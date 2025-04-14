@@ -28,8 +28,8 @@ export default function Home() {
             />
           </div>
         </div>
-        <div className="md:w-1/2 bg-[#e63946] text-white p-8">
-          <p className="text-base leading-[1.6]">
+        <div className="md:w-1/2 bg-[#e63946] text-white p-8 flex items-center justify-center">
+          <p className="text-base leading-[1.6] text-center">
             Hippo is a company committed to its customers and to addressing the challenges of water management. We work
             to create better pumps and develop our customers' pump businesses. From our factory near Lusaka, we provide
             a world of pump solutions.
