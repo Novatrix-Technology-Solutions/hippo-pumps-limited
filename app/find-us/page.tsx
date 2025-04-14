@@ -38,39 +38,11 @@ export default function FindUs() {
             <p>Sunday: Closed</p>
           </div>
 
-          <h2 className="text-xl font-bold text-[#1e4785] mt-8 mb-4 flex items-center">
-            <MapPin className="mr-2 text-[#1e4785]" size={20} />
-            International Offices
-          </h2>
-          <div className="space-y-2.5 text-base text-[#333333]">
-            <p>
-              <strong>East Africa Regional Office</strong>
-            </p>
-            <p className="flex items-center">
-              <MapPin className="mr-2 text-[#1e4785]" size={16} />
-              Nairobi, Kenya
-            </p>
-            <p className="flex items-center">
-              <Phone className="mr-2 text-[#1e4785]" size={16} />
-              Tel. +254 712 345678
-            </p>
-            <p className="mt-4">
-              <strong>Southern Africa Regional Office</strong>
-            </p>
-            <p className="flex items-center">
-              <MapPin className="mr-2 text-[#1e4785]" size={16} />
-              Johannesburg, South Africa
-            </p>
-            <p className="flex items-center">
-              <Phone className="mr-2 text-[#1e4785]" size={16} />
-              Tel. +27 11 789 1234
-            </p>
-          </div>
         </div>
         <div>
           <div className="border border-[#DDDDDD] h-[400px] w-full rounded-lg overflow-hidden shadow-md">
             <Image
-              src="/placeholder.svg?height=400&width=600&text=Map+of+Hippo+Headquarters+Location"
+              src="/images/placeholder.svg"
               alt="Map"
               width={600}
               height={400}

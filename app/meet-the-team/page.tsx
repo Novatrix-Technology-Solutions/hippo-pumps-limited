@@ -7,42 +7,42 @@ export default function MeetTheTeam() {
       name: "John Smith",
       position: "CEO",
       bio: "John has over 20 years of experience in the pump industry and leads Hippo with a vision for innovation and excellence.",
-      image: "/placeholder.svg?height=300&width=300&text=John+Smith",
+      image: "/images/placeholder.svg",
     },
     {
       id: 2,
       name: "Sarah Johnson",
       position: "Technical Director",
       bio: "Sarah oversees all technical aspects of our pump designs, ensuring they meet the highest standards of quality and efficiency.",
-      image: "/placeholder.svg?height=300&width=300&text=Sarah+Johnson",
+      image: "/images/placeholder.svg",
     },
     {
       id: 3,
       name: "Michael Chen",
       position: "Head of Manufacturing",
       bio: "Michael manages our state-of-the-art manufacturing facility in Lusaka, implementing lean processes for optimal production.",
-      image: "/placeholder.svg?height=300&width=300&text=Michael+Chen",
+      image: "/images/placeholder.svg",
     },
     {
       id: 4,
       name: "Elizabeth Mwanza",
       position: "Sales Director",
       bio: "Elizabeth leads our global sales team, developing strong relationships with customers across more than 20 countries.",
-      image: "/placeholder.svg?height=300&width=300&text=Elizabeth+Mwanza",
+      image: "/images/placeholder.svg",
     },
     {
       id: 5,
       name: "David Banda",
       position: "Research & Development Manager",
       bio: "David drives innovation at Hippo, leading a team of engineers focused on developing the next generation of pump technologies.",
-      image: "/placeholder.svg?height=300&width=300&text=David+Banda",
+      image: "/images/placeholder.svg",
     },
     {
       id: 6,
       name: "Grace Mutale",
       position: "Quality Assurance Manager",
       bio: "Grace ensures that every pump leaving our facility meets our rigorous quality standards and customer specifications.",
-      image: "/placeholder.svg?height=300&width=300&text=Grace+Mutale",
+      image: "/images/placeholder.svg",
     },
   ]
 
@@ -62,7 +62,7 @@ export default function MeetTheTeam() {
             className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
           >
             <div className="h-64 bg-[#1e4785] relative">
-              <Image src={member.image || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
+              <Image src={member.image || "/images/placeholder.svg"} alt={member.name} fill className="object-cover" />
             </div>
             <div className="p-6">
               <h2 className="text-xl font-bold text-[#1e4785]">{member.name}</h2>
