@@ -75,7 +75,7 @@ export default function Home() {
         <div className="border-r p-8 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors">
           <h3 className="text-[#004080] font-semibold mb-4">Building Services</h3>
           <Image
-            src="/placeholder.svg?height=150&width=150&text=Commercial+Building+Pump"
+            src="/images/placeholder.svg"
             alt="Building services"
             width={150}
             height={150}
@@ -85,7 +85,7 @@ export default function Home() {
         <div className="border-r p-8 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors">
           <h3 className="text-[#004080] font-semibold mb-4">Irrigation</h3>
           <Image
-            src="/placeholder.svg?height=150&width=150&text=Agricultural+Irrigation+System"
+            src="/images/placeholder.svg"
             alt="Irrigation"
             width={150}
             height={150}
@@ -95,7 +95,7 @@ export default function Home() {
         <div className="border-r p-8 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors">
           <h3 className="text-[#004080] font-semibold mb-4">Mining</h3>
           <Image
-            src="/placeholder.svg?height=150&width=150&text=Mining+Dewatering+Pump"
+            src="/images/placeholder.svg"
             alt="Mine"
             width={150}
             height={150}
@@ -105,7 +105,7 @@ export default function Home() {
         <div className="p-8 flex flex-col items-center justify-center hover:bg-gray-50 transition-colors">
           <h3 className="text-[#004080] font-semibold mb-4">Industrial</h3>
           <Image
-            src="/placeholder.svg?height=150&width=150&text=Industrial+Process+Pump"
+            src="/images/placeholder.svg"
             alt="Industrial"
             width={150}
             height={150}
