@@ -8,9 +8,9 @@ export default function Header() {
         <Image
           src="/images/hippo-logo.svg"
           alt="Hippo"
-          width={120}
-          height={48}
-          className="ml-[-10px] mt-[10px]"
+          width={140}
+          height={68}
+          className="ml-[-30px]"
         />
       </Link>
       <nav className="hidden md:flex items-center">
@@ -18,14 +18,14 @@ export default function Header() {
           href="/the-company"
           className="text-[#004080] hover:text-[#008000] text-base"
         >
-          The company
+          The Company
         </Link>
         <span className="mx-5 text-[#004080]">|</span>
         <Link
           href="/pumps-solutions"
           className="text-[#004080] hover:text-[#008000] text-base"
         >
-          Pumps solutions
+          Pumps Solutions
         </Link>
         <span className="mx-5 text-[#004080]">|</span>
         <Link

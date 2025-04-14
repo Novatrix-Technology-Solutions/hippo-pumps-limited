@@ -20,7 +20,7 @@ export default function Home() {
           <div className="text-center">
             <h2 className="text-xl font-bold mb-4">Our Facility</h2>
             <Image
-              src="/images/modern-pump-facility.jpg"
+              src="/images/industrial-pump-system.jpg"
               alt="Pump Manufacturing Facility"
               width={400}
               height={300}
@@ -44,7 +44,7 @@ export default function Home() {
             <div className="md:w-1/3 p-4">
               <h2 className="text-2xl font-bold mb-4">Our Products</h2>
               <Image
-                src="/images/industrial-pump-system.jpg"
+                src="/images/placeholder.svg"
                 alt="Industrial Pump System"
                 width={300}
                 height={200}
