@@ -37,7 +37,7 @@ export default function TheCompany() {
         </div>
         <div className="md:w-1/2">
           <Image
-            src="/placeholder.svg?height=400&width=600&text=Hippo+Manufacturing+Facility"
+            src="/images/hippo-manufacturing-facility.jpg"
             alt="Hippo Manufacturing Facility"
             width={600}
             height={400}

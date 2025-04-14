@@ -8,8 +8,9 @@ export default function Header() {
         <Image
           src="/images/hippo-logo.svg"
           alt="Hippo"
-          width={100}
-          height={40}
+          width={120}
+          height={48}
+          className="ml-[-10px] mt-[10px]"
         />
       </Link>
       <nav className="hidden md:flex items-center">
