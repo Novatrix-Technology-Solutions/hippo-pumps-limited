@@ -1,26 +1,43 @@
-import Link from "next/link"
-import Image from "next/image"
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   return (
     <header className="bg-white h-[70px] flex items-center justify-between px-5 md:px-20">
       <Link href="/" className="text-[#004080]">
-        <Image src="/images/hippo-logo.png" alt="Hippo" width={100} height={40} />
+        <Image
+          src="/images/hippo-logo.svg"
+          alt="Hippo"
+          width={100}
+          height={40}
+        />
       </Link>
       <nav className="hidden md:flex items-center">
-        <Link href="/the-company" className="text-[#004080] hover:text-[#008000] text-base">
+        <Link
+          href="/the-company"
+          className="text-[#004080] hover:text-[#008000] text-base"
+        >
           The company
         </Link>
         <span className="mx-5 text-[#004080]">|</span>
-        <Link href="/pumps-solutions" className="text-[#004080] hover:text-[#008000] text-base">
+        <Link
+          href="/pumps-solutions"
+          className="text-[#004080] hover:text-[#008000] text-base"
+        >
           Pumps solutions
         </Link>
         <span className="mx-5 text-[#004080]">|</span>
-        <Link href="/meet-the-team" className="text-[#004080] hover:text-[#008000] text-base">
+        <Link
+          href="/meet-the-team"
+          className="text-[#004080] hover:text-[#008000] text-base"
+        >
           Meet the Team
         </Link>
         <span className="mx-5 text-[#004080]">|</span>
-        <Link href="/find-us" className="text-[#004080] hover:text-[#008000] text-base">
+        <Link
+          href="/find-us"
+          className="text-[#004080] hover:text-[#008000] text-base"
+        >
           Find Us
         </Link>
       </nav>
@@ -44,5 +61,5 @@ export default function Header() {
         </button>
       </div>
     </header>
-  )
+  );
 }
