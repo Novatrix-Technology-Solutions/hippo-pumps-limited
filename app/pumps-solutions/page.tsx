@@ -30,7 +30,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/sewage-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Industrial+Sewage+Pump"
+                  src="/images/placeholder.svg"
                   alt="Sewage Pumps"
                   width={160}
                   height={160}
@@ -45,7 +45,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/chemical-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Chemical+Processing+Pump"
+                  src="/images/placeholder.svg"
                   alt="Chemical pumps"
                   width={160}
                   height={160}
@@ -60,7 +60,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/inline-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Inline+Circulation+Pump"
+                  src="/images/placeholder.svg"
                   alt="In-line circulation pumps"
                   width={160}
                   height={160}
@@ -78,7 +78,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/solar-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Solar+Powered+Pump"
+                  src="/images/placeholder.svg"
                   alt="Solar Pumps"
                   width={160}
                   height={160}
@@ -93,7 +93,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/borehole-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Deep+Well+Borehole+Pump"
+                  src="/images/placeholder.svg"
                   alt="Borehole Pumps"
                   width={160}
                   height={160}
@@ -111,7 +111,7 @@ export default function PumpsSolutions() {
             >
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Self+Priming+Pump+Unit"
+                  src="/images/placeholder.svg"
                   alt="Self-priming pumps"
                   width={160}
                   height={160}
@@ -129,7 +129,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/booster-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Pressure+Booster+Pump"
+                  src="/images/placeholder.svg"
                   alt="Booster Pumps"
                   width={160}
                   height={160}
@@ -144,7 +144,7 @@ export default function PumpsSolutions() {
             <Link href="/pumps-solutions/submersible-pumps" className="text-[#004080] hover:text-[#1e4785] text-center">
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Submersible+Water+Pump"
+                  src="/images/placeholder.svg"
                   alt="Submersible Pumps"
                   width={160}
                   height={160}
@@ -162,7 +162,7 @@ export default function PumpsSolutions() {
             >
               <div className="mb-3 h-40 w-full relative">
                 <Image
-                  src="/placeholder.svg?height=160&width=160&text=Swimming+Pool+Filtration+Pump"
+                  src="/images/placeholder.svg"
                   alt="Swimming pool pumps"
                   width={160}
                   height={160}

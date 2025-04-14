@@ -41,7 +41,7 @@ export default function BoreholePumps() {
           </div>
           <div className="md:w-1/2">
             <Image
-              src="/placeholder.svg?height=300&width=400"
+              src="/images/placeholder.svg"
               alt="BH Pump"
               width={400}
               height={300}
@@ -73,7 +73,7 @@ export default function BoreholePumps() {
           </div>
           <div className="md:w-1/2">
             <Image
-              src="/placeholder.svg?height=300&width=400"
+              src="/images/placeholder.svg"
               alt="SX, SN Pump"
               width={400}
               height={300}
