@@ -170,15 +170,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Contact Section */}
-      <div className="py-12 bg-gray-100">
-        <div className="container mx-auto px-5">
-          <h2 className="text-2xl font-bold text-[#1e4785] mb-6">HIPPO PUMPS LIMITED</h2>
-          <p className="text-[#333333] text-base mb-2">Headquarters</p>
-          <p className="text-[#333333] text-base mb-2">Chalala, Lusaka - Zambia</p>
-          <p className="text-[#333333] text-base mb-2">Tel. +260 975 318888</p>
-        </div>
-      </div>
+      
     </div>
   )
 }
