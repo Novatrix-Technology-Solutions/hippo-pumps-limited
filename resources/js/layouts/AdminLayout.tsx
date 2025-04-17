@@ -7,7 +7,7 @@ import {
     Settings, 
     LogOut 
 } from 'lucide-react';
-import PageTransition from '@/Components/Animated/PageTransition';
+import PageTransition from '@/components/Animated/PageTransition';
 
 interface Props {
     title?: string;

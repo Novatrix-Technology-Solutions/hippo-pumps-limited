@@ -1,9 +1,9 @@
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/AdminLayout';
 import { motion, AnimatePresence } from 'framer-motion';
-import AnimatedPage from '@/Components/Animated/AnimatedPage';
-import AnimatedCard from '@/Components/Animated/AnimatedCard';
-import AnimatedButton from '@/Components/Animated/AnimatedButton';
+import AnimatedPage from '@/components/Animated/AnimatedPage';
+import AnimatedCard from '@/components/Animated/AnimatedCard';
+import AnimatedButton from '@/components/Animated/AnimatedButton';
 import { staggerContainer, staggerItem } from '@/Utils/animations';
 
 interface TeamMember {

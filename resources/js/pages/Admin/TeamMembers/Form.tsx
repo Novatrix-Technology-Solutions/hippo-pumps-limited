@@ -1,10 +1,10 @@
 import { Head, useForm } from '@inertiajs/react';
 import { ChangeEvent, useState } from 'react';
 import AdminLayout from '@/layouts/AdminLayout';
-import AnimatedPage from '@/Components/Animated/AnimatedPage';
-import AnimatedCard from '@/Components/Animated/AnimatedCard';
-import AnimatedButton from '@/Components/Animated/AnimatedButton';
-import AnimatedErrorMessage from '@/Components/Animated/AnimatedErrorMessage';
+import AnimatedPage from '@/components/Animated/AnimatedPage';
+import AnimatedCard from '@/components/Animated/AnimatedCard';
+import AnimatedButton from '@/components/Animated/AnimatedButton';
+import AnimatedErrorMessage from '@/components/Animated/AnimatedErrorMessage';
 import { staggerContainer, staggerItem, imagePreview } from '@/Utils/animations';
 
 interface TeamMember {
