@@ -1,8 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Button } from '@/Components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.jsx';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Pencil } from 'lucide-react';
 
 interface PumpSolution {
