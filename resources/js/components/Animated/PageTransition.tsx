@@ -1,17 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
 interface Props {
     children: React.ReactNode;
 }
 
 const PageTransition = ({ children }: Props) => {
-    const location = useLocation();
+    const { url } = usePage();
 
     return (
         <AnimatePresence mode="wait">
             <motion.div
-                key={location.pathname}
+                key={url}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
