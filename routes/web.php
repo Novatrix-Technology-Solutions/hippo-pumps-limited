@@ -17,11 +17,20 @@ Route::get('/find-us', function () {
     return Inertia::render('FindUs');
 })->name('find-us');
 
-Route::get('/meet-the-team', [TeamMemberController::class, 'index'])->name('meet-the-team');
+Route::get('/meet-the-team', function () {
+    $teamMembers = \App\Models\TeamMember::orderBy('order')->get();
+    return Inertia::render('MeetTheTeam', [
+        'teamMembers' => $teamMembers,
+    ]);
+})->name('meet-the-team');
 
 Route::get('/the-company', function () {
     return Inertia::render('TheCompany');
 })->name('the-company');
+
+Route::get('/team', function () {
+    return Inertia::render('Public/Team');
+})->name('public.team');
 
 // Public News Routes
 Route::get('/news', [NewsController::class, 'index'])->name('public.news.index');

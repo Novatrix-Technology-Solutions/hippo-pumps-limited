@@ -1,5 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { ChangeEvent, useState } from 'react';
+import { motion } from 'framer-motion';
 import AdminLayout from '@/layouts/AdminLayout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import AnimatedCard from '@/components/Animated/AnimatedCard';

@@ -28,7 +28,7 @@ export default function Header() {
                 </Link>
                 <span className="mx-5 text-[#004080]">|</span>
                 <Link
-                    href={route('meet-the-team')}
+                    href={route('public.team')}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     Meet the Team

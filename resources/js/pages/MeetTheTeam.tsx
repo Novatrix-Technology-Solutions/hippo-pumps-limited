@@ -1,52 +1,20 @@
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 
-export default function MeetTheTeam({ auth }: PageProps) {
-    const teamMembers = [
-        {
-            id: 1,
-            name: "John Smith",
-            position: "CEO",
-            bio: "John has over 20 years of experience in the pump industry and leads Hippo with a vision for innovation and excellence.",
-            image: "/images/placeholder.svg",
-        },
-        {
-            id: 2,
-            name: "Sarah Johnson",
-            position: "Technical Director",
-            bio: "Sarah oversees all technical aspects of our pump designs, ensuring they meet the highest standards of quality and efficiency.",
-            image: "/images/placeholder.svg",
-        },
-        {
-            id: 3,
-            name: "Michael Chen",
-            position: "Head of Manufacturing",
-            bio: "Michael manages our state-of-the-art manufacturing facility in Lusaka, implementing lean processes for optimal production.",
-            image: "/images/placeholder.svg",
-        },
-        {
-            id: 4,
-            name: "Elizabeth Mwanza",
-            position: "Sales Director",
-            bio: "Elizabeth leads our global sales team, developing strong relationships with customers across more than 20 countries.",
-            image: "/images/placeholder.svg",
-        },
-        {
-            id: 5,
-            name: "David Banda",
-            position: "Research & Development Manager",
-            bio: "David drives innovation at Hippo, leading a team of engineers focused on developing the next generation of pump technologies.",
-            image: "/images/placeholder.svg",
-        },
-        {
-            id: 6,
-            name: "Grace Mutale",
-            position: "Quality Assurance Manager",
-            bio: "Grace ensures that every pump leaving our facility meets our rigorous quality standards and customer specifications.",
-            image: "/images/placeholder.svg",
-        },
-    ];
+interface TeamMember {
+    id: number;
+    name: string;
+    position: string;
+    bio: string;
+    image: string;
+    order: number;
+}
 
+interface MeetTheTeamProps extends PageProps {
+    teamMembers: TeamMember[];
+}
+
+export default function MeetTheTeam({ auth, teamMembers }: MeetTheTeamProps) {
     return (
         <>
             <Head title="Meet the Team" />
@@ -66,7 +34,7 @@ export default function MeetTheTeam({ auth }: PageProps) {
                         >
                             <div className="h-64 bg-[#1e4785] relative">
                                 <img
-                                    src={member.image || "/images/placeholder.svg"}
+                                    src={member.image ? `/storage/${member.image}` : "/images/placeholder.svg"}
                                     alt={member.name}
                                     className="w-full h-full object-cover"
                                 />
