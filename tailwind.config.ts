@@ -1,19 +1,21 @@
 import type { Config } from "tailwindcss"
+import tailwindcssAnimate from "tailwindcss-animate"
 
 const config: Config = {
-  darkMode: ["class"],
+  darkMode: "class", // Changed from ["class"]
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "*.{js,ts,jsx,tsx,mdx}",
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.jsx",
+    "./resources/**/*.ts",
+    "./resources/**/*.tsx",
   ],
   theme: {
     extend: {
       colors: {
         primary: "#004080",
-        secondary: "#ADD8E6",
-        accent: "#008000",
+        // secondary: "#ADD8E6", // Removed duplicate
+        // accent: "#008000", // Removed duplicate
         text: "#333333",
         background: "#FFFFFF",
         card: {
@@ -28,7 +30,7 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},*/
-        secondary: {
+        secondary: { // Kept HSL version
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
@@ -36,7 +38,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
-        accent: {
+        accent: { // Kept HSL version
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
@@ -98,6 +100,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate], // Changed from require()
 }
 export default config
