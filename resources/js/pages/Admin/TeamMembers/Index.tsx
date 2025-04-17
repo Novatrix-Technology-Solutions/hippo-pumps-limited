@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AdminLayout from '@/Layouts/AdminLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedPage from '@/Components/Animated/AnimatedPage';
 import AnimatedCard from '@/Components/Animated/AnimatedCard';
