@@ -1,7 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Calendar, User as UserIcon, Share2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import AnimatedPage from '@/components/Animated/AnimatedPage';
+import { staggerContainer, staggerItem, fadeIn } from '@/Utils/animations';
 
 interface User {
     name: string;
@@ -21,44 +24,104 @@ interface Props {
 
 export default function Show({ news }: Props) {
     return (
-        <>
+        <AnimatedPage>
             <Head title={news.title} />
-            <div className="container mx-auto py-12 px-4 md:px-0">
+            <motion.div 
+                variants={staggerContainer}
+                initial="hidden"
+                animate="visible"
+                className="container mx-auto py-12 px-4 md:px-0"
+            >
                 <div className="max-w-4xl mx-auto">
-                    <Link href={route('public.news.index')}>
-                        <Button variant="ghost" className="mb-6">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            Back to News
-                        </Button>
-                    </Link>
+                    <motion.div variants={fadeIn}>
+                        <Link href={route('public.news.index')}>
+                            <Button variant="ghost" className="mb-6">
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                Back to News
+                            </Button>
+                        </Link>
+                    </motion.div>
 
                     {/* Featured Image */}
                     {news.featured_image && (
-                        <div className="mb-8 rounded-lg overflow-hidden shadow-lg">
-                            <img
+                        <motion.div 
+                            variants={staggerItem}
+                            className="mb-8 rounded-xl overflow-hidden shadow-xl"
+                        >
+                            <motion.img
+                                initial={{ opacity: 0, scale: 1.1 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5 }}
                                 src={news.featured_image}
                                 alt={news.title}
-                                className="w-full h-[400px] object-cover"
+                                className="w-full h-[500px] object-cover"
                             />
-                        </div>
+                        </motion.div>
                     )}
 
                     {/* Article Header */}
-                    <div className="mb-8">
-                        <h1 className="text-4xl font-bold mb-4">{news.title}</h1>
-                        <div className="flex items-center text-gray-600 text-sm">
-                            <span>By {news.user.name}</span>
-                            <span className="mx-2">•</span>
-                            <time>{format(new Date(news.published_at), 'MMMM d, yyyy')}</time>
+                    <motion.div 
+                        variants={staggerItem}
+                        className="mb-12"
+                    >
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-[#1e4785] leading-tight">
+                            {news.title}
+                        </h1>
+                        <div className="flex flex-wrap items-center gap-6 text-gray-600">
+                            <div className="flex items-center">
+                                <UserIcon className="w-5 h-5 mr-2" />
+                                <span>{news.user.name}</span>
+                            </div>
+                            <div className="flex items-center">
+                                <Calendar className="w-5 h-5 mr-2" />
+                                <time>{format(new Date(news.published_at), 'MMMM d, yyyy')}</time>
+                            </div>
+                            <Button variant="ghost" size="sm" className="ml-auto">
+                                <Share2 className="w-4 h-4 mr-2" />
+                                Share
+                            </Button>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Article Content */}
-                    <div className="prose prose-lg max-w-none">
-                        <div className="whitespace-pre-line">{news.content}</div>
-                    </div>
+                    <motion.div 
+                        variants={staggerItem}
+                        className="prose prose-lg max-w-none"
+                    >
+                        <div className="whitespace-pre-line leading-relaxed">
+                            {news.content.split('\n\n').map((paragraph, index) => (
+                                <motion.p
+                                    key={index}
+                                    variants={fadeIn}
+                                    className="mb-6 text-gray-700"
+                                >
+                                    {paragraph}
+                                </motion.p>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Share Section */}
+                    <motion.div 
+                        variants={staggerItem}
+                        className="mt-12 pt-8 border-t border-gray-200"
+                    >
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold text-gray-900">Share this article</h3>
+                            <div className="flex gap-4">
+                                <Button variant="outline" size="sm">
+                                    <Share2 className="w-4 h-4 mr-2" />
+                                    Share on LinkedIn
+                                </Button>
+                                <Button variant="outline" size="sm">
+                                    <Share2 className="w-4 h-4 mr-2" />
+                                    Share on Twitter
+                                </Button>
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
-            </div>
-        </>
+            </motion.div>
+        </AnimatedPage>
     );
 } 

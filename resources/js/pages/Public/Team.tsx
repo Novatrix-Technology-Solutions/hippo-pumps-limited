@@ -1,12 +1,13 @@
 import { Head } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+// import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 
 export default function Team({ auth }) {
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Meet Our Team</h2>}
-        >
+        <div>
+        {/* // <AuthenticatedLayout
+        //     user={auth.user}
+        //     header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Meet Our Team</h2>}
+        // > */}
             <Head title="Meet Our Team" />
 
             <div className="py-12">
@@ -44,6 +45,7 @@ export default function Team({ auth }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        {/* // </AuthenticatedLayout> */}
+        </div>
     );
 } 

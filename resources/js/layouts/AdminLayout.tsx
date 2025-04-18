@@ -5,7 +5,8 @@ import {
     Newspaper, 
     Droplet, 
     Settings, 
-    LogOut 
+    LogOut, 
+    User
 } from 'lucide-react';
 import PageTransition from '@/components/Animated/PageTransition';
 
@@ -19,7 +20,7 @@ interface Props {
 
 const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="min-h-screen bg-gray-100">
             <Head title={title} />
 
             <div className="min-h-screen">
@@ -29,9 +30,14 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                         <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-lg">
                             <div className="flex flex-col h-full">
                                 {/* Logo */}
-                                <div className="flex items-center justify-center h-16 border-b">
+                                <div className="flex items-center justify-center h-16 border-b border-gray-200">
                                     <Link href="/" className="text-xl font-bold text-gray-800">
-                                        Hippo Pumps
+                                    <img 
+                                        src="/images/hippo-logo.svg"
+                                        alt='Hippo Pumps Limited'
+                                        width={150}
+                                        height={100}
+                                    />
                                     </Link>
                                 </div>
 
@@ -62,6 +68,14 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                     </Link>
 
                                     <Link
+                                        href={route('users.index')}
+                                        className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100"
+                                    >
+                                        <User className="w-5 h-5 mr-3" />
+                                        Users
+                                    </Link>
+
+                                    <Link
                                         href={route('profile.edit')}
                                         className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100"
                                     >
@@ -71,7 +85,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                 </nav>
 
                                 {/* User Section */}
-                                <div className="p-4 border-t">
+                                <div className="p-4 border-t border-gray-200">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <p className="text-sm font-medium text-gray-700">{user?.name}</p>
@@ -91,17 +105,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                         </div>
 
                         {/* Main Content */}
-                        <div className="ml-64">
-                            {/* Header */}
-                            <header className="bg-white shadow">
-                                <div className="px-4 py-4">
-                                    <h1 className="text-2xl font-semibold text-gray-800">
-                                        Admin Dashboard
-                                    </h1>
-                                </div>
-                            </header>
-
-                            {/* Page Content */}
+                        <div className="pl-64">
                             <main className="p-6">
                                 {children}
                             </main>
