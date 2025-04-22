@@ -5,7 +5,16 @@ export default function Header() {
     const getAbsoluteUrl = (routeName: string) => {
         const baseUrl = import.meta.env.VITE_APP_URL || 'http://localhost';
         const routePath = route(routeName);
+        console.log('Base URL:', baseUrl);
+        console.log('Route Path:', routePath);
+        console.log('Full URL:', `${baseUrl}${routePath}`);
         return `${baseUrl}${routePath}`;
+    };
+
+    const handleLinkClick = (e: React.MouseEvent, href: string) => {
+        e.preventDefault();
+        console.log('Navigating to:', href);
+        window.location.href = href;
     };
 
     return (
@@ -20,40 +29,45 @@ export default function Header() {
                 />
             </Link>
             <nav className="hidden md:flex items-center">
-                <Link
+                <a
                     href={getAbsoluteUrl('the-company')}
+                    onClick={(e) => handleLinkClick(e, getAbsoluteUrl('the-company'))}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     The Company
-                </Link>
+                </a>
                 <span className="mx-5 text-[#004080]">|</span>
-                <Link
+                <a
                     href={getAbsoluteUrl('public.pump-solutions.index')}
+                    onClick={(e) => handleLinkClick(e, getAbsoluteUrl('public.pump-solutions.index'))}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     Pumps Solutions
-                </Link>
+                </a>
                 <span className="mx-5 text-[#004080]">|</span>
-                <Link
+                <a
                     href={getAbsoluteUrl('public.team')}
+                    onClick={(e) => handleLinkClick(e, getAbsoluteUrl('public.team'))}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     Meet the Team
-                </Link>
+                </a>
                 <span className="mx-5 text-[#004080]">|</span>
-                <Link
+                <a
                     href={getAbsoluteUrl('find-us')}
+                    onClick={(e) => handleLinkClick(e, getAbsoluteUrl('find-us'))}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     Find Us
-                </Link>
+                </a>
                 <span className="mx-5 text-[#004080]">|</span>
-                <Link
+                <a
                     href={getAbsoluteUrl('public.news.index')}
+                    onClick={(e) => handleLinkClick(e, getAbsoluteUrl('public.news.index'))}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     News
-                </Link>
+                </a>
             </nav>
             <div className="md:hidden">
                 <button className="text-[#004080]">
