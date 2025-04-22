@@ -28,6 +28,8 @@ class NewsController extends Controller
             abort(404);
         }
 
+        $news->load('user');
+
         return Inertia::render('News/Show', [
             'news' => $news,
         ]);
