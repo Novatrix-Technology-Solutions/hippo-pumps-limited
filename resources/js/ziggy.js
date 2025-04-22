@@ -3,3 +3,24 @@ if (typeof window !== 'undefined' && typeof window.Ziggy !== 'undefined') {
   Object.assign(Ziggy.routes, window.Ziggy.routes);
 }
 export { Ziggy };
+
+export function route(name, params = {}) {
+    if (!Ziggy.routes[name]) {
+        throw new Error(`Route [${name}] not found.`);
+    }
+
+    let uri = Ziggy.routes[name].uri;
+
+    // Replace route parameters
+    Object.keys(params).forEach(key => {
+        uri = uri.replace(`{${key}}`, params[key]);
+    });
+
+    // Remove any remaining optional parameters
+    uri = uri.replace(/\{.*?\}/g, '');
+
+    // Remove any double slashes
+    uri = uri.replace(/\/+/g, '/');
+
+    return uri;
+}
