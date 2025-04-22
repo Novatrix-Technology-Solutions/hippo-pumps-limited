@@ -37,14 +37,7 @@ export default defineConfig({
     },
     build: {
         rollupOptions: {
-            input: {
-                app: resolve(__dirname, 'resources/js/app.tsx'),
-            },
-            output: {
-                manualChunks: {
-                    'pages': ['resources/js/pages/**/*.tsx']
-                }
-            }
-        },
+            input: resolve(__dirname, 'resources/js/app.tsx'),
+        }
     },
 });
