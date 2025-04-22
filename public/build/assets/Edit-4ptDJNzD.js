@@ -1,1 +1,0 @@
-import{j as r}from"./app-BUUpkr5g.js";import o from"./Form-D7Y6Vbj3.js";import"./AdminLayout-DnKcqgey.js";import"./createLucideIcon-CyWy1TyL.js";import"./settings-BuBbebEO.js";import"./AnimatedButton-Rypqd_7M.js";const x=({teamMember:t})=>r.jsx(o,{teamMember:t,isEdit:!0});export{x as default};

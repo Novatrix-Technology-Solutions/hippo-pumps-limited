@@ -1,4 +1,4 @@
-name: Laravel Deploy to Railway
+name: Deploy Laravel to Railway
 
 on:
   push:
@@ -7,52 +7,45 @@ on:
 
 jobs:
   deploy:
+    name: Deploy to Railway
     runs-on: ubuntu-latest
-    env:
-      APP_ENV: production
-      APP_URL: https://hippo-pumps-limited.up.railway.app
 
     steps:
-      - name: ⬇️ Checkout code
+      - name: ✨ Checkout code
         uses: actions/checkout@v3
 
-      - name: ⚙️ Setup PHP
+      - name: ☕ Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, bcmath, curl, openssl, pdo_pgsql
-          tools: composer
+          extensions: mbstring, bcmath, ctype, json, tokenizer, xml, curl, openssl, pdo, pdo_pgsql
 
-      - name: 📦 Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: 🚀 Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
 
-      - name: 💾 Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: 🌟 Set Laravel key
+        run: php artisan key:generate
 
-      - name: 🧱 Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: 🤝 Set permissions
+        run: chmod -R 775 storage bootstrap/cache
 
-      - name: 📦 Install NPM dependencies
-        run: npm ci
-
-      - name: 🔨 Build frontend assets
-        run: npm run build
-
-      - name: 🧼 Laravel Optimization
+      - name: 🚀 Install Node dependencies & build
         run: |
-          php artisan config:clear
-          php artisan route:clear
-          php artisan view:clear
+          npm install
+          npm run build
+
+      - name: 🚧 Clear caches
+        run: |
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
 
-      - name: 🚀 Deploy to Railway
-        run: curl -X POST ${{ secrets.RAILWAY_DEPLOY_HOOK }}
+      - name: ✨ Deploy to Railway
+        uses: railwayapp/cli-action@v1
+        with:
+          command: up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: 🔧 Run Migrations
+        run: php artisan migrate --force
