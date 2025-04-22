@@ -5,6 +5,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import SiteLayout from './layouts/site-layout'; // Import the layout
 import { initializeTheme } from './hooks/use-appearance';
+import ('./pages/Home'); // this makes Vite include it
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Hippo Pumps Limited';
 

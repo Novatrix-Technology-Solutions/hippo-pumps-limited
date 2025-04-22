@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { Link } from '@inertiajs/react';
 import { CircleCheck, Droplets, Gauge, Recycle, Wrench } from 'lucide-react';
@@ -7,7 +6,7 @@ interface HomeProps extends PageProps {
     // Add any additional props specific to the Home component here
 }
 
-export default function Home({ auth }: HomeProps) {
+export default function Home({}: HomeProps) {
     return (
         <div>
             {/* Hero Section */}
