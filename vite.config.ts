@@ -28,4 +28,7 @@ export default defineConfig({
         port: 5173,
         hmr: process.env.APP_ENV === 'local',
     },
+    define: {
+        'import.meta.env.VITE_APP_VERSION': JSON.stringify(Date.now()),
+    },
 });

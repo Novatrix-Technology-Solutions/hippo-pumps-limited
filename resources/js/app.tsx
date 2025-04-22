@@ -47,6 +47,7 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+    version: () => import.meta.env.VITE_APP_VERSION,
 });
 
 // This will set light / dark mode on load...
