@@ -4,6 +4,7 @@ import NavLink from '@/components/NavLink';
 import ResponsiveNavLink from '@/components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import { useUrl } from '@/hooks/use-url';
 
 interface AuthenticatedLayoutProps {
     header?: React.ReactNode;
@@ -13,6 +14,7 @@ interface AuthenticatedLayoutProps {
 export default function AuthenticatedLayout({ header, children }: AuthenticatedLayoutProps) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const { getAbsoluteUrl } = useUrl();
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -21,14 +23,14 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
                     <div className="flex h-16 justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
-                                <Link href="/">
+                                <Link href={getAbsoluteUrl('/')}>
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route('dashboard')}
+                                    href={getAbsoluteUrl('dashboard')}
                                     active={route().current('dashboard')}
                                 >
                                     Dashboard
@@ -65,12 +67,12 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route('profile.edit')}
+                                            href={getAbsoluteUrl('profile.edit')}
                                         >
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route('logout')}
+                                            href={getAbsoluteUrl('logout')}
                                             method="post"
                                             as="button"
                                         >
@@ -132,7 +134,7 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
                 >
                     <div className="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            href={route('dashboard')}
+                            href={getAbsoluteUrl('dashboard')}
                             active={route().current('dashboard')}
                         >
                             Dashboard
@@ -150,12 +152,12 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
+                            <ResponsiveNavLink href={getAbsoluteUrl('profile.edit')}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
-                                href={route('logout')}
+                                href={getAbsoluteUrl('logout')}
                                 as="button"
                             >
                                 Log Out

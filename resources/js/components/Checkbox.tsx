@@ -1,4 +1,8 @@
-export default function Checkbox({ className = '', ...props }) {
+interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    checked?: boolean;
+}
+
+export default function Checkbox({ className = '', ...props }: CheckboxProps) {
     return (
         <input
             {...props}
@@ -9,4 +13,4 @@ export default function Checkbox({ className = '', ...props }) {
             }
         />
     );
-}
+} 

@@ -1,37 +1,53 @@
-import { Variants } from 'framer-motion';
+import { Variants, Transition } from 'framer-motion';
 
-export const pageTransition = {
+// Common transitions for reuse
+const springTransition: Transition = {
+    type: 'spring',
+    stiffness: 260,
+    damping: 20,
+};
+
+const easeTransition: Transition = {
+    type: 'ease',
+    duration: 0.3,
+};
+
+// Page transitions
+export const pageTransition: Variants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
-    transition: { 
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        duration: 0.3
-    }
+    transition: springTransition,
 };
 
-export const fadeInUp = {
+// Fade animations
+export const fadeInUp: Variants = {
     initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
+    animate: { 
+        opacity: 1, 
+        y: 0,
+        transition: easeTransition,
+    },
 };
 
-export const fadeIn = {
+export const fadeIn: Variants = {
     initial: { opacity: 0 },
-    animate: { opacity: 1 },
-    transition: { duration: 0.5 }
+    animate: { 
+        opacity: 1,
+        transition: easeTransition,
+    },
 };
 
+// Stagger animations
 export const staggerContainer: Variants = {
     hidden: { opacity: 0 },
     visible: {
         opacity: 1,
         transition: {
-            staggerChildren: 0.1
-        }
-    }
+            staggerChildren: 0.1,
+            ...easeTransition,
+        },
+    },
 };
 
 export const staggerItem: Variants = {
@@ -39,52 +55,72 @@ export const staggerItem: Variants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: {
-            duration: 0.5
-        }
-    }
+        transition: easeTransition,
+    },
 };
 
-export const hoverScale = {
+// Hover animations
+export const hoverScale: Variants = {
+    initial: { scale: 1 },
     whileHover: { scale: 1.05 },
     whileTap: { scale: 0.95 },
-    transition: { duration: 0.2 }
+    transition: {
+        ...easeTransition,
+        duration: 0.2,
+    },
 };
 
-export const hoverLift = {
+export const hoverLift: Variants = {
+    initial: { y: 0 },
     whileHover: { y: -5 },
     whileTap: { y: 0 },
-    transition: { duration: 0.2 }
+    transition: {
+        ...easeTransition,
+        duration: 0.2,
+    },
 };
 
-export const errorMessage = {
+// Feedback animations
+export const errorMessage: Variants = {
     initial: { opacity: 0, y: -10 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: 10 },
-    transition: { duration: 0.2 }
+    transition: {
+        ...easeTransition,
+        duration: 0.2,
+    },
 };
 
-export const cardHover = {
+// UI element animations
+export const cardHover: Variants = {
+    initial: { scale: 1 },
     whileHover: { scale: 1.02 },
-    transition: { duration: 0.2 }
+    transition: {
+        ...easeTransition,
+        duration: 0.2,
+    },
 };
 
-export const imagePreview = {
+export const imagePreview: Variants = {
     initial: { opacity: 0, scale: 0.8 },
     animate: { opacity: 1, scale: 1 },
-    transition: { duration: 0.3 }
+    transition: {
+        ...easeTransition,
+        duration: 0.3,
+    },
 };
 
-export const slideIn = {
+// Navigation animations
+export const slideIn: Variants = {
     initial: { x: -100, opacity: 0 },
     animate: { x: 0, opacity: 1 },
     exit: { x: 100, opacity: 0 },
-    transition: { duration: 0.3 }
+    transition: easeTransition,
 };
 
-export const scaleIn = {
+export const scaleIn: Variants = {
     initial: { scale: 0.8, opacity: 0 },
     animate: { scale: 1, opacity: 1 },
     exit: { scale: 0.8, opacity: 0 },
-    transition: { duration: 0.3 }
+    transition: easeTransition,
 }; 
