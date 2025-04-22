@@ -39,8 +39,12 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 app: resolve(__dirname, 'resources/js/app.tsx'),
-                pages: resolve(__dirname, 'resources/js/pages/**/*.tsx'),
             },
+            output: {
+                manualChunks: {
+                    'pages': ['resources/js/pages/**/*.tsx']
+                }
+            }
         },
     },
 });
