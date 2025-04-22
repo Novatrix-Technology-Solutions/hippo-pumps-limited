@@ -44,7 +44,7 @@ createInertiaApp({
     },
     url: baseUrl,
     // Add CSRF token handling
-    setupPage: (page) => {
+    setupPage: (page: { props: { csrfToken?: string } }) => {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
         if (csrfToken) {
             page.props.csrfToken = csrfToken;
