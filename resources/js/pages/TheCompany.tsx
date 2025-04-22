@@ -4,8 +4,11 @@ import { Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import { staggerContainer, staggerItem, fadeIn } from '@/Utils/animations';
+import { useUrl } from '@/hooks/use-url';
 
 export default function TheCompany({ auth }: PageProps) {
+    const { getAbsoluteUrl } = useUrl();
+    
     return (
         <AnimatedPage>
             <Head title="The Company" />
@@ -19,7 +22,7 @@ export default function TheCompany({ auth }: PageProps) {
                     variants={fadeIn}
                     className="mb-4 text-sm text-[#004080]"
                 >
-                    <Link href="/" className="hover:underline">
+                    <Link href={getAbsoluteUrl('/')} className="hover:underline">
                         Home
                     </Link>
                     <span className="mx-2">＞</span>

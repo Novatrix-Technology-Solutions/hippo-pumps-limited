@@ -4,6 +4,7 @@ import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.jsx';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Pencil } from 'lucide-react';
+import { useUrl } from '@/hooks/use-url';
 
 interface PumpSolution {
     id: number;
@@ -24,6 +25,8 @@ interface Props extends PageProps {
 }
 
 export default function Show({ auth, pumpSolution }: Props) {
+    const { getAbsoluteUrl } = useUrl();
+    
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -34,13 +37,13 @@ export default function Show({ auth, pumpSolution }: Props) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="mb-6 flex justify-between items-center">
-                        <Link href={route('pump-solutions.index')}>
+                        <Link href={getAbsoluteUrl('pump-solutions.index')}>
                             <Button variant="outline">
                                 <ArrowLeft className="w-4 h-4 mr-2" />
                                 Back to List
                             </Button>
                         </Link>
-                        <Link href={route('pump-solutions.edit', pumpSolution.id)}>
+                        <Link href={getAbsoluteUrl('pump-solutions.edit', pumpSolution.id)}>
                             <Button>
                                 <Pencil className="w-4 h-4 mr-2" />
                                 Edit Solution

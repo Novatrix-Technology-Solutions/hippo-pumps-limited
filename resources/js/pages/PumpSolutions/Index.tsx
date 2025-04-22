@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useUrl } from '@/hooks/use-url';
 
 interface PumpSolution {
     id: number;
@@ -14,11 +15,15 @@ interface PumpSolution {
 }
 
 interface Props {
-    pumpSolutions: PumpSolution[];
+    pumpSolutions: {
+        data: PumpSolution[];
+    };
     categories: string[];
 }
 
 export default function Index({ pumpSolutions, categories }: Props) {
+    const { getAbsoluteUrl } = useUrl();
+    
     return (
         <>
             <Head title="Pump Solutions" />
@@ -36,10 +41,10 @@ export default function Index({ pumpSolutions, categories }: Props) {
 
                 {/* Solutions Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {pumpSolutions.map((solution) => (
+                    {pumpSolutions.data.map((solution) => (
                         <Link
                             key={solution.id}
-                            href={route('public.pump-solutions.show', solution.slug)}
+                            href={getAbsoluteUrl('public.pump-solutions.show', solution.slug)}
                             className="block"
                         >
                             <Card className="h-full hover:shadow-lg transition-shadow">

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { Newspaper, Settings, WashingMachine, Users, Group } from 'lucide-react';
+import { useUrl } from '@/hooks/use-url';
 
 interface Props {
     newsCount: number;
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCount, usersCount }: Props) {
+    const { getAbsoluteUrl } = useUrl();
+    
     return (
         <AdminLayout>
             <Head title="Dashboard" />
@@ -31,7 +34,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                 Total news articles
                             </p>
                             <Button asChild className="mt-4">
-                                <Link href={route('news.index')}>
+                                <Link href={getAbsoluteUrl('news.index')}>
                                     Manage News
                                 </Link>
                             </Button>
@@ -51,7 +54,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                 Total pump solutions
                             </p>
                             <Button asChild className="mt-4">
-                                <Link href={route('pump-solutions.index')}>
+                                <Link href={getAbsoluteUrl('pump-solutions.index')}>
                                     Manage Solutions
                                 </Link>
                             </Button>
@@ -91,7 +94,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                 Total users
                             </p>
                             <Button asChild className="mt-4">
-                                <Link href={route('users.index')}>
+                                <Link href={getAbsoluteUrl('users.index')}>
                                     Manage Users
                                 </Link>
                             </Button>
@@ -111,7 +114,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                 Manage your profile
                             </p>
                             <Button asChild className="mt-4">
-                                <Link href={route('profile.edit')}>
+                                <Link href={getAbsoluteUrl('profile.edit')}>
                                     Edit Profile
                                 </Link>
                             </Button>

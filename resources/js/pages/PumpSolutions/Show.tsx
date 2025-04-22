@@ -6,6 +6,7 @@ import { ArrowLeft, Download, Mail, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import { staggerContainer, staggerItem, fadeIn } from '@/Utils/animations';
+import { useUrl } from '@/hooks/use-url';
 
 interface Specification {
     key: string;
@@ -15,10 +16,15 @@ interface Specification {
 interface PumpSolution {
     id: number;
     title: string;
+    slug: string;
     description: string;
     category: string;
     image: string | null;
-    specifications: Specification[];
+    specifications: Record<string, string>;
+    is_featured: boolean;
+    order: number;
+    created_at: string;
+    updated_at: string;
 }
 
 interface Props {
@@ -26,6 +32,8 @@ interface Props {
 }
 
 export default function Show({ solution }: Props) {
+    const { getAbsoluteUrl } = useUrl();
+    
     return (
         <AnimatedPage>
             <Head title={solution.title} />
@@ -36,7 +44,7 @@ export default function Show({ solution }: Props) {
                 className="container mx-auto py-12 px-4 md:px-0"
             >
                 <motion.div variants={fadeIn} className="mb-8">
-                    <Link href={route('public.pump-solutions.index')}>
+                    <Link href={getAbsoluteUrl('public.pump-solutions.index')}>
                         <Button variant="ghost" className="mb-6">
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             Back to Solutions
@@ -103,7 +111,7 @@ export default function Show({ solution }: Props) {
                     </div>
 
                     {/* Specifications */}
-                    {solution.specifications && solution.specifications.length > 0 && (
+                    {Object.entries(solution.specifications).length > 0 && (
                         <motion.div 
                             variants={staggerItem}
                             className="mt-16"
@@ -114,17 +122,17 @@ export default function Show({ solution }: Props) {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {solution.specifications.map((spec, index) => (
+                                        {Object.entries(solution.specifications).map(([key, value], index) => (
                                             <motion.div 
                                                 key={index}
                                                 variants={fadeIn}
                                                 className="bg-gray-50 p-4 rounded-lg"
                                             >
                                                 <div className="font-medium text-gray-900 mb-2">
-                                                    {spec.key}
+                                                    {key}
                                                 </div>
                                                 <div className="text-gray-600">
-                                                    {spec.value}
+                                                    {value}
                                                 </div>
                                             </motion.div>
                                         ))}
