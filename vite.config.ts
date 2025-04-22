@@ -7,7 +7,10 @@ import tailwindcss from 'tailwindcss';
 export default defineConfig({
     plugins: [
         laravel({
-            input: 'resources/js/app.tsx',
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.tsx'
+            ],
             refresh: true,
         }),
         react(),
@@ -27,12 +30,14 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': '/resources/js',
+            '@': resolve(__dirname, 'resources/js'),
         },
     },
     build: {
         rollupOptions: {
-            input: resolve(__dirname, 'resources/js/app.tsx'),
-        }
+            input: {
+                app: resolve(__dirname, 'resources/js/app.tsx'),
+            },
+        },
     },
 });
