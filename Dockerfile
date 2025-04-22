@@ -1,24 +1,42 @@
-FROM node:18-bullseye
+FROM php:8.2-fpm
 
-# Install PHP and required extensions
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    php-cli php-mbstring php-xml php-curl php-bcmath php-pgsql unzip curl git \
-    && apt-get clean
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    curl \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    libpq-dev \
+    libssl-dev \
+    nodejs \
+    npm
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_pgsql mbstring zip exif pcntl bcmath gd
+
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /app
+WORKDIR /var/www
 
-# Copy and install PHP and Node deps
 COPY . .
 
-RUN composer install
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 RUN npm install
+RUN npm run build
 
-# Expose ports for Laravel and Vite
-EXPOSE 8000 5173
+# Permissions fix (optional)
+RUN chown -R www-data:www-data /var/www
 
-# Run the concurrent dev setup
-CMD ["npx", "concurrently", "-c", "#93c5fd,#c4b5fd,#fdba74", "php artisan serve --host=0.0.0.0 --port=8000", "php artisan queue:listen --tries=1", "npm run dev"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
