@@ -9,6 +9,7 @@ import ('./pages/Home'); // this makes Vite include it
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Hippo Pumps Limited';
+const baseUrl = import.meta.env.VITE_APP_URL || 'http://localhost';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -41,6 +42,7 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+    url: baseUrl,
 });
 
 // This will set light / dark mode on load...
