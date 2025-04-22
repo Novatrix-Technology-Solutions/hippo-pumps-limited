@@ -6,7 +6,8 @@ import {
     Droplet, 
     Settings, 
     LogOut, 
-    User
+    User,
+    AppWindow
 } from 'lucide-react';
 import PageTransition from '@/components/Animated/PageTransition';
 
@@ -65,6 +66,14 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                     >
                                         <Droplet className="w-5 h-5 mr-3" />
                                         Pump Solutions
+                                    </Link>
+
+                                    <Link
+                                        href={route('admin.team-members.index')}
+                                        className="flex items-center px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100"
+                                    >
+                                        <AppWindow className="w-5 h-5 mr-3" />
+                                        Team Members
                                     </Link>
 
                                     <Link

@@ -6,6 +6,7 @@ use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -99,6 +100,10 @@ class NewsController extends Controller
         $news->published_at = $validated['is_published'] ? now() : null;
 
         if ($request->hasFile('featured_image')) {
+            // Delete old image if exists
+            if ($news->featured_image) {
+                Storage::disk('public')->delete($news->featured_image);
+            }
             $news->featured_image = $request->file('featured_image')->store('news', 'public');
         }
 
