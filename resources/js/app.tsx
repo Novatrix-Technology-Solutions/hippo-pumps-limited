@@ -15,8 +15,8 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: async (name) => {
         const page = await resolvePageComponent(
-            `./pages/${name}.tsx`,
-            import.meta.glob('./pages/**/*.tsx')
+            `./Pages/${name}.tsx`,
+            import.meta.glob('./Pages/**/*.tsx')
         );
         
         if (!page) {
@@ -43,6 +43,14 @@ createInertiaApp({
         color: '#4B5563',
     },
     url: baseUrl,
+    // Add CSRF token handling
+    setupPage: (page) => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        if (csrfToken) {
+            page.props.csrfToken = csrfToken;
+        }
+        return page;
+    },
 });
 
 // This will set light / dark mode on load...
