@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { useUrl } from '@/hooks/use-url';
 
 type RegisterForm = {
     name: string;
@@ -23,10 +24,11 @@ export default function Register() {
         password: '',
         password_confirmation: '',
     });
+    const { getAbsoluteUrl } = useUrl();
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('register'), {
+        post(getAbsoluteUrl('register'), {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
@@ -109,7 +111,7 @@ export default function Register() {
 
                 <div className="text-muted-foreground text-center text-sm">
                     Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={getAbsoluteUrl('login')} tabIndex={6}>
                         Log in
                     </TextLink>
                 </div>
