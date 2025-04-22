@@ -1,7 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
-import { route } from '@/ziggy';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -10,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import { useUrl } from '@/hooks/use-url';
 
 type LoginForm = {
     email: string;
@@ -23,19 +23,12 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
+    const { getAbsoluteUrl } = useUrl();
     const { data, setData, post, processing, errors, reset } = useForm<Required<LoginForm>>({
         email: '',
         password: '',
         remember: false,
     });
-
-    const getAbsoluteUrl = (routeName: string) => {
-        const baseUrl = import.meta.env.VITE_APP_URL || 'http://localhost';
-        const routePath = route(routeName);
-        const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-        const normalizedRoutePath = routePath.startsWith('/') ? routePath.slice(1) : routePath;
-        return `${normalizedBaseUrl}${normalizedRoutePath}`;
-    };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();

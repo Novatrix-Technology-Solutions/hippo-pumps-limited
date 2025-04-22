@@ -1,12 +1,10 @@
-import { PageProps } from '@/types';
 import { Link } from '@inertiajs/react';
 import { CircleCheck, Droplets, Gauge, Recycle, Wrench } from 'lucide-react';
+import { useUrl } from '@/hooks/use-url';
 
-interface HomeProps extends PageProps {
-    // Add any additional props specific to the Home component here
-}
+export default function Home() {
+    const { getAbsoluteUrl } = useUrl();
 
-export default function Home({}: HomeProps) {
     return (
         <div>
             {/* Hero Section */}
@@ -59,10 +57,10 @@ export default function Home({}: HomeProps) {
                             </p>
                             <div>
                                 <Link
-                                    href="/pump-solutions"
-                                    className="bg-white text-[#1e4785] px-4 py-2 rounded hover:bg-gray-100 inline-block"
+                                    href={getAbsoluteUrl('pump-solutions')}
+                                    className="text-[#004080] hover:text-[#008000]"
                                 >
-                                    Pump solutions &gt;
+                                    View Pump Solutions
                                 </Link>
                             </div>
                         </div>

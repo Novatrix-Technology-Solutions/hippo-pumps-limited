@@ -1,18 +1,8 @@
 import { Link } from '@inertiajs/react';
-import { route } from '@/ziggy';
+import { useUrl } from '@/hooks/use-url';
 
 export default function Header() {
-    const getAbsoluteUrl = (routeName: string) => {
-        const baseUrl = import.meta.env.VITE_APP_URL || 'http://localhost';
-        const routePath = route(routeName);
-        // Ensure baseUrl ends with a slash and routePath doesn't start with one
-        const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-        const normalizedRoutePath = routePath.startsWith('/') ? routePath.slice(1) : routePath;
-        console.log('Base URL:', normalizedBaseUrl);
-        console.log('Route Path:', normalizedRoutePath);
-        console.log('Full URL:', `${normalizedBaseUrl}${normalizedRoutePath}`);
-        return `${normalizedBaseUrl}${normalizedRoutePath}`;
-    };
+    const { getAbsoluteUrl } = useUrl();
 
     const handleLinkClick = (e: React.MouseEvent, href: string) => {
         e.preventDefault();
