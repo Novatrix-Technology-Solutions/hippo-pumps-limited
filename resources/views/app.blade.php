@@ -12,8 +12,16 @@
 
         <!-- Scripts -->
         @routes
-        @viteReactRefresh
-        @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.jsx"])
+
+        @if (env('VITE_DEV_SERVER') === 'true')
+            {{-- Local Dev: Use hot-reloading and full Vite server --}}
+            @viteReactRefresh
+            @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
+        @else
+            {{-- Production: Only use the built app entry --}}
+            @vite(['resources/js/app.tsx'])
+        @endif
+
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
