@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss"
 import tailwindcssAnimate from "tailwindcss-animate"
+import forms from '@tailwindcss/forms'
 
 const config: Config = {
   content: [
@@ -10,6 +11,13 @@ const config: Config = {
     "./resources/**/*.tsx",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
         primary: "#004080",
@@ -83,7 +91,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [tailwindcssAnimate],
+  plugins: [tailwindcssAnimate, forms],
 }
 
 export default config
