@@ -13,8 +13,8 @@ interface TeamMember {
     name: string;
     position: string;
     bio: string;
-    image?: string | null;
-    image_url?: string | null;
+    image: string | null;
+    image_url: string | null;
     order: number;
 }
 
@@ -31,7 +31,7 @@ const Form = ({ teamMember = {
     image_url: null,
     order: 0
 }, isEdit = false }: Props) => {
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(teamMember.image_url);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(teamMember.image_url ?? null);
 
     const { data, setData, post, put, processing, errors } = useForm({
         name: teamMember.name,
@@ -50,6 +50,9 @@ const Form = ({ teamMember = {
                 setImagePreviewUrl(e.target?.result as string);
             };
             reader.readAsDataURL(file);
+        } else {
+            setData('image', null);
+            setImagePreviewUrl(teamMember.image_url ?? null);
         }
     };
 
@@ -89,7 +92,7 @@ const Form = ({ teamMember = {
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                             required
                                         />
-                                        <AnimatedErrorMessage message={errors.name} />
+                                        <AnimatedErrorMessage message={errors.name ?? null} />
                                     </motion.div>
 
                                     <motion.div variants={staggerItem}>
@@ -104,7 +107,7 @@ const Form = ({ teamMember = {
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                             required
                                         />
-                                        <AnimatedErrorMessage message={errors.position} />
+                                        <AnimatedErrorMessage message={errors.position ?? null} />
                                     </motion.div>
 
                                     <motion.div variants={staggerItem}>
@@ -119,7 +122,7 @@ const Form = ({ teamMember = {
                                             required
                                             rows={4}
                                         />
-                                        <AnimatedErrorMessage message={errors.bio} />
+                                        <AnimatedErrorMessage message={errors.bio ?? null} />
                                     </motion.div>
 
                                     <motion.div variants={staggerItem}>
@@ -134,7 +137,7 @@ const Form = ({ teamMember = {
                                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                             required
                                         />
-                                        <AnimatedErrorMessage message={errors.order} />
+                                        <AnimatedErrorMessage message={errors.order ?? null} />
                                     </motion.div>
 
                                     <motion.div variants={staggerItem}>
@@ -157,7 +160,7 @@ const Form = ({ teamMember = {
                                         <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                             Upload a team member photo or leave empty to create without an image
                                         </p>
-                                        <AnimatedErrorMessage message={errors.image} />
+                                        <AnimatedErrorMessage message={errors.image ?? null} />
                                         {imagePreviewUrl && (
                                             <motion.div
                                                 className="mt-2"
