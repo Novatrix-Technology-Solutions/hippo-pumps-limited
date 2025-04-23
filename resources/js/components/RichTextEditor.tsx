@@ -100,12 +100,24 @@ const RichTextEditor = ({
             Table.configure({
                 resizable: true,
                 HTMLAttributes: {
-                    class: 'border-collapse table-auto w-full',
+                    class: 'border-collapse table-auto w-full border border-gray-300',
                 },
             }),
-            TableRow,
-            TableHeader,
-            TableCell,
+            TableRow.configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300',
+                },
+            }),
+            TableCell.configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300 p-2',
+                },
+            }),
+            TableHeader.configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300 bg-gray-100 p-2',
+                },
+            }),
             Color,
             TextStyle,
         ],
@@ -150,7 +162,7 @@ const RichTextEditor = ({
                 </label>
             )}
             
-            <div className="border rounded-lg overflow-hidden">
+            <div className="border rounded-lg overflow-hidden bg-white">
                 <div className="border-b bg-gray-50 p-2 flex flex-wrap gap-1">
                     <Button
                         variant="ghost"
@@ -306,7 +318,7 @@ const RichTextEditor = ({
                                 <Palette className="h-4 w-4" />
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-64">
+                        <PopoverContent className="w-64 bg-white p-4 shadow-lg border border-gray-200">
                             <div className="grid grid-cols-8 gap-1">
                                 {[
                                     '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef',
@@ -315,7 +327,7 @@ const RichTextEditor = ({
                                 ].map((color) => (
                                     <button
                                         key={color}
-                                        className="w-6 h-6 rounded-md"
+                                        className="w-6 h-6 rounded-md hover:ring-2 hover:ring-offset-2 hover:ring-gray-400"
                                         style={{ backgroundColor: color }}
                                         onClick={() => editor.chain().focus().setColor(color).run()}
                                     />
@@ -337,7 +349,7 @@ const RichTextEditor = ({
                                 <LinkIcon className="h-4 w-4" />
                             </Button>
                         </DialogTrigger>
-                        <DialogContent>
+                        <DialogContent className="bg-white">
                             <DialogHeader>
                                 <DialogTitle>Add Link</DialogTitle>
                                 <DialogDescription>
@@ -349,6 +361,7 @@ const RichTextEditor = ({
                                     value={linkUrl}
                                     onChange={(e) => setLinkUrl(e.target.value)}
                                     placeholder="https://example.com"
+                                    className="bg-white"
                                 />
                                 <div className="flex justify-end gap-2">
                                     <Button variant="ghost" onClick={() => setIsLinkModalOpen(false)}>
@@ -372,7 +385,7 @@ const RichTextEditor = ({
                                 <ImageIcon className="h-4 w-4" />
                             </Button>
                         </DialogTrigger>
-                        <DialogContent>
+                        <DialogContent className="bg-white">
                             <DialogHeader>
                                 <DialogTitle>Add Image</DialogTitle>
                                 <DialogDescription>
@@ -384,11 +397,13 @@ const RichTextEditor = ({
                                     value={imageUrl}
                                     onChange={(e) => setImageUrl(e.target.value)}
                                     placeholder="Image URL"
+                                    className="bg-white"
                                 />
                                 <Input
                                     value={imageAlt}
                                     onChange={(e) => setImageAlt(e.target.value)}
                                     placeholder="Alt text"
+                                    className="bg-white"
                                 />
                                 <div className="flex justify-end gap-2">
                                     <Button variant="ghost" onClick={() => setIsImageModalOpen(false)}>
@@ -423,7 +438,7 @@ const RichTextEditor = ({
 
                 <EditorContent 
                     editor={editor} 
-                    className="prose max-w-none p-4 min-h-[200px] focus:outline-none"
+                    className="prose max-w-none p-4 min-h-[200px] focus:outline-none bg-white"
                 />
 
                 <div className="flex justify-end px-4 py-2 border-t bg-gray-50 text-sm text-gray-500">

@@ -83,6 +83,10 @@ export default function Header() {
             {isMenuOpen && (
             <div className="fixed inset-0 z-50 bg-white md:hidden overflow-y-auto p-6">
                 <nav className="flex flex-col space-y-4">
+                <button onClick={toggleMenu} className="text-[#004080] self-end">
+                    Close ✕
+                </button>
+
                 <Link
                     href={route('the-company')}
                     className="text-[#004080] hover:text-[#008000] text-base"

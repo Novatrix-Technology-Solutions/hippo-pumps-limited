@@ -8,7 +8,8 @@ import {
     LogOut, 
     User,
     AppWindow,
-    Menu
+    Menu,
+    X
 } from 'lucide-react';
 import PageTransition from '@/components/Animated/PageTransition';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -66,18 +67,28 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                             <Menu className="h-5 w-5" />
                                         </Button>
                                     </SheetTrigger>
-                                    <SheetContent side="left" className="w-64 p-0 z-[101]">
-                                        <SheetHeader className="p-4 border-b">
-                                            <SheetTitle className="text-xl font-bold text-gray-800">
-                                                <img 
-                                                    src="/images/hippo-logo.svg"
-                                                    alt='Hippo Pumps Limited'
-                                                    width={120}
-                                                    height={60}
-                                                />
-                                            </SheetTitle>
+                                    <SheetContent side="left" className="w-64 p-0 z-[101] bg-white">
+                                        <SheetHeader className="p-4 border-b bg-white">
+                                            <div className="flex items-center justify-between">
+                                                <SheetTitle className="text-xl font-bold text-gray-800">
+                                                    <img 
+                                                        src="/images/hippo-logo.svg"
+                                                        alt='Hippo Pumps Limited'
+                                                        width={120}
+                                                        height={60}
+                                                    />
+                                                </SheetTitle>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8"
+                                                    onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))}
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                </Button>
+                                            </div>
                                         </SheetHeader>
-                                        <nav className="flex-1 px-4 py-4 space-y-1">
+                                        <nav className="flex-1 px-4 py-4 space-y-1 bg-white">
                                             <NavLink href={route('dashboard')} icon={LayoutDashboard} routeName="dashboard">
                                                 Dashboard
                                             </NavLink>
