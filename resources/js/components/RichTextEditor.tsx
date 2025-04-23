@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
 
 interface RichTextEditorProps {
     value: string;
@@ -10,7 +9,6 @@ interface RichTextEditorProps {
 
 const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label, error }) => {
     const editorRef = useRef<HTMLDivElement>(null);
-    const [showToolbar, setShowToolbar] = useState(false);
 
     const formatText = (command: string, value?: string) => {
         document.execCommand(command, false, value);
@@ -29,13 +27,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                 {label}
             </label>
             
-            <div className="border rounded-md dark:border-gray-600">
-                <div className={`p-2 border-b dark:border-gray-600 ${showToolbar ? 'block' : 'hidden'}`}>
+            <div className="border rounded-md dark:border-gray-600 bg-white dark:bg-gray-800">
+                <div className="p-2 border-b dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
                     <div className="flex flex-wrap gap-2">
                         <button
                             type="button"
                             onClick={() => formatText('bold')}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                             title="Bold"
                         >
                             <strong>B</strong>
@@ -43,7 +41,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                         <button
                             type="button"
                             onClick={() => formatText('italic')}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                             title="Italic"
                         >
                             <em>I</em>
@@ -51,14 +49,14 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                         <button
                             type="button"
                             onClick={() => formatText('underline')}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                             title="Underline"
                         >
                             <u>U</u>
                         </button>
                         <select
                             onChange={(e) => formatText('fontSize', e.target.value)}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                         >
                             <option value="">Font Size</option>
                             <option value="1">Small</option>
@@ -68,7 +66,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                         </select>
                         <select
                             onChange={(e) => formatText('foreColor', e.target.value)}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                         >
                             <option value="">Text Color</option>
                             <option value="red">Red</option>
@@ -78,7 +76,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                         </select>
                         <select
                             onChange={(e) => formatText('hiliteColor', e.target.value)}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                         >
                             <option value="">Highlight Color</option>
                             <option value="yellow">Yellow</option>
@@ -88,7 +86,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                         <button
                             type="button"
                             onClick={() => formatText('insertUnorderedList')}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                             title="Bullet List"
                         >
                             • List
@@ -96,7 +94,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                         <button
                             type="button"
                             onClick={() => formatText('insertOrderedList')}
-                            className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600"
+                            className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
                             title="Numbered List"
                         >
                             1. List
@@ -108,9 +106,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label,
                     ref={editorRef}
                     contentEditable
                     onInput={handleInput}
-                    onFocus={() => setShowToolbar(true)}
-                    onBlur={() => setShowToolbar(false)}
-                    className="p-4 min-h-[200px] focus:outline-none"
+                    className="p-4 min-h-[200px] focus:outline-none text-gray-800 dark:text-gray-200"
                     dangerouslySetInnerHTML={{ __html: value }}
                 />
             </div>
