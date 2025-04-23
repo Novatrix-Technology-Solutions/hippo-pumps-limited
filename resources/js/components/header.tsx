@@ -1,13 +1,8 @@
 import { Link } from '@inertiajs/react';
-import { useState } from 'react';
+import { Disclosure } from '@headlessui/react';
+import { Menu, X } from 'lucide-react';
 
 export default function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
-    };
-
     return (
         <header className="bg-white h-[70px] flex items-center justify-between px-5 md:px-20 relative">
             <Link href="/" className="text-[#004080]">
@@ -55,76 +50,57 @@ export default function Header() {
                     News
                 </Link>
             </nav>
+
+            {/* Mobile menu button */}
             <div className="md:hidden">
-                <button 
-                    onClick={toggleMenu}
-                    className="text-[#004080]"
-                    aria-label="Toggle menu"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                </button>
+                <Disclosure>
+                    {({ open }) => (
+                        <>
+                            <Disclosure.Button className="text-[#004080] p-2">
+                                {open ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
+                            </Disclosure.Button>
+                            <Disclosure.Panel className="fixed top-[70px] left-0 right-0 z-50 bg-white shadow-lg">
+                                <nav className="flex flex-col items-center space-y-4 py-4">
+                                    <Link
+                                        href={route('the-company')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        The Company
+                                    </Link>
+                                    <Link
+                                        href={route('public.pump-solutions.index')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        Pumps Solutions
+                                    </Link>
+                                    <Link
+                                        href={route('meet-the-team')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        Meet the Team
+                                    </Link>
+                                    <Link
+                                        href={route('find-us')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        Find Us
+                                    </Link>
+                                    <Link
+                                        href={route('public.news.index')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        News
+                                    </Link>
+                                </nav>
+                            </Disclosure.Panel>
+                        </>
+                    )}
+                </Disclosure>
             </div>
-
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-            <div className="fixed inset-0 z-50 bg-white md:hidden overflow-y-auto p-6">
-                <nav className="flex flex-col space-y-4">
-                <button onClick={toggleMenu} className="text-[#004080] self-end">
-                    Close ✕
-                </button>
-
-                <Link
-                    href={route('the-company')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                    onClick={toggleMenu}
-                >
-                    The Company
-                </Link>
-                <Link
-                    href={route('public.pump-solutions.index')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                    onClick={toggleMenu}
-                >
-                    Pumps Solutions
-                </Link>
-                <Link
-                    href={route('meet-the-team')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                    onClick={toggleMenu}
-                >
-                    Meet the Team
-                </Link>
-                <Link
-                    href={route('find-us')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                    onClick={toggleMenu}
-                >
-                    Find Us
-                </Link>
-                <Link
-                    href={route('public.news.index')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                    onClick={toggleMenu}
-                >
-                    News
-                </Link>
-                </nav>
-            </div>
-            )}
         </header>
     );
 } 
