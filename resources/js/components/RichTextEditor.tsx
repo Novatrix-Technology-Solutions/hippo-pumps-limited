@@ -1,202 +1,444 @@
-import React, { useRef, useEffect } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
+import TextAlign from '@tiptap/extension-text-align';
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import Color from '@tiptap/extension-color';
+import TextStyle from '@tiptap/extension-text-style';
+import { 
+    Bold, 
+    Italic, 
+    List, 
+    ListOrdered, 
+    Link as LinkIcon,
+    Image as ImageIcon,
+    AlignLeft,
+    AlignCenter,
+    AlignRight,
+    Heading1,
+    Heading2,
+    Heading3,
+    Undo,
+    Redo,
+    Code,
+    Table as TableIcon,
+    Palette,
+    Hash
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import { Input } from "@/components/ui/input";
 
 interface RichTextEditorProps {
     value: string;
     onChange: (value: string) => void;
-    label: string;
-    error?: string | null;
+    label?: string;
+    error?: string;
+    placeholder?: string;
+    maxLength?: number;
 }
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, label, error }) => {
-    const editorRef = useRef<HTMLDivElement>(null);
+const RichTextEditor = ({ 
+    value, 
+    onChange, 
+    label, 
+    error, 
+    placeholder = 'Start typing...', 
+    maxLength 
+}: RichTextEditorProps) => {
+    const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [linkUrl, setLinkUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [imageAlt, setImageAlt] = useState('');
 
-    useEffect(() => {
-        if (editorRef.current && !editorRef.current.innerHTML) {
-            editorRef.current.innerHTML = value;
+    const editor = useEditor({
+        extensions: [
+            StarterKit.configure({
+                codeBlock: {
+                    HTMLAttributes: {
+                        class: 'rounded-md bg-gray-900 p-4 text-white',
+                    },
+                },
+            }),
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    class: 'text-blue-500 hover:text-blue-700 underline',
+                },
+            }),
+            Image.configure({
+                HTMLAttributes: {
+                    class: 'rounded-lg max-w-full',
+                },
+            }),
+            Placeholder.configure({
+                placeholder,
+            }),
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+            }),
+            Table.configure({
+                resizable: true,
+                HTMLAttributes: {
+                    class: 'border-collapse table-auto w-full',
+                },
+            }),
+            TableRow,
+            TableHeader,
+            TableCell,
+            Color,
+            TextStyle,
+        ],
+        content: value,
+        onUpdate: ({ editor }) => {
+            onChange(editor.getHTML());
+        },
+    });
+
+    if (!editor) {
+        return null;
+    }
+
+    const addLink = () => {
+        if (linkUrl) {
+            editor.chain().focus().setLink({ href: linkUrl }).run();
+            setLinkUrl('');
+            setIsLinkModalOpen(false);
         }
-    }, [value]);
-
-    const formatText = (command: string, value?: string) => {
-        document.execCommand(command, false, value);
-        editorRef.current?.focus();
     };
 
-    const handleInput = () => {
-        if (editorRef.current) {
-            onChange(editorRef.current.innerHTML);
+    const addImage = () => {
+        if (imageUrl) {
+            editor.chain().focus().setImage({ src: imageUrl, alt: imageAlt }).run();
+            setImageUrl('');
+            setImageAlt('');
+            setIsImageModalOpen(false);
         }
     };
 
-    const handlePaste = (e: React.ClipboardEvent) => {
-        e.preventDefault();
-        const text = e.clipboardData.getData('text/plain');
-        document.execCommand('insertText', false, text);
+    const addTable = () => {
+        editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            document.execCommand('insertLineBreak');
-        }
-    };
+    const characterCount = editor.storage.characterCount?.characters() ?? 0;
 
     return (
         <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {label}
-            </label>
+            {label && (
+                <label className="block text-sm font-medium text-gray-700">
+                    {label}
+                </label>
+            )}
             
-            <div className="border rounded-md dark:border-gray-600 bg-white dark:bg-gray-800">
-                <div className="p-2 border-b dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
-                    <div className="flex flex-wrap gap-2">
-                        {/* Text Style */}
-                        <div className="flex gap-2 border-r dark:border-gray-600 pr-2">
-                            <button
-                                type="button"
-                                onClick={() => formatText('bold')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Bold"
-                            >
-                                <strong>B</strong>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => formatText('italic')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Italic"
-                            >
-                                <em>I</em>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => formatText('underline')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Underline"
-                            >
-                                <u>U</u>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => formatText('strikeThrough')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Strikethrough"
-                            >
-                                <s>S</s>
-                            </button>
-                        </div>
+            <div className="border rounded-lg overflow-hidden">
+                <div className="border-b bg-gray-50 p-2 flex flex-wrap gap-1">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('bold') && "bg-gray-200"
+                        )}
+                    >
+                        <Bold className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('italic') && "bg-gray-200"
+                        )}
+                    >
+                        <Italic className="h-4 w-4" />
+                    </Button>
 
-                        {/* Text Alignment */}
-                        <div className="flex gap-2 border-r dark:border-gray-600 pr-2">
-                            <button
-                                type="button"
-                                onClick={() => formatText('justifyLeft')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Align Left"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 18h18M3 6h18" />
-                                </svg>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => formatText('justifyCenter')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Align Center"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M6 14h12M3 18h18M6 6h12" />
-                                </svg>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => formatText('justifyRight')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Align Right"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M9 14h12M3 18h18M9 6h12" />
-                                </svg>
-                            </button>
-                        </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('heading', { level: 1 }) && "bg-gray-200"
+                        )}
+                    >
+                        <Heading1 className="h-4 w-4" />
+                    </Button>
 
-                        {/* Lists */}
-                        <div className="flex gap-2 border-r dark:border-gray-600 pr-2">
-                            <button
-                                type="button"
-                                onClick={() => formatText('insertUnorderedList')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Bullet List"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => formatText('insertOrderedList')}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
-                                title="Numbered List"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                            </button>
-                        </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('heading', { level: 2 }) && "bg-gray-200"
+                        )}
+                    >
+                        <Heading2 className="h-4 w-4" />
+                    </Button>
 
-                        {/* Text Formatting */}
-                        <div className="flex gap-2">
-                            <select
-                                onChange={(e) => formatText('formatBlock', e.target.value)}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('heading', { level: 3 }) && "bg-gray-200"
+                        )}
+                    >
+                        <Heading3 className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('bulletList') && "bg-gray-200"
+                        )}
+                    >
+                        <List className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('orderedList') && "bg-gray-200"
+                        )}
+                    >
+                        <ListOrdered className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive({ textAlign: 'left' }) && "bg-gray-200"
+                        )}
+                    >
+                        <AlignLeft className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive({ textAlign: 'center' }) && "bg-gray-200"
+                        )}
+                    >
+                        <AlignCenter className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive({ textAlign: 'right' }) && "bg-gray-200"
+                        )}
+                    >
+                        <AlignRight className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('codeBlock') && "bg-gray-200"
+                        )}
+                    >
+                        <Code className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={addTable}
+                        className={cn(
+                            "h-8 w-8 p-0",
+                            editor.isActive('table') && "bg-gray-200"
+                        )}
+                    >
+                        <TableIcon className="h-4 w-4" />
+                    </Button>
+
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
                             >
-                                <option value="p">Paragraph</option>
-                                <option value="h1">Heading 1</option>
-                                <option value="h2">Heading 2</option>
-                                <option value="h3">Heading 3</option>
-                                <option value="h4">Heading 4</option>
-                                <option value="h5">Heading 5</option>
-                                <option value="h6">Heading 6</option>
-                                <option value="pre">Preformatted</option>
-                            </select>
-                            <select
-                                onChange={(e) => formatText('fontSize', e.target.value)}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
+                                <Palette className="h-4 w-4" />
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-64">
+                            <div className="grid grid-cols-8 gap-1">
+                                {[
+                                    '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef',
+                                    '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4',
+                                    '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722',
+                                ].map((color) => (
+                                    <button
+                                        key={color}
+                                        className="w-6 h-6 rounded-md"
+                                        style={{ backgroundColor: color }}
+                                        onClick={() => editor.chain().focus().setColor(color).run()}
+                                    />
+                                ))}
+                            </div>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Dialog open={isLinkModalOpen} onOpenChange={setIsLinkModalOpen}>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className={cn(
+                                    "h-8 w-8 p-0",
+                                    editor.isActive('link') && "bg-gray-200"
+                                )}
                             >
-                                <option value="">Font Size</option>
-                                <option value="1">Small</option>
-                                <option value="3">Medium</option>
-                                <option value="5">Large</option>
-                                <option value="7">Extra Large</option>
-                            </select>
-                            <select
-                                onChange={(e) => formatText('foreColor', e.target.value)}
-                                className="px-2 py-1 text-sm bg-white dark:bg-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-500 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-500"
+                                <LinkIcon className="h-4 w-4" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Add Link</DialogTitle>
+                                <DialogDescription>
+                                    Enter the URL for the link
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <Input
+                                    value={linkUrl}
+                                    onChange={(e) => setLinkUrl(e.target.value)}
+                                    placeholder="https://example.com"
+                                />
+                                <div className="flex justify-end gap-2">
+                                    <Button variant="ghost" onClick={() => setIsLinkModalOpen(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={addLink}>
+                                        Add Link
+                                    </Button>
+                                </div>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+
+                    <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
                             >
-                                <option value="">Text Color</option>
-                                <option value="black">Black</option>
-                                <option value="red">Red</option>
-                                <option value="blue">Blue</option>
-                                <option value="green">Green</option>
-                                <option value="purple">Purple</option>
-                                <option value="orange">Orange</option>
-                            </select>
-                        </div>
-                    </div>
+                                <ImageIcon className="h-4 w-4" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Add Image</DialogTitle>
+                                <DialogDescription>
+                                    Enter the URL and alt text for the image
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-4 py-4">
+                                <Input
+                                    value={imageUrl}
+                                    onChange={(e) => setImageUrl(e.target.value)}
+                                    placeholder="Image URL"
+                                />
+                                <Input
+                                    value={imageAlt}
+                                    onChange={(e) => setImageAlt(e.target.value)}
+                                    placeholder="Alt text"
+                                />
+                                <div className="flex justify-end gap-2">
+                                    <Button variant="ghost" onClick={() => setIsImageModalOpen(false)}>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={addImage}>
+                                        Add Image
+                                    </Button>
+                                </div>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().undo().run()}
+                        className="h-8 w-8 p-0"
+                    >
+                        <Undo className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => editor.chain().focus().redo().run()}
+                        className="h-8 w-8 p-0"
+                    >
+                        <Redo className="h-4 w-4" />
+                    </Button>
                 </div>
-                
-                <div
-                    ref={editorRef}
-                    contentEditable
-                    onInput={handleInput}
-                    onPaste={handlePaste}
-                    onKeyDown={handleKeyDown}
-                    className="p-4 min-h-[200px] focus:outline-none text-gray-800 dark:text-gray-200 whitespace-pre-wrap"
-                    dangerouslySetInnerHTML={{ __html: value }}
+
+                <EditorContent 
+                    editor={editor} 
+                    className="prose max-w-none p-4 min-h-[200px] focus:outline-none"
                 />
+
+                <div className="flex justify-end px-4 py-2 border-t bg-gray-50 text-sm text-gray-500">
+                    {maxLength ? (
+                        <span>{characterCount} / {maxLength} characters</span>
+                    ) : (
+                        <span>{characterCount} characters</span>
+                    )}
+                </div>
             </div>
-            
+
             {error && (
-                <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                <p className="text-sm text-red-600">
+                    {error}
+                </p>
             )}
         </div>
     );

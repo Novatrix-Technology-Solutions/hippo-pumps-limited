@@ -80,49 +80,47 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu */}
-            <div 
-                className={`md:hidden fixed top-[70px] left-0 w-full bg-white shadow-lg transition-all duration-300 ease-in-out ${
-                    isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-                }`}
-            >
-                <nav className="flex flex-col p-4 space-y-4">
-                    <Link
-                        href={route('the-company')}
-                        className="text-[#004080] hover:text-[#008000] text-base py-2"
-                        onClick={toggleMenu}
-                    >
-                        The Company
-                    </Link>
-                    <Link
-                        href={route('public.pump-solutions.index')}
-                        className="text-[#004080] hover:text-[#008000] text-base py-2"
-                        onClick={toggleMenu}
-                    >
-                        Pumps Solutions
-                    </Link>
-                    <Link
-                        href={route('meet-the-team')}
-                        className="text-[#004080] hover:text-[#008000] text-base py-2"
-                        onClick={toggleMenu}
-                    >
-                        Meet the Team
-                    </Link>
-                    <Link
-                        href={route('find-us')}
-                        className="text-[#004080] hover:text-[#008000] text-base py-2"
-                        onClick={toggleMenu}
-                    >
-                        Find Us
-                    </Link>
-                    <Link
-                        href={route('public.news.index')}
-                        className="text-[#004080] hover:text-[#008000] text-base py-2"
-                        onClick={toggleMenu}
-                    >
-                        News
-                    </Link>
+            {isMenuOpen && (
+            <div className="fixed inset-0 z-50 bg-white md:hidden overflow-y-auto p-6">
+                <nav className="flex flex-col space-y-4">
+                <Link
+                    href={route('the-company')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                    onClick={toggleMenu}
+                >
+                    The Company
+                </Link>
+                <Link
+                    href={route('public.pump-solutions.index')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                    onClick={toggleMenu}
+                >
+                    Pumps Solutions
+                </Link>
+                <Link
+                    href={route('meet-the-team')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                    onClick={toggleMenu}
+                >
+                    Meet the Team
+                </Link>
+                <Link
+                    href={route('find-us')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                    onClick={toggleMenu}
+                >
+                    Find Us
+                </Link>
+                <Link
+                    href={route('public.news.index')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                    onClick={toggleMenu}
+                >
+                    News
+                </Link>
                 </nav>
             </div>
+            )}
         </header>
     );
 } 
