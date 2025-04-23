@@ -10,6 +10,7 @@ import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import Color from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
+import CharacterCount from '@tiptap/extension-character-count';
 import { 
     Bold, 
     Italic, 
@@ -79,6 +80,14 @@ const RichTextEditor = ({
                         class: 'rounded-md bg-gray-900 p-4 text-white',
                     },
                 },
+                bulletList: {
+                    keepMarks: true,
+                    keepAttributes: false,
+                  },
+                  orderedList: {
+                    keepMarks: true,
+                    keepAttributes: false,
+                  },
             }),
             Link.configure({
                 openOnClick: false,
@@ -118,8 +127,13 @@ const RichTextEditor = ({
                     class: 'border border-gray-300 bg-gray-100 p-2',
                 },
             }),
+            CharacterCount.configure({
+                limit: maxLength ?? 1000,
+            }),
             Color,
-            TextStyle,
+            TextStyle.configure({
+                types: ['textStyle'],
+            }),
         ],
         content: value,
         onUpdate: ({ editor }) => {
@@ -326,6 +340,7 @@ const RichTextEditor = ({
                                     '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722',
                                 ].map((color) => (
                                     <button
+                                        type="button"
                                         key={color}
                                         className="w-6 h-6 rounded-md hover:ring-2 hover:ring-offset-2 hover:ring-gray-400"
                                         style={{ backgroundColor: color }}
