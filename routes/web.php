@@ -28,9 +28,6 @@ Route::get('/the-company', function () {
     return Inertia::render('TheCompany');
 })->name('the-company');
 
-Route::get('/team', function () {
-    return Inertia::render('Public/Team');
-})->name('public.team');
 
 // Public News Routes
 Route::get('/news', [NewsController::class, 'index'])->name('public.news.index');
