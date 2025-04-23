@@ -1,8 +1,15 @@
 import { Link } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function Header() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
-        <header className="bg-white h-[70px] flex items-center justify-between px-5 md:px-20">
+        <header className="bg-white h-[70px] flex items-center justify-between px-5 md:px-20 relative">
             <Link href="/" className="text-[#004080]">
                 <img
                     src="/images/hippo-logo.svg"
@@ -49,7 +56,11 @@ export default function Header() {
                 </Link>
             </nav>
             <div className="md:hidden">
-                <button className="text-[#004080]">
+                <button 
+                    onClick={toggleMenu}
+                    className="text-[#004080]"
+                    aria-label="Toggle menu"
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -66,6 +77,51 @@ export default function Header() {
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
+            </div>
+
+            {/* Mobile Menu */}
+            <div 
+                className={`md:hidden fixed top-[70px] left-0 w-full bg-white shadow-lg transition-all duration-300 ease-in-out ${
+                    isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+                }`}
+            >
+                <nav className="flex flex-col p-4 space-y-4">
+                    <Link
+                        href={route('the-company')}
+                        className="text-[#004080] hover:text-[#008000] text-base py-2"
+                        onClick={toggleMenu}
+                    >
+                        The Company
+                    </Link>
+                    <Link
+                        href={route('public.pump-solutions.index')}
+                        className="text-[#004080] hover:text-[#008000] text-base py-2"
+                        onClick={toggleMenu}
+                    >
+                        Pumps Solutions
+                    </Link>
+                    <Link
+                        href={route('meet-the-team')}
+                        className="text-[#004080] hover:text-[#008000] text-base py-2"
+                        onClick={toggleMenu}
+                    >
+                        Meet the Team
+                    </Link>
+                    <Link
+                        href={route('find-us')}
+                        className="text-[#004080] hover:text-[#008000] text-base py-2"
+                        onClick={toggleMenu}
+                    >
+                        Find Us
+                    </Link>
+                    <Link
+                        href={route('public.news.index')}
+                        className="text-[#004080] hover:text-[#008000] text-base py-2"
+                        onClick={toggleMenu}
+                    >
+                        News
+                    </Link>
+                </nav>
             </div>
         </header>
     );
