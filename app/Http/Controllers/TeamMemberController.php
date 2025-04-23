@@ -29,7 +29,7 @@ class TeamMemberController extends Controller
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
             'bio' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'order' => 'required|integer|min:0',
         ]);
 
@@ -38,6 +38,8 @@ class TeamMemberController extends Controller
             $filename = Str::slug($request->name) . '-' . time() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('team-members', $filename, 'public');
             $validated['image'] = $path;
+        } else {
+            $validated['image'] = null;
         }
 
         TeamMember::create($validated);
@@ -73,6 +75,9 @@ class TeamMemberController extends Controller
             $filename = Str::slug($request->name) . '-' . time() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('team-members', $filename, 'public');
             $validated['image'] = $path;
+        } else if (!$request->has('image')) {
+            // If no image is provided in the request, keep the existing one
+            $validated['image'] = $teamMember->image;
         }
 
         $teamMember->update($validated);
