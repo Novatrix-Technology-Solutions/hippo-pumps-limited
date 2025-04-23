@@ -13,8 +13,8 @@ interface TeamMember {
     name: string;
     position: string;
     bio: string;
-    image: string | null;
-    image_url: string | null;
+    image?: string | null;
+    image_url?: string | null;
     order: number;
 }
 
@@ -139,7 +139,7 @@ const Form = ({ teamMember = {
 
                                     <motion.div variants={staggerItem}>
                                         <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Image
+                                            Image (Optional)
                                         </label>
                                         <input
                                             type="file"
@@ -154,6 +154,9 @@ const Form = ({ teamMember = {
                                                 hover:file:bg-indigo-100
                                                 dark:file:bg-indigo-900 dark:file:text-indigo-300"
                                         />
+                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                            Upload a team member photo or leave empty to create without an image
+                                        </p>
                                         <AnimatedErrorMessage message={errors.image} />
                                         {imagePreviewUrl && (
                                             <motion.div
