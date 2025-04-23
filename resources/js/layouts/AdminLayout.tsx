@@ -32,7 +32,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
 
     const NavLink = ({ href, icon: Icon, children, routeName }: { 
         href: string; 
-        icon: any; 
+        icon: React.ComponentType<{ className?: string }>; 
         children: React.ReactNode;
         routeName: string;
     }) => (
