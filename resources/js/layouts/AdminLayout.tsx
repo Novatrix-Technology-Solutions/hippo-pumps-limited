@@ -58,7 +58,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                 <PageTransition>
                     <div className="min-h-screen">
                         {/* Mobile Header */}
-                        <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+                        <div className="md:hidden fixed top-0 left-0 right-0 z-[100] bg-white shadow-md">
                             <div className="flex items-center justify-between px-4 h-16">
                                 <Sheet>
                                     <SheetTrigger asChild>
@@ -66,7 +66,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                             <Menu className="h-5 w-5" />
                                         </Button>
                                     </SheetTrigger>
-                                    <SheetContent side="left" className="w-64 p-0">
+                                    <SheetContent side="left" className="w-64 p-0 z-[101]">
                                         <SheetHeader className="p-4 border-b">
                                             <SheetTitle className="text-xl font-bold text-gray-800">
                                                 <img 
