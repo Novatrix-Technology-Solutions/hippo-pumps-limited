@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import SiteLayout from './layouts/site-layout'; // Import the layout
 import { initializeTheme } from './hooks/use-appearance';
 import axios from 'axios';
+import { Toaster } from 'react-hot-toast';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Hippo Pumps Limited';
 const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -42,7 +43,12 @@ createInertiaApp({
     },
     setup({ el, App, props }) {
         const root = createRoot(el);
-        root.render(<App {...props} />);
+        root.render(
+            <>
+                <App {...props} />
+                <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+            </>
+        );
     },
     progress: {
         color: '#4B5563',

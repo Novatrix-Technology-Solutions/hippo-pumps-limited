@@ -30,10 +30,18 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+    
         post(route('login'), {
+            onSuccess: () => {
+                toast.success('Logged in successfully 🎉');
+            },
+            onError: () => {
+                toast.error('Login failed. Please check your credentials.');
+            },
             onFinish: () => reset('password'),
         });
     };
+    
 
     return (
         <AuthLayout title="Log in to your account" description="Enter your email and password below to log in">
