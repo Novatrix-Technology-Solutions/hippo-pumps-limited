@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react';
 
 export default function Header() {
     return (
-        <header className="bg-white h-[70px] flex items-center justify-between px-5 md:px-20 relative">
+        <header className="bg-white h-[70px] flex items-center justify-between px-5 md:px-20">
             <Link href="/" className="text-[#004080]">
                 <img
                     src="/images/hippo-logo.svg"
@@ -63,7 +63,7 @@ export default function Header() {
                                     <Menu className="h-6 w-6" />
                                 )}
                             </Disclosure.Button>
-                            <Disclosure.Panel className="fixed top-[70px] left-0 right-0 z-50 bg-white shadow-lg">
+                            <Disclosure.Panel className="absolute top-[70px] left-0 right-0 z-50 bg-white shadow-lg">
                                 <nav className="flex flex-col items-center space-y-4 py-4">
                                     <Link
                                         href={route('the-company')}
