@@ -45,7 +45,6 @@ class PumpSolutionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|max:2048',
             'category' => 'required|string|in:Building Services,Irrigation,Mining,Industrial',
             'specifications' => 'nullable|array',
             'is_featured' => 'boolean',
@@ -55,9 +54,6 @@ class PumpSolutionController extends Controller
         $solution = new PumpSolution($validated);
         $solution->slug = Str::slug($validated['title']);
 
-        if ($request->hasFile('image')) {
-            $solution->image = $request->file('image')->store('pump-solutions', 'public');
-        }
 
         $solution->save();
 
@@ -76,7 +72,6 @@ class PumpSolutionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|max:2048',
             'category' => 'required|string|in:Building Services,Irrigation,Mining,Industrial',
             'specifications' => 'nullable|array',
             'is_featured' => 'boolean',
@@ -86,9 +81,6 @@ class PumpSolutionController extends Controller
         $pumpSolution->fill($validated);
         $pumpSolution->slug = Str::slug($validated['title']);
 
-        if ($request->hasFile('image')) {
-            $pumpSolution->image = $request->file('image')->store('pump-solutions', 'public');
-        }
 
         $pumpSolution->save();
 

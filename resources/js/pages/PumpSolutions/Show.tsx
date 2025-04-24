@@ -7,18 +7,13 @@ import { motion } from 'framer-motion';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import { staggerContainer, staggerItem, fadeIn } from '@/Utils/animations';
 
-interface Specification {
-    key: string;
-    value: string;
-}
-
 interface PumpSolution {
     id: number;
     title: string;
     description: string;
     category: string;
     image: string | null;
-    specifications: Specification[];
+    specifications: { [key: string]: string | null };
 }
 
 interface Props {
@@ -45,29 +40,11 @@ export default function Show({ solution }: Props) {
                 </motion.div>
 
                 <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                        {/* Left Column - Image */}
-                        <motion.div variants={staggerItem}>
-                            {solution.image && (
-                                <motion.div 
-                                    initial={{ opacity: 0, scale: 1.1 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="rounded-xl overflow-hidden shadow-xl bg-white p-4"
-                                >
-                                    <img
-                                        src={solution.image}
-                                        alt={solution.title}
-                                        className="w-full h-auto rounded-lg"
-                                    />
-                                </motion.div>
-                            )}
-                        </motion.div>
-
-                        {/* Right Column - Product Info */}
-                        <motion.div variants={staggerItem} className="space-y-6">
-                            <Badge variant="secondary" className="text-lg px-4 py-1">
-                                {solution.category}
+    
+                    {/* Right Column - Product Info */}
+                    <motion.div variants={staggerItem} className="space-y-6">
+                        <Badge variant="secondary" className="text-lg px-4 py-1">
+                            {solution.category}
                             </Badge>
                             <h1 className="text-4xl font-bold text-[#1e4785]">{solution.title}</h1>
                             
@@ -103,8 +80,8 @@ export default function Show({ solution }: Props) {
                     </div>
 
                     {/* Specifications */}
-                    {solution.specifications && solution.specifications.length > 0 && (
-                        <motion.div 
+                    {solution.specifications && (
+                        <motion.div
                             variants={staggerItem}
                             className="mt-16"
                         >
@@ -113,18 +90,18 @@ export default function Show({ solution }: Props) {
                                     <CardTitle className="text-2xl">Technical Specifications</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {solution.specifications.map((spec, index) => (
-                                            <motion.div 
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {Object.entries(solution.specifications).map(([key, value], index) => (
+                                            <motion.div
                                                 key={index}
                                                 variants={fadeIn}
                                                 className="bg-gray-50 p-4 rounded-lg"
                                             >
-                                                <div className="font-medium text-gray-900 mb-2">
-                                                    {spec.key}
+                                                <div className="font-medium text-gray-900 mb-2 capitalize">
+                                                    {key.replace(/_/g, ' ')}
                                                 </div>
                                                 <div className="text-gray-600">
-                                                    {spec.value}
+                                                    {value}
                                                 </div>
                                             </motion.div>
                                         ))}
@@ -133,7 +110,6 @@ export default function Show({ solution }: Props) {
                             </Card>
                         </motion.div>
                     )}
-                </div>
             </motion.div>
         </AnimatedPage>
     );

@@ -15,7 +15,6 @@ class PumpSolution extends Model
         'slug',
         'description',
         'category',
-        'image',
         'specifications',
         'is_featured',
         'order',
