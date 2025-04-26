@@ -40,7 +40,7 @@ export default function Create() {
         <AdminLayout>
             <Head title="Create News Article" />
             <AnimatedPage>
-                <motion.div 
+                <motion.div
                     variants={staggerContainer}
                     initial="hidden"
                     animate="visible"
