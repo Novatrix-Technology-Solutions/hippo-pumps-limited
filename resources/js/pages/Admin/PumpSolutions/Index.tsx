@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import { format } from 'date-fns';
@@ -22,7 +22,7 @@ interface Props {
 
 export default function Index({ pumpSolutions }: Props) {
     return (
-        <AdminLayout>
+        <AuthenticatedLayout>
             <Head title="Pump Solutions Management" />
             <div className="container mx-auto py-6">
                 <div className="flex justify-between items-center mb-6">

@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { PageProps, PumpSolution } from '@/types';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 import PumpSolutionForm from './Form';
 
 interface Props extends PageProps {
@@ -9,9 +9,8 @@ interface Props extends PageProps {
 
 export default function Edit({ auth, pumpSolution }: Props) {
     return (
-        <AuthenticatedLayout
+        <AdminLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Edit Pump Solution</h2>}
         >
             <Head title="Edit Pump Solution" />
 
@@ -26,4 +25,4 @@ export default function Edit({ auth, pumpSolution }: Props) {
             </div>
         </AuthenticatedLayout>
     );
-} 
+}

@@ -22,7 +22,6 @@ interface PumpSolution {
     title: string;
     slug?: string;
     description: string;
-    image?: File | null;
     category: string;
     specifications: Record<string, string>;
     is_featured: boolean;
@@ -49,7 +48,6 @@ export default function PumpSolutionForm({ pumpSolution, isEditing = false }: Pr
     const { data, setData, post, put, processing, errors } = useForm<PumpSolutionFormData>({
         title: pumpSolution?.title || '',
         description: pumpSolution?.description || '',
-        image: null,
         category: pumpSolution?.category || categories[0],
         specifications: pumpSolution?.specifications || {},
         is_featured: pumpSolution?.is_featured || false,
@@ -93,17 +91,6 @@ export default function PumpSolutionForm({ pumpSolution, isEditing = false }: Pr
                             onChange={(value) => setData('description', value)}
                             error={errors.description ?? null}
                         />
-                    </motion.div>
-
-                    <motion.div variants={staggerItem} className="space-y-2">
-                        <Label htmlFor="image">Image</Label>
-                        <Input
-                            id="image"
-                            type="file"
-                            onChange={e => setData('image', e.target.files?.[0] || null)}
-                            accept="image/*"
-                        />
-                        <InputError message={errors.image} />
                     </motion.div>
 
                     <motion.div variants={staggerItem} className="space-y-2">

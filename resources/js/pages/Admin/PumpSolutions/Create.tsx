@@ -1,13 +1,12 @@
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 import PumpSolutionForm from './Form';
 
 export default function Create({ auth }: PageProps) {
     return (
-        <AuthenticatedLayout
+        <AdminLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Create Pump Solution</h2>}
         >
             <Head title="Create Pump Solution" />
 
@@ -20,6 +19,6 @@ export default function Create({ auth }: PageProps) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AdminLayout>
     );
 }
