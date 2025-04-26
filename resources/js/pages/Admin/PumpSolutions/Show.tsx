@@ -1,6 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.jsx';
+import AdminLayout from '@/layouts/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Pencil } from 'lucide-react';
@@ -25,7 +25,7 @@ interface Props extends PageProps {
 
 export default function Show({ auth, pumpSolution }: Props) {
     return (
-        <AuthenticatedLayout
+        <AdminLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">View Pump Solution</h2>}
         >
@@ -166,6 +166,6 @@ export default function Show({ auth, pumpSolution }: Props) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AdminLayout>
     );
 }

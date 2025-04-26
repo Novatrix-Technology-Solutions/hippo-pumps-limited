@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import RichTextEditor from '@/components/RichTextEditor';
 import { Button } from '@/components/ui/button';
@@ -46,7 +46,7 @@ export default function Edit({ news }: Props) {
     };
 
     return (
-        <AuthenticatedLayout>
+        <AdminLayout>
             <Head title="Edit News Article" />
             <AnimatedPage>
                 <motion.div
@@ -134,6 +134,6 @@ export default function Edit({ news }: Props) {
                     </Card>
                 </motion.div>
             </AnimatedPage>
-        </AuthenticatedLayout>
+        </AdminLayout>
     );
 }
