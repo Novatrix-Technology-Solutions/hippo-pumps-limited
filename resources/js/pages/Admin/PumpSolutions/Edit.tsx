@@ -23,6 +23,6 @@ export default function Edit({ auth, pumpSolution }: Props) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AdminLayout>
     );
 }
