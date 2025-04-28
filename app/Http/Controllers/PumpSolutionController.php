@@ -11,13 +11,9 @@ class PumpSolutionController extends Controller
 {
     public function index()
     {
-        $pumpSolutions = PumpSolution::orderBy('order')->get();
-        $categories = PumpSolution::select('category')->distinct()->pluck('category');
-        
-        return Inertia::render('PumpSolutions/Index', [
-            'pumpSolutions' => $pumpSolutions,
-            'categories' => $categories,
-        ]);
+        $pumpSolutions = PumpSolution::all();
+
+        return response()->json($pumpSolutions);
     }
 
     public function adminIndex()

@@ -15,6 +15,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "league/csv": "^9.23",
+        "maatwebsite/excel": "^1.1",
         "tightenco/ziggy": "^2.5"
     },
     "require-dev": {
@@ -33,7 +34,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "vendor/maatwebsite/excel/src/Maatwebsite/Excel/Facades/Excel.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
