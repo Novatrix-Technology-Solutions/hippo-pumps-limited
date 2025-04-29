@@ -15,7 +15,11 @@ export default function Index() {
     useEffect(() => {
         fetch('/api/pumps')
             .then(response => response.json())
-            .then(data => setPumpSolutions(data));
+            .then(data => setPumpSolutions(data))
+            .catch(error => {
+                console.error("Error fetching pump solutions:", error);
+                error.response.text().then((text: string) => console.error("Raw response:", text));
+            });
     }, []);
 
     return (
