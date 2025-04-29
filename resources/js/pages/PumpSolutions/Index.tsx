@@ -18,7 +18,11 @@ export default function Index() {
             .then(data => setPumpSolutions(data))
             .catch(error => {
                 console.error("Error fetching pump solutions:", error);
-                error.response.text().then((text: string) => console.error("Raw response:", text));
+                if (error.response) {
+                    error.response.text().then((text: string) => console.error("Raw response:", text));
+                } else {
+                    console.error("No response received from the server.");
+                }
             });
     }, []);
 
