@@ -1,19 +1,59 @@
 import React from 'react';
 
-interface ProductCardProps {
-  modelName: string;
-  flowRate: string;
-  maxHead: string;
+interface Specifications {
+    qMax: number;
+    hMax: number;
+    ratedQ: number;
+    ratedH: number;
+    motor: number;
+    price: number;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ modelName, flowRate, maxHead }) => {
-  return (
-    <div className="bg-white rounded-lg shadow-md p-4 hover:shadow-xl transition-shadow duration-300">
-      <h3 className="text-lg font-semibold text-gray-800">{modelName}</h3>
-      <p className="text-gray-600">Flow Rate: {flowRate}</p>
-      <p className="text-gray-600">Max Head: {maxHead}</p>
-    </div>
-  );
-};
+interface Props {
+    title: string;
+    description: string;
+    category: string;
+    specifications: Specifications;
+}
 
-export default ProductCard;
+export default function ProductCard({ title, description, category, specifications }: Props) {
+    return (
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="p-6">
+                <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                <p className="text-gray-600 mb-4">{description}</p>
+                <div className="mb-4">
+                    <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
+                        {category}
+                    </span>
+                </div>
+                <div className="space-y-2">
+                    <div className="flex justify-between">
+                        <span className="text-gray-600">Q.Max (m³/hr):</span>
+                        <span className="font-medium">{specifications.qMax}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-600">H.Max (m):</span>
+                        <span className="font-medium">{specifications.hMax}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-600">Rated Q (m³/hr):</span>
+                        <span className="font-medium">{specifications.ratedQ}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-600">Rated H (m):</span>
+                        <span className="font-medium">{specifications.ratedH}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-600">Motor (HP):</span>
+                        <span className="font-medium">{specifications.motor}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span className="text-gray-600">Price (ZMW):</span>
+                        <span className="font-medium">{specifications.price.toLocaleString()}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

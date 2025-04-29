@@ -9,12 +9,57 @@ use Inertia\Inertia;
 
 class PumpSolutionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pumpSolutions = PumpSolution::all();
+        $query = PumpSolution::query();
+
+        // Apply filters if provided
+        if ($request->has('category')) {
+            $query->byCategory($request->category);
+        }
+
+        if ($request->has(['min_price', 'max_price'])) {
+            $query->byPriceRange($request->min_price, $request->max_price);
+        }
+
+        if ($request->has(['min_motor', 'max_motor'])) {
+            $query->byMotorPower($request->min_motor, $request->max_motor);
+        }
+
+        if ($request->has(['min_flow', 'max_flow'])) {
+            $query->byFlowRate($request->min_flow, $request->max_flow);
+        }
+
+        if ($request->has(['min_head', 'max_head'])) {
+            $query->byHead($request->min_head, $request->max_head);
+        }
+
+        $pumpSolutions = $query->orderBy('order')->paginate(12);
 
         return Inertia::render('PumpSolutions/Index', [
             'pumpSolutions' => $pumpSolutions,
+            'filters' => $request->only([
+                'category',
+                'min_price',
+                'max_price',
+                'min_motor',
+                'max_motor',
+                'min_flow',
+                'max_flow',
+                'min_head',
+                'max_head'
+            ]),
+            'categories' => [
+                'SOLAR PUMPS',
+                'SOLAR PUMPS MAX',
+                'SEWAGE PUMPS',
+                'SUBMERSIBLE PUMPS',
+                'BOOSTER PUMPS',
+                'SPRINKLER PUMPS',
+                'SOLAR PANEL',
+                'SOLAR LIGHT',
+                'WIRE ROPE'
+            ]
         ]);
     }
 
@@ -35,7 +80,19 @@ class PumpSolutionController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/PumpSolutions/Create');
+        return Inertia::render('Admin/PumpSolutions/Create', [
+            'categories' => [
+                'SOLAR PUMPS',
+                'SOLAR PUMPS MAX',
+                'SEWAGE PUMPS',
+                'SUBMERSIBLE PUMPS',
+                'BOOSTER PUMPS',
+                'SPRINKLER PUMPS',
+                'SOLAR PANEL',
+                'SOLAR LIGHT',
+                'WIRE ROPE'
+            ]
+        ]);
     }
 
     public function store(Request $request)
@@ -43,25 +100,40 @@ class PumpSolutionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|string|in:Building Services,Irrigation,Mining,Industrial',
-            'specifications' => 'nullable|array',
+            'category' => 'required|string|in:SOLAR PUMPS,SOLAR PUMPS MAX,SEWAGE PUMPS,SUBMERSIBLE PUMPS,BOOSTER PUMPS,SPRINKLER PUMPS,SOLAR PANEL,SOLAR LIGHT,WIRE ROPE',
+            'q_max' => 'nullable|numeric',
+            'h_max' => 'nullable|numeric',
+            'rated_q' => 'nullable|numeric',
+            'rated_h' => 'nullable|numeric',
+            'motor' => 'nullable|numeric',
+            'price_zmw' => 'nullable|numeric',
+            'vat_rate' => 'nullable|numeric',
+            'net_price_zmw' => 'nullable|numeric',
             'is_featured' => 'boolean',
             'order' => 'integer',
         ]);
 
-        $solution = new PumpSolution($validated);
-        $solution->slug = Str::slug($validated['title']);
+        PumpSolution::create($validated);
 
-
-        $solution->save();
-
-        return redirect()->route('pump-solutions.index');
+        return redirect()->route('admin.pump-solutions.index')
+            ->with('success', 'Pump solution created successfully.');
     }
 
     public function edit(PumpSolution $pumpSolution)
     {
         return Inertia::render('Admin/PumpSolutions/Edit', [
             'solution' => $pumpSolution,
+            'categories' => [
+                'SOLAR PUMPS',
+                'SOLAR PUMPS MAX',
+                'SEWAGE PUMPS',
+                'SUBMERSIBLE PUMPS',
+                'BOOSTER PUMPS',
+                'SPRINKLER PUMPS',
+                'SOLAR PANEL',
+                'SOLAR LIGHT',
+                'WIRE ROPE'
+            ]
         ]);
     }
 
@@ -70,25 +142,31 @@ class PumpSolutionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|string|in:Building Services,Irrigation,Mining,Industrial',
-            'specifications' => 'nullable|array',
+            'category' => 'required|string|in:SOLAR PUMPS,SOLAR PUMPS MAX,SEWAGE PUMPS,SUBMERSIBLE PUMPS,BOOSTER PUMPS,SPRINKLER PUMPS,SOLAR PANEL,SOLAR LIGHT,WIRE ROPE',
+            'q_max' => 'nullable|numeric',
+            'h_max' => 'nullable|numeric',
+            'rated_q' => 'nullable|numeric',
+            'rated_h' => 'nullable|numeric',
+            'motor' => 'nullable|numeric',
+            'price_zmw' => 'nullable|numeric',
+            'vat_rate' => 'nullable|numeric',
+            'net_price_zmw' => 'nullable|numeric',
             'is_featured' => 'boolean',
             'order' => 'integer',
         ]);
 
-        $pumpSolution->fill($validated);
-        $pumpSolution->slug = Str::slug($validated['title']);
+        $pumpSolution->update($validated);
 
-
-        $pumpSolution->save();
-
-        return redirect()->route('pump-solutions.index');
+        return redirect()->route('admin.pump-solutions.index')
+            ->with('success', 'Pump solution updated successfully.');
     }
 
     public function destroy(PumpSolution $pumpSolution)
     {
         $pumpSolution->delete();
-        return redirect()->route('pump-solutions.index');
+
+        return redirect()->route('admin.pump-solutions.index')
+            ->with('success', 'Pump solution deleted successfully.');
     }
 
     public function apiIndex()
