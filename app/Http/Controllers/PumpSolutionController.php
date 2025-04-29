@@ -13,7 +13,9 @@ class PumpSolutionController extends Controller
     {
         $pumpSolutions = PumpSolution::all();
 
-        return response()->json($pumpSolutions);
+        return Inertia::render('PumpSolutions/Index', [
+            'pumpSolutions' => $pumpSolutions,
+        ]);
     }
 
     public function adminIndex()
