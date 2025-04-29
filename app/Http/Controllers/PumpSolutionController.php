@@ -90,4 +90,11 @@ class PumpSolutionController extends Controller
         $pumpSolution->delete();
         return redirect()->route('pump-solutions.index');
     }
-} 
+
+    public function apiIndex()
+    {
+        $pumpSolutions = PumpSolution::all();
+
+        return response()->json($pumpSolutions);
+    }
+}
