@@ -19,4 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/pumps', [PumpSolutionController::class, 'apiIndex'])->middleware(\App\Http\Middleware\CorsMiddleware::class);
+Route::prefix('api')->middleware(['api', \App\Http\Middleware\CorsMiddleware::class])->group(function () {
+    Route::get('/pumps', [PumpSolutionController::class, 'apiIndex']);
+});
