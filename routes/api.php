@@ -15,8 +15,13 @@ use App\Http\Controllers\PumpSolutionController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::get('/pump-solutions', [PumpSolutionController::class, 'apiIndex'])
+        ->middleware('throttle:100,1');
 });
 
 Route::prefix('api')->middleware(['api', \App\Http\Middleware\CorsMiddleware::class])->group(function () {

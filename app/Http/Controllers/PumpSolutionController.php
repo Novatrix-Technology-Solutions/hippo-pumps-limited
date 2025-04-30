@@ -3,176 +3,166 @@
 namespace App\Http\Controllers;
 
 use App\Models\PumpSolution;
+use App\Http\Requests\PumpSolutionRequest;
+use App\Events\PumpSolutionUpdated;
+use App\Services\PumpSolutionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
+use App\Http\Resources\PumpSolutionResource;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PumpSolutionController extends Controller
 {
+    protected $pumpSolutionService;
+
+    public function __construct(PumpSolutionService $pumpSolutionService)
+    {
+        $this->pumpSolutionService = $pumpSolutionService;
+    }
+
     public function index(Request $request)
     {
-        $query = PumpSolution::query();
-
-        // Apply filters if provided
-        if ($request->has('category')) {
-            $query->byCategory($request->category);
-        }
-
-        if ($request->has(['min_price', 'max_price'])) {
-            $query->byPriceRange($request->min_price, $request->max_price);
-        }
-
-        if ($request->has(['min_motor', 'max_motor'])) {
-            $query->byMotorPower($request->min_motor, $request->max_motor);
-        }
-
-        if ($request->has(['min_flow', 'max_flow'])) {
-            $query->byFlowRate($request->min_flow, $request->max_flow);
-        }
-
-        if ($request->has(['min_head', 'max_head'])) {
-            $query->byHead($request->min_head, $request->max_head);
-        }
-
-        $pumpSolutions = $query->orderBy('order')->paginate(12);
-
-        return Inertia::render('PumpSolutions/Index', [
-            'pumpSolutions' => $pumpSolutions,
-            'filters' => $request->only([
-                'category',
-                'min_price',
-                'max_price',
-                'min_motor',
-                'max_motor',
-                'min_flow',
-                'max_flow',
-                'min_head',
-                'max_head'
-            ]),
-            'categories' => [
-                'SOLAR PUMPS',
-                'SOLAR PUMPS MAX',
-                'SEWAGE PUMPS',
-                'SUBMERSIBLE PUMPS',
-                'BOOSTER PUMPS',
-                'SPRINKLER PUMPS',
-                'SOLAR PANEL',
-                'SOLAR LIGHT',
-                'WIRE ROPE'
-            ]
+        $validator = Validator::make($request->all(), [
+            'category' => ['nullable', 'string', Rule::in(PumpSolution::getCategories())],
+            'sub_category' => ['nullable', 'string'],
+            'min_flow_rate' => ['nullable', 'numeric', 'min:0'],
+            'max_flow_rate' => ['nullable', 'numeric', 'min:0'],
+            'min_head' => ['nullable', 'numeric', 'min:0'],
+            'max_head' => ['nullable', 'numeric', 'min:0'],
+            'min_power' => ['nullable', 'numeric', 'min:0'],
+            'max_power' => ['nullable', 'numeric', 'min:0'],
+            'material' => ['nullable', 'string'],
+            'sort_by' => ['nullable', 'string', Rule::in(['name', 'price', 'flow_rate', 'head', 'power'])],
+            'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
+            'page' => ['nullable', 'integer', 'min:1'],
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Invalid input data',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $filters = $request->only([
+            'category',
+            'sub_category',
+            'min_flow_rate',
+            'max_flow_rate',
+            'min_head',
+            'max_head',
+            'min_power',
+            'max_power',
+            'material'
+        ]);
+
+        $sortBy = $request->input('sort_by', 'name');
+        $sortOrder = $request->input('sort_order', 'asc');
+
+        return $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sortBy, $sortOrder);
     }
 
     public function adminIndex()
     {
-        $pumpSolutions = PumpSolution::orderBy('order')->paginate(9);
-        return Inertia::render('Admin/PumpSolutions/Index', [
-            'pumpSolutions' => $pumpSolutions,
-        ]);
+        try {
+            $pumpSolutions = Cache::remember('admin_pump_solutions', 300, function () {
+                return PumpSolution::orderBy('order')->paginate(9);
+            });
+
+            return Inertia::render('Admin/PumpSolutions/Index', [
+                'pumpSolutions' => $pumpSolutions,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PumpSolutionController@adminIndex: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while loading pump solutions.');
+        }
     }
 
     public function show(PumpSolution $pumpSolution)
     {
-        return Inertia::render('PumpSolutions/Show', [
-            'solution' => $pumpSolution,
-        ]);
+        return $this->pumpSolutionService->getPumpSolution($pumpSolution->id);
     }
 
     public function create()
     {
-        return Inertia::render('Admin/PumpSolutions/Create', [
-            'categories' => [
-                'SOLAR PUMPS',
-                'SOLAR PUMPS MAX',
-                'SEWAGE PUMPS',
-                'SUBMERSIBLE PUMPS',
-                'BOOSTER PUMPS',
-                'SPRINKLER PUMPS',
-                'SOLAR PANEL',
-                'SOLAR LIGHT',
-                'WIRE ROPE'
-            ]
-        ]);
+        try {
+            return Inertia::render('Admin/PumpSolutions/Create', [
+                'categories' => Cache::remember('pump_categories', 3600, function () {
+                    return PumpSolution::getCategories();
+                })
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PumpSolutionController@create: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while loading the create form.');
+        }
     }
 
-    public function store(Request $request)
+    public function store(PumpSolutionRequest $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category' => 'required|string|in:SOLAR PUMPS,SOLAR PUMPS MAX,SEWAGE PUMPS,SUBMERSIBLE PUMPS,BOOSTER PUMPS,SPRINKLER PUMPS,SOLAR PANEL,SOLAR LIGHT,WIRE ROPE',
-            'q_max' => 'nullable|numeric',
-            'h_max' => 'nullable|numeric',
-            'rated_q' => 'nullable|numeric',
-            'rated_h' => 'nullable|numeric',
-            'motor' => 'nullable|numeric',
-            'price_zmw' => 'nullable|numeric',
-            'vat_rate' => 'nullable|numeric',
-            'net_price_zmw' => 'nullable|numeric',
-            'is_featured' => 'boolean',
-            'order' => 'integer',
-        ]);
+        $pumpSolution = $this->pumpSolutionService->createPumpSolution($request->validated());
 
-        PumpSolution::create($validated);
+        if ($request->hasFile('image')) {
+            $pumpSolution->addMediaFromRequest('image')
+                ->toMediaCollection('pump-solutions');
+        }
 
-        return redirect()->route('admin.pump-solutions.index')
-            ->with('success', 'Pump solution created successfully.');
+        event(new PumpSolutionUpdated($pumpSolution));
+
+        return response()->json($pumpSolution, 201);
     }
 
     public function edit(PumpSolution $pumpSolution)
     {
-        return Inertia::render('Admin/PumpSolutions/Edit', [
-            'solution' => $pumpSolution,
-            'categories' => [
-                'SOLAR PUMPS',
-                'SOLAR PUMPS MAX',
-                'SEWAGE PUMPS',
-                'SUBMERSIBLE PUMPS',
-                'BOOSTER PUMPS',
-                'SPRINKLER PUMPS',
-                'SOLAR PANEL',
-                'SOLAR LIGHT',
-                'WIRE ROPE'
-            ]
-        ]);
+        try {
+            return Inertia::render('Admin/PumpSolutions/Edit', [
+                'pumpSolution' => $pumpSolution,
+                'categories' => Cache::remember('pump_categories', 3600, function () {
+                    return PumpSolution::getCategories();
+                })
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in PumpSolutionController@edit: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while loading the edit form.');
+        }
     }
 
-    public function update(Request $request, PumpSolution $pumpSolution)
+    public function update(PumpSolutionRequest $request, PumpSolution $pumpSolution)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category' => 'required|string|in:SOLAR PUMPS,SOLAR PUMPS MAX,SEWAGE PUMPS,SUBMERSIBLE PUMPS,BOOSTER PUMPS,SPRINKLER PUMPS,SOLAR PANEL,SOLAR LIGHT,WIRE ROPE',
-            'q_max' => 'nullable|numeric',
-            'h_max' => 'nullable|numeric',
-            'rated_q' => 'nullable|numeric',
-            'rated_h' => 'nullable|numeric',
-            'motor' => 'nullable|numeric',
-            'price_zmw' => 'nullable|numeric',
-            'vat_rate' => 'nullable|numeric',
-            'net_price_zmw' => 'nullable|numeric',
-            'is_featured' => 'boolean',
-            'order' => 'integer',
-        ]);
+        $pumpSolution = $this->pumpSolutionService->updatePumpSolution($pumpSolution, $request->validated());
 
-        $pumpSolution->update($validated);
+        if ($request->hasFile('image')) {
+            $pumpSolution->clearMediaCollection('pump-solutions');
+            $pumpSolution->addMediaFromRequest('image')
+                ->toMediaCollection('pump-solutions');
+        }
 
-        return redirect()->route('admin.pump-solutions.index')
-            ->with('success', 'Pump solution updated successfully.');
+        event(new PumpSolutionUpdated($pumpSolution));
+
+        return response()->json($pumpSolution);
     }
 
     public function destroy(PumpSolution $pumpSolution)
     {
-        $pumpSolution->delete();
+        $this->pumpSolutionService->deletePumpSolution($pumpSolution);
 
-        return redirect()->route('admin.pump-solutions.index')
-            ->with('success', 'Pump solution deleted successfully.');
+        event(new PumpSolutionUpdated($pumpSolution));
+
+        return response()->json(null, 204);
     }
 
     public function apiIndex()
     {
-        $pumpSolutions = PumpSolution::all();
-
-        return response()->json($pumpSolutions);
+        try {
+            return Cache::remember('api_pump_solutions', 300, function () {
+                return PumpSolutionResource::collection(PumpSolution::all());
+            });
+        } catch (\Exception $e) {
+            Log::error('Error in PumpSolutionController@apiIndex: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while fetching pump solutions.'], 500);
+        }
     }
 }

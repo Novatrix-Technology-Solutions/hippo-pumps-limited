@@ -109,5 +109,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/team-members/{teamMember}', [TeamMemberController::class, 'destroy'])->name('admin.team-members.destroy');
 });
 
+Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
+    Route::get('/pump-solutions', [PumpSolutionController::class, 'index'])
+        ->name('pump-solutions.index')
+        ->middleware('throttle:60,1');
+
+    Route::get('/pump-solutions/{pumpSolution}', [PumpSolutionController::class, 'show'])
+        ->name('pump-solutions.show')
+        ->middleware('throttle:60,1');
+});
+
+Route::middleware(['web', 'auth:sanctum', 'verified', 'admin'])->group(function () {
+    Route::get('/admin/pump-solutions', [PumpSolutionController::class, 'adminIndex'])
+        ->name('admin.pump-solutions.index')
+        ->middleware('throttle:60,1');
+
+    Route::get('/admin/pump-solutions/create', [PumpSolutionController::class, 'create'])
+        ->name('admin.pump-solutions.create')
+        ->middleware('throttle:60,1');
+
+    Route::post('/admin/pump-solutions', [PumpSolutionController::class, 'store'])
+        ->name('admin.pump-solutions.store')
+        ->middleware('throttle:60,1');
+
+    Route::get('/admin/pump-solutions/{pumpSolution}/edit', [PumpSolutionController::class, 'edit'])
+        ->name('admin.pump-solutions.edit')
+        ->middleware('throttle:60,1');
+
+    Route::put('/admin/pump-solutions/{pumpSolution}', [PumpSolutionController::class, 'update'])
+        ->name('admin.pump-solutions.update')
+        ->middleware('throttle:60,1');
+
+    Route::delete('/admin/pump-solutions/{pumpSolution}', [PumpSolutionController::class, 'destroy'])
+        ->name('admin.pump-solutions.destroy')
+        ->middleware('throttle:60,1');
+});
+
 require __DIR__.'/auth.php';
 

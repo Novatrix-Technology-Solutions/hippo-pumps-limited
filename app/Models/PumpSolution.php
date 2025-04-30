@@ -27,17 +27,15 @@ class PumpSolution extends Model
         'order',
     ];
 
-
-
     protected $casts = [
-        'q_max' => 'string',
-        'h_max' => 'string',
-        'rated_q' => 'string',
-        'rated_h' => 'string',
-        'motor' => 'string',
-        'price_zmw' => 'string',
-        'vat_rate' => 'string',
-        'net_price_zmw' => 'string',
+        'q_max' => 'decimal:2',
+        'h_max' => 'decimal:2',
+        'rated_q' => 'decimal:2',
+        'rated_h' => 'decimal:2',
+        'motor' => 'decimal:2',
+        'price_zmw' => 'decimal:2',
+        'vat_rate' => 'decimal:2',
+        'net_price_zmw' => 'decimal:2',
         'is_featured' => 'boolean',
     ];
 
@@ -90,19 +88,63 @@ class PumpSolution extends Model
         parent::boot();
 
         static::creating(function ($pumpSolution) {
+            $pumpSolution->sanitizeInputs();
             if (empty($pumpSolution->slug)) {
                 $pumpSolution->slug = Str::slug($pumpSolution->title);
             }
         });
 
         static::updating(function ($pumpSolution) {
+            $pumpSolution->sanitizeInputs();
             if ($pumpSolution->isDirty('title')) {
                 $pumpSolution->slug = Str::slug($pumpSolution->title);
             }
         });
     }
 
+    protected function sanitizeInputs()
+    {
+        $this->title = $this->sanitizeString($this->title);
+        $this->description = $this->sanitizeString($this->description);
+        $this->category = $this->sanitizeString($this->category);
+        
+        // Sanitize numeric values
+        $this->q_max = $this->sanitizeNumeric($this->q_max);
+        $this->h_max = $this->sanitizeNumeric($this->h_max);
+        $this->rated_q = $this->sanitizeNumeric($this->rated_q);
+        $this->rated_h = $this->sanitizeNumeric($this->rated_h);
+        $this->motor = $this->sanitizeNumeric($this->motor);
+        $this->price_zmw = $this->sanitizeNumeric($this->price_zmw);
+        $this->vat_rate = $this->sanitizeNumeric($this->vat_rate);
+        $this->net_price_zmw = $this->sanitizeNumeric($this->net_price_zmw);
+        $this->is_featured = $this->sanitizeBoolean($this->is_featured);
+        $this->order = $this->sanitizeNumeric($this->order);
+    }
 
+    protected function sanitizeString($value)
+    {
+        return $value ? htmlspecialchars(strip_tags($value), ENT_QUOTES, 'UTF-8') : null;
+    }
+
+    protected function sanitizeNumeric($value)
+    {
+        return is_numeric($value) ? floatval($value) : null;
+    }
+
+    protected function sanitizeBoolean($value)
+    {
+        return is_bool($value) ? $value : null;
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function setSlugAttribute($value)
+    {
+        $this->attributes['slug'] = Str::slug($value);
+    }
 
     // Define available categories
     const CATEGORIES = [
@@ -141,5 +183,39 @@ class PumpSolution extends Model
     public function scopeByHead($query, $min, $max)
     {
         return $query->whereBetween('h_max', [$min, $max]);
+    }
+
+    public static function rules($id = null)
+    {
+        return [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category' => 'required|in:SOLAR PUMPS,SOLAR PUMPS MAX,SEWAGE PUMPS,SUBMERSIBLE PUMPS,BOOSTER PUMPS,SPRINKLER PUMPS,SOLAR PANEL,SOLAR LIGHT,WIRE ROPE',
+            'q_max' => 'nullable|numeric|min:0',
+            'h_max' => 'nullable|numeric|min:0',
+            'rated_q' => 'nullable|numeric|min:0',
+            'rated_h' => 'nullable|numeric|min:0',
+            'motor' => 'nullable|numeric|min:0',
+            'price_zmw' => 'nullable|numeric|min:0',
+            'vat_rate' => 'nullable|numeric|min:0|max:100',
+            'net_price_zmw' => 'nullable|numeric|min:0',
+            'is_featured' => 'boolean',
+            'order' => 'nullable|integer|min:0',
+        ];
+    }
+
+    public static function getCategories()
+    {
+        return [
+            'SOLAR PUMPS',
+            'SOLAR PUMPS MAX',
+            'SEWAGE PUMPS',
+            'SUBMERSIBLE PUMPS',
+            'BOOSTER PUMPS',
+            'SPRINKLER PUMPS',
+            'SOLAR PANEL',
+            'SOLAR LIGHT',
+            'WIRE ROPE'
+        ];
     }
 } 
