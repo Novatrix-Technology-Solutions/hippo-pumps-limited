@@ -9,11 +9,12 @@ class Product extends Model // Renamed class from PumpSolution
 {
     use HasFactory;
 
-    protected $table = 'pump_solutions';
-
-    // Assuming the table name will be 'products' (Eloquent default)
-    // If the migration created 'pump_solutions', add:
-    // protected $table = 'pump_solutions'; 
+    const CATEGORIES = [
+        'Building Services',
+        'Irrigation',
+        'Mining',
+        'Industrial'
+    ];
 
     protected $fillable = [
         'title',

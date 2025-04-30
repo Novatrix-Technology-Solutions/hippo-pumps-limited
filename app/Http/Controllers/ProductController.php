@@ -16,7 +16,7 @@ class ProductController extends Controller // Changed class name
         $categories = $products->pluck('category')->unique()->values(); // Changed variable
 
         // Consider if this public view path needs changing too, e.g., 'Products/Index'
-        return Inertia::render('PumpSolutions/Index', [ // KEEPING OLD VIEW PATH FOR NOW - Needs frontend refactor later
+        return Inertia::render('Public/Products/Index', [ // KEEPING OLD VIEW PATH FOR NOW - Needs frontend refactor later
             'products' => $products, // Changed variable name
             'categories' => $categories,
         ]);
@@ -26,7 +26,7 @@ class ProductController extends Controller // Changed class name
     public function show(Product $product) // Changed type hint and variable name
     {
          // Consider if this public view path needs changing too, e.g., 'Products/Show'
-        return Inertia::render('PumpSolutions/Show', [ // KEEPING OLD VIEW PATH FOR NOW - Needs frontend refactor later
+        return Inertia::render('Public/Products/Show', [ // KEEPING OLD VIEW PATH FOR NOW - Needs frontend refactor later
             'product' => $product, // Changed variable name
         ]);
     }
@@ -52,7 +52,7 @@ class ProductController extends Controller // Changed class name
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
-            'category' => 'required|string|in:Building Services,Irrigation,Mining,Industrial', // Keep categories for now
+            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES), // Keep categories for now
             'specifications' => 'nullable|array',
             'is_featured' => 'boolean',
             'order' => 'integer',
@@ -87,7 +87,7 @@ class ProductController extends Controller // Changed class name
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
-            'category' => 'required|string|in:Building Services,Irrigation,Mining,Industrial', // Keep categories for now
+            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES), // Keep categories for now
             'specifications' => 'nullable|array',
             'is_featured' => 'boolean',
             'order' => 'integer',

@@ -15,6 +15,7 @@ class NewsController extends Controller
     {
         $news = News::where('is_published', true)
             ->orderBy('published_at', 'desc')
+            ->with('user')
             ->paginate(9);
 
         return Inertia::render('News/Index', [
@@ -39,7 +40,10 @@ class NewsController extends Controller
     // Admin index - Renders the admin news listing page
     public function adminIndex()
     {
-        $news = News::orderBy('created_at', 'desc')->get();
+        $news = News::orderBy('created_at', 'desc')
+            ->with('user')
+            ->paginate(9);
+
         return Inertia::render('Admin/News/Index', [
             'news' => $news,
         ]);
@@ -73,7 +77,8 @@ class NewsController extends Controller
 
         $news->save();
 
-        return redirect()->route('news.index');
+        return redirect()->route('admin.news.index')
+            ->with('success', 'News created successfully.');
     }
 
     // Admin edit - Shows the form to edit existing news
@@ -105,17 +110,21 @@ class NewsController extends Controller
                 Storage::disk('public')->delete($news->featured_image);
             }
             $news->featured_image = $request->file('featured_image')->store('news', 'public');
+        } elseif ($request->input('featured_image') === null && $news->featured_image) {
+            Storage::disk('public')->delete($news->featured_image);
+            $news->featured_image = null;
         }
 
         $news->save();
-
-        return redirect()->route('news.index');
+        
+        return redirect()->route('admin.news.index')
+            ->with('success', 'News updated successfully.');
     }
 
     // Admin destroy - Deletes news
     public function destroy(News $news)
     {
         $news->delete();
-        return redirect()->route('news.index');
+        return redirect()->route('admin.news.index')
+            ->with('success', 'News deleted successfully.');
     }
-}
