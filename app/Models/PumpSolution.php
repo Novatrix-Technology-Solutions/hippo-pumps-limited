@@ -41,47 +41,48 @@ class PumpSolution extends Model
         'is_featured' => 'boolean',
     ];
 
-function decimal_formatter($value) {
+    protected function decimal_formatter($value) {
         return number_format(floatval($value), 2, '.', '');
     }
+
     public function getQMaxAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getHMaxAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getRatedQAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getRatedHAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getMotorAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getPriceZmwAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getVatRateAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     public function getNetPriceZmwAttribute($value)
     {
-        return $value ? decimal_formatter($value) : null;
+        return $value ? $this->decimal_formatter($value) : null;
     }
 
     protected static function boot()
