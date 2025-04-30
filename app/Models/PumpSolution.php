@@ -27,17 +27,62 @@ class PumpSolution extends Model
         'order',
     ];
 
+
+
     protected $casts = [
-        'q_max' => 'decimal:2',
-        'h_max' => 'decimal:2',
-        'rated_q' => 'decimal:2',
-        'rated_h' => 'decimal:2',
-        'motor' => 'decimal:2',
-        'price_zmw' => 'decimal:2',
-        'vat_rate' => 'decimal:2',
-        'net_price_zmw' => 'decimal:2',
+        'q_max' => 'string',
+        'h_max' => 'string',
+        'rated_q' => 'string',
+        'rated_h' => 'string',
+        'motor' => 'string',
+        'price_zmw' => 'string',
+        'vat_rate' => 'string',
+        'net_price_zmw' => 'string',
         'is_featured' => 'boolean',
     ];
+
+function decimal_formatter($value) {
+        return number_format(floatval($value), 2, '.', '');
+    }
+    public function getQMaxAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getHMaxAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getRatedQAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getRatedHAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getMotorAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getPriceZmwAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getVatRateAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
+
+    public function getNetPriceZmwAttribute($value)
+    {
+        return $value ? decimal_formatter($value) : null;
+    }
 
     protected static function boot()
     {
