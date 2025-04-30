@@ -102,6 +102,21 @@ class PumpSolution extends Model
         });
     }
 
+
+
+    // Define available categories
+    const CATEGORIES = [
+        'SOLAR PUMPS',
+        'SOLAR PUMPS MAX',
+        'SEWAGE PUMPS',
+        'SUBMERSIBLE PUMPS',
+        'BOOSTER PUMPS',
+        'SPRINKLER PUMPS',
+        'SOLAR PANEL',
+        'SOLAR LIGHT',
+        'WIRE ROPE'
+    ];
+
     // Add scopes for filtering
     public function scopeByCategory($query, $category)
     {
