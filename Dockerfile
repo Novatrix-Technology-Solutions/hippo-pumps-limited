@@ -27,7 +27,7 @@ RUN npm install && npm run build
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Expose port (Railway will set the actual port)
-EXPOSE $PORT
+EXPOSE 8000
 
 # Copy Laravel .env (you can handle this via Railway ENV vars too)
 # COPY .env.example .env
@@ -37,4 +37,4 @@ CMD php artisan config:cache \
  && php artisan route:cache \
  && php artisan view:cache \
  && php artisan migrate --force \
- && php artisan serve --host=0.0.0.0 --port=$PORT
+ && php artisan serve --host=0.0.0.0 --port=8000
