@@ -72,7 +72,7 @@ export default function Header() {
                                         The Company
                                     </Link>
                                     <Link
-                                        href={route('public.pump-solutions.index')}
+                                        href={route('pump-solutions.index')}
                                         className="text-[#004080] hover:text-[#008000] text-lg font-medium"
                                     >
                                         Pumps Solutions
