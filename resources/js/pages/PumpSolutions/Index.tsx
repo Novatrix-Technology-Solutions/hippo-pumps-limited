@@ -54,7 +54,7 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
     });
 
     const handleFilter = () => {
-        router.get(route('pump-solutions.index'), data, {
+        router.get(route('public.pump-solutions.index'), data, {
             preserveState: true,
             preserveScroll: true,
         });
@@ -72,7 +72,7 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             min_head: '',
             max_head: '',
         });
-        router.get(route('pump-solutions.index'));
+        router.get(route('public.pump-solutions.index'));
     };
 
     return (

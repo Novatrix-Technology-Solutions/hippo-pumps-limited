@@ -29,13 +29,14 @@ class PumpSolutionController extends Controller
         $validator = Validator::make($request->all(), [
             'category' => ['nullable', 'string', Rule::in(PumpSolution::getCategories())],
             'sub_category' => ['nullable', 'string'],
-            'min_flow_rate' => ['nullable', 'numeric', 'min:0'],
-            'max_flow_rate' => ['nullable', 'numeric', 'min:0'],
+            'min_price' => ['nullable', 'numeric', 'min:0'],
+            'max_price' => ['nullable', 'numeric', 'min:0'],
+            'min_motor' => ['nullable', 'numeric', 'min:0'],
+            'max_motor' => ['nullable', 'numeric', 'min:0'],
+            'min_flow' => ['nullable', 'numeric', 'min:0'],
+            'max_flow' => ['nullable', 'numeric', 'min:0'],
             'min_head' => ['nullable', 'numeric', 'min:0'],
             'max_head' => ['nullable', 'numeric', 'min:0'],
-            'min_power' => ['nullable', 'numeric', 'min:0'],
-            'max_power' => ['nullable', 'numeric', 'min:0'],
-            'material' => ['nullable', 'string'],
             'sort_by' => ['nullable', 'string', Rule::in(['name', 'price', 'flow_rate', 'head', 'power'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'page' => ['nullable', 'integer', 'min:1'],
@@ -51,19 +52,26 @@ class PumpSolutionController extends Controller
         $filters = $request->only([
             'category',
             'sub_category',
-            'min_flow_rate',
-            'max_flow_rate',
+            'min_price',
+            'max_price',
+            'min_motor',
+            'max_motor',
+            'min_flow',
+            'max_flow',
             'min_head',
-            'max_head',
-            'min_power',
-            'max_power',
-            'material'
+            'max_head'
         ]);
 
         $sortBy = $request->input('sort_by', 'name');
         $sortOrder = $request->input('sort_order', 'asc');
 
-        return $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sortBy, $sortOrder);
+        $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sortBy, $sortOrder);
+
+        return Inertia::render('PumpSolutions/Index', [
+            'pumpSolutions' => $pumpSolutions,
+            'filters' => $filters,
+            'categories' => PumpSolution::getCategories()
+        ]);
     }
 
     public function adminIndex()
@@ -84,7 +92,9 @@ class PumpSolutionController extends Controller
 
     public function show(PumpSolution $pumpSolution)
     {
-        return $this->pumpSolutionService->getPumpSolution($pumpSolution->id);
+        return Inertia::render('PumpSolutions/Show', [
+            'solution' => $pumpSolution
+        ]);
     }
 
     public function create()
