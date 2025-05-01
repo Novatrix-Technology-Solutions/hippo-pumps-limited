@@ -10,6 +10,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Throwable;
+use Illuminate\Database\QueryException;
+use PDOException;
 
 class Handler extends ExceptionHandler
 {
@@ -20,11 +22,35 @@ class Handler extends ExceptionHandler
         ValidationException::class,
     ];
 
+    protected $dontFlash = [
+        'current_password',
+        'password',
+        'password_confirmation',
+    ];
+
     public function register()
     {
         $this->reportable(function (Throwable $e) {
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);
+            }
+        });
+
+        $this->renderable(function (PDOException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Database connection error. Please try again later.',
+                    'error' => config('app.debug') ? $e->getMessage() : null
+                ], 503);
+            }
+        });
+
+        $this->renderable(function (QueryException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'Database query error. Please try again later.',
+                    'error' => config('app.debug') ? $e->getMessage() : null
+                ], 503);
             }
         });
     }
