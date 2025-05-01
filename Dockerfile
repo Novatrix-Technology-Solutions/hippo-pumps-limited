@@ -23,8 +23,11 @@ RUN composer install --optimize-autoloader --no-dev
 # Install JS dependencies and build assets
 RUN npm install && npm run build
 
-# Expose Laravel's default dev server port
-EXPOSE 8080
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Expose port (Railway will set the actual port)
+EXPOSE $PORT
 
 # Copy Laravel .env (you can handle this via Railway ENV vars too)
 # COPY .env.example .env
@@ -34,4 +37,4 @@ CMD php artisan config:cache \
  && php artisan route:cache \
  && php artisan view:cache \
  && php artisan migrate --force \
- && php artisan serve --host=0.0.0.0 --port=8080
+ && php artisan serve --host=0.0.0.0 --port=$PORT
