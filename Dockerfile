@@ -1,42 +1,36 @@
+# Base PHP image
 FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
-    libpq-dev \
-    libssl-dev \
-    nodejs \
-    npm
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev \
+    libzip-dev npm nodejs \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql mbstring zip exif pcntl bcmath gd
-
-# Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
 
+# Copy application
 COPY . .
 
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-RUN npm install
-RUN npm run build
+# Install PHP dependencies
+RUN composer install --optimize-autoloader --no-dev
 
-# Permissions fix (optional)
-RUN chown -R www-data:www-data /var/www
+# Install JS dependencies and build assets
+RUN npm install && npm run build
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+# Expose Laravel's default dev server port
+EXPOSE 8080
+
+# Copy Laravel .env (you can handle this via Railway ENV vars too)
+# COPY .env.example .env
+
+# Laravel startup commands
+CMD php artisan config:cache \
+ && php artisan route:cache \
+ && php artisan view:cache \
+ && php artisan migrate --force \
+ && php artisan serve --host=0.0.0.0 --port=8080
