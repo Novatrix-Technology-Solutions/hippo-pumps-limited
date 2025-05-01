@@ -64,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Admin Pump Solutions Routes
-    Route::prefix('admin/pump-solutions')->name('pump-solutions.')->group(function () {
+    Route::prefix('admin/pump-solutions')->name('admin.pump-solutions.')->group(function () {
         Route::get('/', [PumpSolutionController::class, 'adminIndex'])->name('index');
         Route::get('/create', [PumpSolutionController::class, 'create'])->name('create');
         Route::post('/', [PumpSolutionController::class, 'store'])->name('store');
