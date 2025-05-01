@@ -55,8 +55,7 @@ class Image extends Base
         trigger_deprecation(
             'fakerphp/faker',
             '1.20',
-            '%s is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
-            __CLASS__,
+            'Provider is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
         );
 
         // Validate image format
@@ -120,8 +119,7 @@ class Image extends Base
         trigger_deprecation(
             'fakerphp/faker',
             '1.20',
-            '%s is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
-            __CLASS__,
+            'Provider is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
         );
 
         $dir = null === $dir ? sys_get_temp_dir() : $dir; // GNU/Linux / OS X / Windows compatible
@@ -175,8 +173,7 @@ class Image extends Base
         trigger_deprecation(
             'fakerphp/faker',
             '1.20',
-            '%s is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
-            __CLASS__,
+            'Provider is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
         );
 
         return array_keys(static::getFormatConstants());
@@ -187,8 +184,7 @@ class Image extends Base
         trigger_deprecation(
             'fakerphp/faker',
             '1.20',
-            '%s is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
-            __CLASS__,
+            'Provider is deprecated and will no longer be available in Faker 2. Please use a custom provider instead',
         );
 
         return [

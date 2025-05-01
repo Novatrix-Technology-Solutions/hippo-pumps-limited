@@ -16,9 +16,6 @@ namespace League\Uri\Contracts;
 use JsonSerializable;
 use Stringable;
 
-/**
- * @method static when(callable|bool $condition, callable $onSuccess, ?callable $onFail = null) conditionally return a new instance
- */
 interface UriComponentInterface extends JsonSerializable, Stringable
 {
     /**

@@ -95,54 +95,19 @@ class DateTime extends \DateTime implements \JsonSerializable
 	 */
 	public static function createFromFormat(
 		string $format,
-		string $datetime,
+		string $time,
 		string|\DateTimeZone|null $timezone = null,
 	): static|false
 	{
-		$timezone = $timezone instanceof \DateTimeZone
-		? $timezone : new \DateTimeZone($timezone ?? date_default_timezone_get());
-		$date = parent::createFromFormat($format, $datetime, $timezone);
+		if ($timezone === null) {
+			$timezone = new \DateTimeZone(date_default_timezone_get());
+
+		} elseif (is_string($timezone)) {
+			$timezone = new \DateTimeZone($timezone);
+		}
+
+		$date = parent::createFromFormat($format, $time, $timezone);
 		return $date ? static::from($date) : false;
-	}
-
-
-	public function __construct(string $datetime = 'now', ?\DateTimeZone $timezone = null)
-	{
-		$this->apply($datetime, $timezone, true);
-	}
-
-
-	public function modify(string $modifier): static
-	{
-		$this->apply($modifier);
-		return $this;
-	}
-
-
-	private function apply(string $datetime, $timezone = null, bool $ctr = false): void
-	{
-		$relTime = '';
-		$rest = preg_replace_callback(
-			'/[+-]?\s*\d+\s+((microsecond|millisecond|[mµu]sec)s?|[mµ]s|sec(ond)?s?|min(ute)?s?|hours?)\b/iu',
-			function ($m) use (&$relTime) {
-				$relTime .= $m[0] . ' ';
-				return '';
-			},
-			$datetime,
-		);
-
-		if ($ctr) {
-			parent::__construct($rest, $timezone);
-		} elseif (trim($rest)) {
-			parent::modify($rest) ?: throw new Nette\InvalidArgumentException("Invalid modifier '$datetime'");
-		}
-
-		if ($relTime) {
-			$timezone ??= $this->getTimezone();
-			$this->setTimezone(new \DateTimeZone('UTC'));
-			parent::modify($relTime) ?: throw new Nette\InvalidArgumentException("Invalid modifier '$datetime'");
-			$this->setTimezone($timezone);
-		}
 	}
 
 

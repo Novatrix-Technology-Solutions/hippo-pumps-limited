@@ -45,7 +45,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "league/uri-interfaces": "^7.6"
+        "league/uri-interfaces": "^7.5"
     },
     "autoload": {
         "psr-4": {
@@ -56,7 +56,6 @@
         "league/uri-schemes": "^1.0"
     },
     "suggest": {
-        "ext-dom": "to convert the URI into an HTML anchor tag",
         "ext-bcmath": "to improve IPV4 host parsing",
         "ext-fileinfo": "to create Data URI from file contennts",
         "ext-gmp": "to improve IPV4 host parsing",
@@ -64,8 +63,7 @@
         "jeremykendall/php-domain-parser": "to resolve Public Suffix and Top Level Domain",
         "league/uri-components" : "Needed to easily manipulate URI objects components",
         "php-64bit": "to improve IPV4 host parsing",
-        "symfony/polyfill-intl-idn": "to handle IDN host via the Symfony polyfill if ext-intl is not present",
-        "rowbot/url": "to handle WHATWG URL"
+        "symfony/polyfill-intl-idn": "to handle IDN host via the Symfony polyfill if ext-intl is not present"
     },
     "extra": {
         "branch-alias": {

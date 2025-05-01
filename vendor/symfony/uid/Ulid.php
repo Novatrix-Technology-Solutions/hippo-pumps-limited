@@ -11,9 +11,6 @@
 
 namespace Symfony\Component\Uid;
 
-use Symfony\Component\Uid\Exception\InvalidArgumentException;
-use Symfony\Component\Uid\Exception\InvalidUlidException;
-
 /**
  * A ULID is lexicographically sortable and contains a 48-bit timestamp and 80-bit of crypto-random entropy.
  *
@@ -39,7 +36,7 @@ class Ulid extends AbstractUid implements TimeBasedUidInterface
             $this->uid = $ulid;
         } else {
             if (!self::isValid($ulid)) {
-                throw new InvalidUlidException($ulid);
+                throw new \InvalidArgumentException(\sprintf('Invalid ULID: "%s".', $ulid));
             }
 
             $this->uid = strtoupper($ulid);
@@ -157,7 +154,7 @@ class Ulid extends AbstractUid implements TimeBasedUidInterface
             $time = microtime(false);
             $time = substr($time, 11).substr($time, 2, 3);
         } elseif (0 > $time = $time->format('Uv')) {
-            throw new InvalidArgumentException('The timestamp must be positive.');
+            throw new \InvalidArgumentException('The timestamp must be positive.');
         }
 
         if ($time > self::$time || (null !== $mtime && $time !== self::$time)) {

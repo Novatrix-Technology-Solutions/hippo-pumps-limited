@@ -15,7 +15,6 @@ namespace League\Uri;
 
 use Deprecated;
 use JsonSerializable;
-use League\Uri\Contracts\Conditionable;
 use League\Uri\Contracts\UriException;
 use League\Uri\Contracts\UriInterface;
 use League\Uri\Exceptions\SyntaxError;
@@ -23,12 +22,10 @@ use League\Uri\UriTemplate\TemplateCanNotBeExpanded;
 use Psr\Http\Message\UriInterface as Psr7UriInterface;
 use Stringable;
 
-use function is_bool;
-
 /**
  * @phpstan-import-type InputComponentMap from UriString
  */
-final class Http implements Stringable, Psr7UriInterface, JsonSerializable, Conditionable
+final class Http implements Stringable, Psr7UriInterface, JsonSerializable
 {
     private readonly UriInterface $uri;
 
@@ -80,19 +77,7 @@ final class Http implements Stringable, Psr7UriInterface, JsonSerializable, Cond
      */
     public static function new(Stringable|string $uri = ''): self
     {
-        return new self(Uri::new($uri));
-    }
-
-    /**
-     * Create a new instance from a string.or a stringable structure or returns null on failure.
-     */
-    public static function tryNew(Stringable|string $uri = ''): ?self
-    {
-        try {
-            return self::new($uri);
-        } catch (UriException) {
-            return null;
-        }
+        return self::fromComponents(UriString::parse($uri));
     }
 
     /**
@@ -223,19 +208,6 @@ final class Http implements Stringable, Psr7UriInterface, JsonSerializable, Cond
             $uri->toString() => $this,
             default => new self($uri),
         };
-    }
-
-    public function when(callable|bool $condition, callable $onSuccess, ?callable $onFail = null): static
-    {
-        if (!is_bool($condition)) {
-            $condition = $condition($this);
-        }
-
-        return match (true) {
-            $condition => $onSuccess($this),
-            null !== $onFail => $onFail($this),
-            default => $this,
-        } ?? $this;
     }
 
     public function withScheme(string $scheme): self
