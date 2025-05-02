@@ -37,7 +37,7 @@ class PumpSolutionController extends Controller
             'max_flow' => ['nullable', 'numeric', 'min:0'],
             'min_head' => ['nullable', 'numeric', 'min:0'],
             'max_head' => ['nullable', 'numeric', 'min:0'],
-            'sort_by' => ['nullable', 'string', Rule::in(['name', 'price', 'flow_rate', 'head', 'power'])],
+            'sort_by' => ['nullable', 'string', Rule::in(['title', 'price', 'flow_rate', 'head', 'power'])],
             'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
             'page' => ['nullable', 'integer', 'min:1'],
         ]);
@@ -62,7 +62,7 @@ class PumpSolutionController extends Controller
             'max_head'
         ]);
 
-        $sortBy = $request->input('sort_by', 'name');
+        $sortBy = $request->input('sort_by', 'title');
         $sortOrder = $request->input('sort_order', 'asc');
 
         $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sortBy, $sortOrder);
