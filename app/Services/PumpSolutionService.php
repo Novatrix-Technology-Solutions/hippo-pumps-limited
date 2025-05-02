@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class PumpSolutionService
 {
-    public function getFilteredPumpSolutions(array $filters = [], string $sortBy = 'name', string $sortOrder = 'asc', int $perPage = 12)
+    public function getFilteredPumpSolutions(array $filters = [], string $sortBy = 'title', string $sortOrder = 'asc', int $perPage = 12)
     {
         $cacheKey = 'pump_solutions_' . md5(json_encode($filters) . $sortBy . $sortOrder . $perPage);
         
