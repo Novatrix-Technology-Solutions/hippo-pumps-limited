@@ -50,7 +50,9 @@ export default function ProductCard({ title, description, category, specificatio
                     </div>
                     <div className="flex justify-between">
                         <span className="text-gray-600">Price (ZMW):</span>
-                        <span className="font-medium">{specifications.price.toLocaleString()}</span>
+                        <span className="font-medium">
+                            {specifications.price ? specifications.price.toLocaleString() : 'N/A'}
+                        </span>
                     </div>
                 </div>
             </div>
