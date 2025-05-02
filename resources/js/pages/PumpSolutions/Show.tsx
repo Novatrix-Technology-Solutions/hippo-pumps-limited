@@ -31,7 +31,7 @@ export default function Show({ solution }: Props) {
                 className="container mx-auto py-12 px-4 md:px-0"
             >
                 <motion.div variants={fadeIn} className="mb-8">
-                    <Link href={route('public.pump-solutions.index')}>
+                    <Link href={route('pump-solutions.index')}>
                         <Button variant="ghost" className="mb-6">
                             <ArrowLeft className="w-4 h-4 mr-2" />
                             Back to Solutions

@@ -34,8 +34,8 @@ Route::get('/news', [NewsController::class, 'index'])->name('public.news.index')
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('public.news.show');
 
 // Public Pump Solutions routes
-Route::get('/pump-solutions', [PumpSolutionController::class, 'index'])->name('public.pump-solutions.index');
-Route::get('/pump-solutions/{pumpSolution:slug}', [PumpSolutionController::class, 'show'])->name('public.pump-solutions.show');
+Route::get('/pump-solutions', [PumpSolutionController::class, 'index'])->name('pump-solutions.index');
+Route::get('/pump-solutions/{pumpSolution:slug}', [PumpSolutionController::class, 'show'])->name('pump-solutions.show');
 
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {

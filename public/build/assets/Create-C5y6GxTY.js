@@ -1,1 +1,0 @@
-import{j as r}from"./app-CwnLmAAZ.js";import t from"./Form-BHJKieqs.js";import"./AdminLayout-BtRF-IT0.js";import"./proxy-DByVbTkK.js";import"./createLucideIcon-DukIPYPK.js";import"./user-CchTzPof.js";import"./settings-E59KbjxX.js";import"./AnimatedPage-CUTGy52g.js";import"./AnimatedButton-6xm5a7s_.js";const j=()=>r.jsx(t,{});export{j as default};
