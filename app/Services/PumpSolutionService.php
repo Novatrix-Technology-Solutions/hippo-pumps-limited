@@ -33,7 +33,7 @@ class PumpSolutionService
 
         $query->orderBy($sortBy, $sortDirection);
 
-        return $query->get();
+        return $query->paginate(9);
     }
 
     public function getPumpSolution(int $id)

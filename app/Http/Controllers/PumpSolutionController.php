@@ -31,6 +31,7 @@ class PumpSolutionController extends Controller
             'search' => 'nullable|string',
             'sort_by' => 'nullable|in:title,category,order,created_at',
             'sort_direction' => 'nullable|in:asc,desc',
+            'page' => 'nullable|integer|min:1',
         ]);
 
         $filters = [
@@ -46,7 +47,13 @@ class PumpSolutionController extends Controller
         $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);
 
         return Inertia::render('PumpSolutions/Index', [
-            'pumpSolutions' => $pumpSolutions,
+            'pumpSolutions' => [
+                'data' => $pumpSolutions->items(),
+                'current_page' => $pumpSolutions->currentPage(),
+                'last_page' => $pumpSolutions->lastPage(),
+                'per_page' => $pumpSolutions->perPage(),
+                'total' => $pumpSolutions->total(),
+            ],
             'filters' => $filters,
             'categories' => Cache::remember('pump_categories', 3600, function () {
                 return PumpSolution::getCategories();
