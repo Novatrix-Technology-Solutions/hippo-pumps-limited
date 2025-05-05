@@ -45,7 +45,13 @@ class PumpSolutionController extends Controller
 
         $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);
 
-        return PumpSolutionResource::collection($pumpSolutions);
+        return Inertia::render('PumpSolutions/Index', [
+            'pumpSolutions' => $pumpSolutions,
+            'filters' => $filters,
+            'categories' => Cache::remember('pump_categories', 3600, function () {
+                return PumpSolution::getCategories();
+            })
+        ]);
     }
 
     public function adminIndex()
