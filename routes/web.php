@@ -110,13 +110,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
-    Route::get('/pump-solutions', [PumpSolutionController::class, 'index'])
-        ->name('pump-solutions.index')
-        ->middleware('throttle:60,1');
-
-    Route::get('/pump-solutions/{pumpSolution}', [PumpSolutionController::class, 'show'])
-        ->name('pump-solutions.show')
-        ->middleware('throttle:60,1');
+    // Remove duplicate pump-solutions routes
 });
 
 Route::middleware(['web', 'auth:sanctum', 'verified', 'admin'])->group(function () {

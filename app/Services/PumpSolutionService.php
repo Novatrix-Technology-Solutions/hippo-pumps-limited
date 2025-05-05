@@ -5,54 +5,35 @@ namespace App\Services;
 use App\Models\PumpSolution;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class PumpSolutionService
 {
-    public function getFilteredPumpSolutions(array $filters = [], string $sortBy = 'title', string $sortOrder = 'asc', int $perPage = 12)
+    public function getFilteredPumpSolutions(array $filters, array $sorting)
     {
-        $cacheKey = 'pump_solutions_' . md5(json_encode($filters) . $sortBy . $sortOrder . $perPage);
-        
-        return Cache::remember($cacheKey, 60, function () use ($filters, $sortBy, $sortOrder, $perPage) {
-            $query = PumpSolution::query();
+        $query = PumpSolution::query();
 
-            if (isset($filters['category'])) {
-                $query->where('category', $filters['category']);
-            }
+        // Apply filters
+        if (!empty($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
 
-            if (isset($filters['sub_category'])) {
-                $query->where('sub_category', $filters['sub_category']);
-            }
+        if (!empty($filters['search'])) {
+            $query->where(function (Builder $q) use ($filters) {
+                $q->where('title', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('description', 'like', '%' . $filters['search'] . '%')
+                    ->orWhere('item_code', 'like', '%' . $filters['search'] . '%');
+            });
+        }
 
-            if (isset($filters['min_flow_rate'])) {
-                $query->where('flow_rate', '>=', $filters['min_flow_rate']);
-            }
+        // Apply sorting
+        $sortBy = $sorting['sort_by'] ?? 'title';
+        $sortDirection = $sorting['sort_direction'] ?? 'asc';
 
-            if (isset($filters['max_flow_rate'])) {
-                $query->where('flow_rate', '<=', $filters['max_flow_rate']);
-            }
+        $query->orderBy($sortBy, $sortDirection);
 
-            if (isset($filters['min_head'])) {
-                $query->where('head', '>=', $filters['min_head']);
-            }
-
-            if (isset($filters['max_head'])) {
-                $query->where('head', '<=', $filters['max_head']);
-            }
-
-            if (isset($filters['min_power'])) {
-                $query->where('power', '>=', $filters['min_power']);
-            }
-
-            if (isset($filters['max_power'])) {
-                $query->where('power', '<=', $filters['max_power']);
-            }
-
-            if (isset($filters['material'])) {
-                $query->where('material', $filters['material']);
-            }
-
-            return $query->orderBy($sortBy, $sortOrder)->paginate($perPage);
-        });
+        return $query->get();
     }
 
     public function getPumpSolution(int $id)

@@ -3,33 +3,45 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use App\Rules\ValidPumpCategory;
 use App\Rules\ValidPumpSpecification;
 
 class PumpSolutionRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function rules()
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'image' => ['nullable', 'image', 'max:2048'],
-            'category' => ['required', new ValidPumpCategory],
-            'sub_category' => ['required', 'string'],
-            'flow_rate' => ['required', new ValidPumpSpecification('flow rate', 0)],
-            'head' => ['required', new ValidPumpSpecification('head', 0)],
-            'power' => ['required', new ValidPumpSpecification('power', 0)],
-            'voltage' => ['required', new ValidPumpSpecification('voltage', 0)],
-            'phase' => ['required', 'string', 'in:1,3'],
-            'frequency' => ['required', new ValidPumpSpecification('frequency', 0)],
-            'material' => ['required', 'string'],
-            'price' => ['required', new ValidPumpSpecification('price', 0)],
-            'status' => ['required', 'boolean'],
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:pump_solutions,slug,' . $this->pump_solution?->id],
+            'description' => ['nullable', 'string'],
+            'category' => ['required', 'string', Rule::in(\App\Models\PumpSolution::getCategories())],
+            'item_code' => ['nullable', 'string', 'max:50'],
+            'q_max' => ['nullable', 'numeric', 'min:0'],
+            'h_max' => ['nullable', 'numeric', 'min:0'],
+            'rated_q' => ['nullable', 'numeric', 'min:0'],
+            'rated_h' => ['nullable', 'numeric', 'min:0'],
+            'motor' => ['nullable', 'numeric', 'min:0'],
+            'motor_unit' => ['nullable', 'string', 'in:HP,kW'],
+            'price_zmw' => ['required', 'numeric', 'min:0'],
+            'vat_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'net_price_zmw' => ['nullable', 'numeric', 'min:0'],
+            'notes' => ['nullable', 'string'],
+            'is_featured' => ['boolean'],
+            'order' => ['integer', 'min:0'],
         ];
     }
 

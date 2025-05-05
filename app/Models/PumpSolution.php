@@ -15,14 +15,17 @@ class PumpSolution extends Model
         'slug',
         'description',
         'category',
+        'item_code',
         'q_max',
         'h_max',
         'rated_q',
         'rated_h',
         'motor',
+        'motor_unit',
         'price_zmw',
         'vat_rate',
         'net_price_zmw',
+        'notes',
         'is_featured',
         'order',
     ];
@@ -107,6 +110,8 @@ class PumpSolution extends Model
         $this->title = $this->sanitizeString($this->title);
         $this->description = $this->sanitizeString($this->description);
         $this->category = $this->sanitizeString($this->category);
+        $this->item_code = $this->sanitizeString($this->item_code);
+        $this->notes = $this->sanitizeString($this->notes);
         
         // Sanitize numeric values
         $this->q_max = $this->sanitizeNumeric($this->q_max);
@@ -146,7 +151,7 @@ class PumpSolution extends Model
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    // Define available categories
+    // Define available categories from the CSV
     const CATEGORIES = [
         'SOLAR PUMPS',
         'SOLAR PUMPS MAX',
@@ -158,6 +163,11 @@ class PumpSolution extends Model
         'SOLAR LIGHT',
         'WIRE ROPE'
     ];
+
+    public static function getCategories()
+    {
+        return self::CATEGORIES;
+    }
 
     // Add scopes for filtering
     public function scopeByCategory($query, $category)
@@ -201,21 +211,6 @@ class PumpSolution extends Model
             'net_price_zmw' => 'nullable|numeric|min:0',
             'is_featured' => 'boolean',
             'order' => 'nullable|integer|min:0',
-        ];
-    }
-
-    public static function getCategories()
-    {
-        return [
-            'SOLAR PUMPS',
-            'SOLAR PUMPS MAX',
-            'SEWAGE PUMPS',
-            'SUBMERSIBLE PUMPS',
-            'BOOSTER PUMPS',
-            'SPRINKLER PUMPS',
-            'SOLAR PANEL',
-            'SOLAR LIGHT',
-            'WIRE ROPE'
         ];
     }
 } 

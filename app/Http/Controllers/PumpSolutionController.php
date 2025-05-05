@@ -26,52 +26,26 @@ class PumpSolutionController extends Controller
 
     public function index(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'category' => ['nullable', 'string', Rule::in(PumpSolution::getCategories())],
-            'sub_category' => ['nullable', 'string'],
-            'min_price' => ['nullable', 'numeric', 'min:0'],
-            'max_price' => ['nullable', 'numeric', 'min:0'],
-            'min_motor' => ['nullable', 'numeric', 'min:0'],
-            'max_motor' => ['nullable', 'numeric', 'min:0'],
-            'min_flow' => ['nullable', 'numeric', 'min:0'],
-            'max_flow' => ['nullable', 'numeric', 'min:0'],
-            'min_head' => ['nullable', 'numeric', 'min:0'],
-            'max_head' => ['nullable', 'numeric', 'min:0'],
-            'sort_by' => ['nullable', 'string', Rule::in(['title', 'price', 'flow_rate', 'head', 'power'])],
-            'sort_order' => ['nullable', 'string', Rule::in(['asc', 'desc'])],
-            'page' => ['nullable', 'integer', 'min:1'],
+        $request->validate([
+            'category' => 'nullable|string',
+            'search' => 'nullable|string',
+            'sort_by' => 'nullable|in:title,category,order,created_at',
+            'sort_direction' => 'nullable|in:asc,desc',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Invalid input data',
-                'errors' => $validator->errors()
-            ], 422);
-        }
+        $filters = [
+            'category' => $request->input('category'),
+            'search' => $request->input('search'),
+        ];
 
-        $filters = $request->only([
-            'category',
-            'sub_category',
-            'min_price',
-            'max_price',
-            'min_motor',
-            'max_motor',
-            'min_flow',
-            'max_flow',
-            'min_head',
-            'max_head'
-        ]);
+        $sorting = [
+            'sort_by' => $request->input('sort_by', 'title'),
+            'sort_direction' => $request->input('sort_direction', 'asc'),
+        ];
 
-        $sortBy = $request->input('sort_by', 'title');
-        $sortOrder = $request->input('sort_order', 'asc');
+        $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);
 
-        $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sortBy, $sortOrder);
-
-        return Inertia::render('PumpSolutions/Index', [
-            'pumpSolutions' => $pumpSolutions,
-            'filters' => $filters,
-            'categories' => PumpSolution::getCategories()
-        ]);
+        return PumpSolutionResource::collection($pumpSolutions);
     }
 
     public function adminIndex()
@@ -92,9 +66,7 @@ class PumpSolutionController extends Controller
 
     public function show(PumpSolution $pumpSolution)
     {
-        return Inertia::render('PumpSolutions/Show', [
-            'solution' => $pumpSolution
-        ]);
+        return new PumpSolutionResource($pumpSolution);
     }
 
     public function create()
@@ -115,14 +87,7 @@ class PumpSolutionController extends Controller
     {
         $pumpSolution = $this->pumpSolutionService->createPumpSolution($request->validated());
 
-        if ($request->hasFile('image')) {
-            $pumpSolution->addMediaFromRequest('image')
-                ->toMediaCollection('pump-solutions');
-        }
-
-        event(new PumpSolutionUpdated($pumpSolution));
-
-        return response()->json($pumpSolution, 201);
+        return new PumpSolutionResource($pumpSolution);
     }
 
     public function edit(PumpSolution $pumpSolution)
@@ -144,24 +109,14 @@ class PumpSolutionController extends Controller
     {
         $pumpSolution = $this->pumpSolutionService->updatePumpSolution($pumpSolution, $request->validated());
 
-        if ($request->hasFile('image')) {
-            $pumpSolution->clearMediaCollection('pump-solutions');
-            $pumpSolution->addMediaFromRequest('image')
-                ->toMediaCollection('pump-solutions');
-        }
-
-        event(new PumpSolutionUpdated($pumpSolution));
-
-        return response()->json($pumpSolution);
+        return new PumpSolutionResource($pumpSolution);
     }
 
     public function destroy(PumpSolution $pumpSolution)
     {
         $this->pumpSolutionService->deletePumpSolution($pumpSolution);
 
-        event(new PumpSolutionUpdated($pumpSolution));
-
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
     public function apiIndex()
