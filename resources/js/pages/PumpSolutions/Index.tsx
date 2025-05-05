@@ -60,6 +60,16 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
         });
     };
 
+    const handlePageChange = (page: number) => {
+        router.get(route('pump-solutions.index'), {
+            ...data,
+            page: page
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
     const resetFilters = () => {
         setData({
             category: '',
@@ -224,10 +234,7 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             {Array.from({ length: pumpSolutions.last_page }, (_, i) => i + 1).map((page) => (
                                 <button
                                     key={page}
-                                    onClick={() => {
-                                        setData('page', page);
-                                        handleFilter();
-                                    }}
+                                    onClick={() => handlePageChange(page)}
                                     className={`px-4 py-2 rounded-md ${
                                         pumpSolutions.current_page === page
                                             ? 'bg-indigo-600 text-white'
