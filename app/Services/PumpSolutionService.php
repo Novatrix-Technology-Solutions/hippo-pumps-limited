@@ -10,124 +10,166 @@ use Illuminate\Support\Facades\DB;
 
 class PumpSolutionService
 {
+    private const CACHE_TTL = 3600; // 1 hour
+    private const CACHE_PREFIX = 'pump_solutions_';
+
     public function getFilteredPumpSolutions(array $filters, array $sorting)
     {
         try {
-            $query = PumpSolution::query();
+            // Create a cache key based on filters and sorting
+            $cacheKey = self::CACHE_PREFIX . md5(json_encode($filters) . json_encode($sorting));
 
-            // Apply category filter
-            if (!empty($filters['category'])) {
-                $query->where('category', $filters['category']);
-            }
+            return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($filters, $sorting) {
+                $query = PumpSolution::query()
+                    ->select([
+                        'id', 'title', 'description', 'category', 'q_max', 'h_max',
+                        'rated_q', 'rated_h', 'motor', 'price_zmw', 'vat_rate',
+                        'net_price_zmw', 'is_featured', 'order'
+                    ]);
 
-            // Apply search filter
-            if (!empty($filters['search'])) {
-                $query->where(function (Builder $q) use ($filters) {
-                    $q->where('title', 'like', '%' . $filters['search'] . '%')
-                        ->orWhere('description', 'like', '%' . $filters['search'] . '%')
-                        ->orWhere('item_code', 'like', '%' . $filters['search'] . '%');
-                });
-            }
+                // Apply category filter with index
+                if (!empty($filters['category'])) {
+                    $query->where('category', $filters['category']);
+                }
 
-            // Apply price range filter
-            if (!empty($filters['min_price'])) {
-                $query->where('net_price_zmw', '>=', $filters['min_price']);
-            }
-            if (!empty($filters['max_price'])) {
-                $query->where('net_price_zmw', '<=', $filters['max_price']);
-            }
+                // Apply search filter with full-text search if available
+                if (!empty($filters['search'])) {
+                    $query->where(function (Builder $q) use ($filters) {
+                        $searchTerm = $filters['search'];
+                        $q->where('title', 'like', "%{$searchTerm}%")
+                            ->orWhere('description', 'like', "%{$searchTerm}%")
+                            ->orWhere('item_code', 'like', "%{$searchTerm}%");
+                    });
+                }
 
-            // Apply motor power filter
-            if (!empty($filters['min_motor'])) {
-                $query->where('motor', '>=', $filters['min_motor']);
-            }
-            if (!empty($filters['max_motor'])) {
-                $query->where('motor', '<=', $filters['max_motor']);
-            }
+                // Apply numeric filters with proper indexing
+                $this->applyNumericFilters($query, $filters);
 
-            // Apply flow rate filter
-            if (!empty($filters['min_flow'])) {
-                $query->where('q_max', '>=', $filters['min_flow']);
-            }
-            if (!empty($filters['max_flow'])) {
-                $query->where('q_max', '<=', $filters['max_flow']);
-            }
+                // Apply sorting with index
+                $sortBy = $sorting['sort_by'] ?? 'title';
+                $sortDirection = $sorting['sort_direction'] ?? 'asc';
+                $query->orderBy($sortBy, $sortDirection);
 
-            // Apply head filter
-            if (!empty($filters['min_head'])) {
-                $query->where('h_max', '>=', $filters['min_head']);
-            }
-            if (!empty($filters['max_head'])) {
-                $query->where('h_max', '<=', $filters['max_head']);
-            }
+                // Eager load any relationships if needed
+                // $query->with(['relatedModel']);
 
-            // Apply sorting
-            $sortBy = $sorting['sort_by'] ?? 'title';
-            $sortDirection = $sorting['sort_direction'] ?? 'asc';
-
-            $query->orderBy($sortBy, $sortDirection);
-
-            return $query->paginate(9);
+                return $query->paginate(9);
+            });
         } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionService@getFilteredPumpSolutions: ' . $e->getMessage());
+            Log::error('Error in PumpSolutionService@getFilteredPumpSolutions: ' . $e->getMessage(), [
+                'filters' => $filters,
+                'sorting' => $sorting,
+                'trace' => $e->getTraceAsString()
+            ]);
             throw $e;
+        }
+    }
+
+    private function applyNumericFilters(Builder $query, array $filters): void
+    {
+        $numericFilters = [
+            'min_price' => ['field' => 'net_price_zmw', 'operator' => '>='],
+            'max_price' => ['field' => 'net_price_zmw', 'operator' => '<='],
+            'min_motor' => ['field' => 'motor', 'operator' => '>='],
+            'max_motor' => ['field' => 'motor', 'operator' => '<='],
+            'min_flow' => ['field' => 'q_max', 'operator' => '>='],
+            'max_flow' => ['field' => 'q_max', 'operator' => '<='],
+            'min_head' => ['field' => 'h_max', 'operator' => '>='],
+            'max_head' => ['field' => 'h_max', 'operator' => '<='],
+        ];
+
+        foreach ($numericFilters as $filterKey => $config) {
+            if (!empty($filters[$filterKey])) {
+                $query->where($config['field'], $config['operator'], $filters[$filterKey]);
+            }
         }
     }
 
     public function getPumpSolution(int $id)
     {
-        $cacheKey = 'pump_solution_' . $id;
+        $cacheKey = self::CACHE_PREFIX . 'single_' . $id;
         
-        return Cache::remember($cacheKey, 60, function () use ($id) {
-            return PumpSolution::findOrFail($id);
+        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($id) {
+            return PumpSolution::select([
+                'id', 'title', 'description', 'category', 'q_max', 'h_max',
+                'rated_q', 'rated_h', 'motor', 'price_zmw', 'vat_rate',
+                'net_price_zmw', 'is_featured', 'order'
+            ])->findOrFail($id);
         });
     }
 
     public function createPumpSolution(array $data)
     {
-        $pumpSolution = PumpSolution::create($data);
+        DB::beginTransaction();
+        try {
+            $pumpSolution = PumpSolution::create($data);
 
-        if (isset($data['image'])) {
-            $pumpSolution->addMediaFromRequest('image')
-                ->toMediaCollection('pump-solutions');
+            if (isset($data['image'])) {
+                $pumpSolution->addMediaFromRequest('image')
+                    ->toMediaCollection('pump-solutions');
+            }
+
+            $this->clearCaches();
+            DB::commit();
+
+            return $pumpSolution;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating pump solution: ' . $e->getMessage(), [
+                'data' => $data,
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
-
-        $this->clearCaches($pumpSolution);
-
-        return $pumpSolution;
     }
 
     public function updatePumpSolution(PumpSolution $pumpSolution, array $data)
     {
-        $pumpSolution->update($data);
+        DB::beginTransaction();
+        try {
+            $pumpSolution->update($data);
 
-        if (isset($data['image'])) {
-            $pumpSolution->clearMediaCollection('pump-solutions');
-            $pumpSolution->addMediaFromRequest('image')
-                ->toMediaCollection('pump-solutions');
+            if (isset($data['image'])) {
+                $pumpSolution->clearMediaCollection('pump-solutions');
+                $pumpSolution->addMediaFromRequest('image')
+                    ->toMediaCollection('pump-solutions');
+            }
+
+            $this->clearCaches();
+            DB::commit();
+
+            return $pumpSolution;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating pump solution: ' . $e->getMessage(), [
+                'id' => $pumpSolution->id,
+                'data' => $data,
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
-
-        $this->clearCaches($pumpSolution);
-
-        return $pumpSolution;
     }
 
     public function deletePumpSolution(PumpSolution $pumpSolution)
     {
-        $pumpSolution->delete();
-
-        $this->clearCaches($pumpSolution);
+        DB::beginTransaction();
+        try {
+            $pumpSolution->delete();
+            $this->clearCaches();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error deleting pump solution: ' . $e->getMessage(), [
+                'id' => $pumpSolution->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
+        }
     }
 
-    protected function clearCaches(PumpSolution $pumpSolution)
+    protected function clearCaches(): void
     {
-        Cache::forget('pump_solutions_*');
-        Cache::forget('pump_solution_' . $pumpSolution->id);
-        Cache::forget('pump_categories');
-
-        Log::info('Caches cleared for pump solution', [
-            'id' => $pumpSolution->id,
-            'name' => $pumpSolution->name,
-        ]);
+        Cache::tags([self::CACHE_PREFIX])->flush();
+        Log::info('Pump solutions cache cleared');
     }
 } 

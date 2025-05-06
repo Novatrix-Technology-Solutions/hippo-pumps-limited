@@ -1,8 +1,8 @@
 import { Head } from '@inertiajs/react';
 import ProductCard from '@/components/ProductCard';
-import { router } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
+import { debounce } from 'lodash';
 
 interface PumpSolution {
     id: number;
@@ -57,18 +57,24 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
         page: 1,
     });
 
-    const handleFilter = () => {
+    // Memoize the filter handler to prevent unnecessary re-renders
+    const handleFilter = useCallback(() => {
         get(route('pump-solutions.index'), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
-                // Reset to page 1 when filters change
                 setData('page', 1);
             },
         });
-    };
+    }, [get, setData]);
 
-    const handlePageChange = (page: number) => {
+    // Debounce the filter handler to prevent too many requests
+    const debouncedFilter = useMemo(
+        () => debounce(handleFilter, 300),
+        [handleFilter]
+    );
+
+    const handlePageChange = useCallback((page: number) => {
         get(route('pump-solutions.index'), {
             ...data,
             page: page,
@@ -76,9 +82,9 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             preserveState: true,
             preserveScroll: true,
         });
-    };
+    }, [get, data]);
 
-    const resetFilters = () => {
+    const resetFilters = useCallback(() => {
         setData({
             category: '',
             min_price: '',
@@ -92,12 +98,19 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             page: 1,
         });
         get(route('pump-solutions.index'));
-    };
+    }, [get, setData]);
 
     // Reset to page 1 when filters change
     useEffect(() => {
         setData('page', 1);
-    }, [data.category, data.min_price, data.max_price, data.min_motor, data.max_motor, data.min_flow, data.max_flow, data.min_head, data.max_head]);
+    }, [data.category, data.min_price, data.max_price, data.min_motor, data.max_motor, data.min_flow, data.max_flow, data.min_head, data.max_head, setData]);
+
+    // Cleanup debounce on unmount
+    useEffect(() => {
+        return () => {
+            debouncedFilter.cancel();
+        };
+    }, [debouncedFilter]);
 
     return (
         <>
@@ -112,7 +125,10 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             <label className="block text-sm font-medium text-gray-700">Category</label>
                             <select
                                 value={data.category}
-                                onChange={(e) => setData('category', e.target.value)}
+                                onChange={(e) => {
+                                    setData('category', e.target.value);
+                                    debouncedFilter();
+                                }}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             >
                                 <option value="">All Categories</option>
@@ -130,14 +146,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                                 <input
                                     type="number"
                                     value={data.min_price}
-                                    onChange={(e) => setData('min_price', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('min_price', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
                                     value={data.max_price}
-                                    onChange={(e) => setData('max_price', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('max_price', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
@@ -150,14 +172,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                                 <input
                                     type="number"
                                     value={data.min_motor}
-                                    onChange={(e) => setData('min_motor', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('min_motor', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
                                     value={data.max_motor}
-                                    onChange={(e) => setData('max_motor', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('max_motor', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
@@ -170,14 +198,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                                 <input
                                     type="number"
                                     value={data.min_flow}
-                                    onChange={(e) => setData('min_flow', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('min_flow', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
                                     value={data.max_flow}
-                                    onChange={(e) => setData('max_flow', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('max_flow', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
@@ -190,14 +224,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                                 <input
                                     type="number"
                                     value={data.min_head}
-                                    onChange={(e) => setData('min_head', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('min_head', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
                                     value={data.max_head}
-                                    onChange={(e) => setData('max_head', e.target.value)}
+                                    onChange={(e) => {
+                                        setData('max_head', e.target.value);
+                                        debouncedFilter();
+                                    }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
@@ -211,12 +251,6 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                         >
                             Reset Filters
-                        </button>
-                        <button
-                            onClick={handleFilter}
-                            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-                        >
-                            Apply Filters
                         </button>
                     </div>
                 </div>
