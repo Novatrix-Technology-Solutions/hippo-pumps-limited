@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import ProductCard from '@/components/ProductCard';
 import { router } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 interface PumpSolution {
     id: number;
@@ -25,6 +26,8 @@ interface Props {
         data: PumpSolution[];
         current_page: number;
         last_page: number;
+        per_page: number;
+        total: number;
     };
     filters: {
         category?: string;
@@ -41,7 +44,7 @@ interface Props {
 }
 
 export default function Index({ pumpSolutions, filters, categories }: Props) {
-    const { data, setData } = useForm({
+    const { data, setData, get } = useForm({
         category: filters.category || '',
         min_price: filters.min_price || '',
         max_price: filters.max_price || '',
@@ -51,19 +54,24 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
         max_flow: filters.max_flow || '',
         min_head: filters.min_head || '',
         max_head: filters.max_head || '',
+        page: 1,
     });
 
     const handleFilter = () => {
-        router.get(route('pump-solutions.index'), data, {
+        get(route('pump-solutions.index'), {
             preserveState: true,
             preserveScroll: true,
+            onSuccess: () => {
+                // Reset to page 1 when filters change
+                setData('page', 1);
+            },
         });
     };
 
     const handlePageChange = (page: number) => {
-        router.get(route('pump-solutions.index'), {
+        get(route('pump-solutions.index'), {
             ...data,
-            page: page
+            page: page,
         }, {
             preserveState: true,
             preserveScroll: true,
@@ -81,9 +89,15 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             max_flow: '',
             min_head: '',
             max_head: '',
+            page: 1,
         });
-        router.get(route('pump-solutions.index'));
+        get(route('pump-solutions.index'));
     };
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setData('page', 1);
+    }, [data.category, data.min_price, data.max_price, data.min_motor, data.max_motor, data.min_flow, data.max_flow, data.min_head, data.max_head]);
 
     return (
         <>
