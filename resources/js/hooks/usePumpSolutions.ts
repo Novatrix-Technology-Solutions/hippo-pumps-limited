@@ -23,33 +23,18 @@ interface PumpSolutionsResponse {
     total: number;
 }
 
+import axios from 'axios';
+
 const fetchPumpSolutions = async (filters: PumpSolutionsFilters): Promise<PumpSolutionsResponse> => {
-    const response = await router.get(route('pump-solutions.index'), filters, {
-        preserveState: true,
-        preserveScroll: true,
-    });
-    return response.props.pumpSolutions;
+    const response = await axios.get('/api/pump-solutions', { params: filters });
+    return response.data;
 };
+
 
 export const usePumpSolutions = (filters: PumpSolutionsFilters) => {
     return useQuery({
         queryKey: ['pumpSolutions', filters],
         queryFn: () => fetchPumpSolutions(filters),
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        keepPreviousData: true, // Keep previous data while loading new data
+        staleTime: 1000 * 60 * 5,
     });
 };
-
-export const usePumpSolution = (id: number) => {
-    return useQuery({
-        queryKey: ['pumpSolution', id],
-        queryFn: async () => {
-            const response = await router.get(route('pump-solutions.show', id), {}, {
-                preserveState: true,
-                preserveScroll: true,
-            });
-            return response.props.solution;
-        },
-        staleTime: 1000 * 60 * 5, // 5 minutes
-    });
-}; 
