@@ -1,1 +1,0 @@
-import{r as f,h as n,f as s}from"./app-CUw2shSB.js";function a(){let t=typeof document>"u";return"useSyncExternalStore"in s?(e=>e.useSyncExternalStore)(s)(()=>()=>{},()=>!1,()=>!t):!1}function u(){let t=a(),[e,r]=f.useState(n.isHandoffComplete);return e&&n.isHandoffComplete===!1&&r(!1),f.useEffect(()=>{e!==!0&&r(!0)},[e]),f.useEffect(()=>n.handoff(),[]),t?!1:e}export{u as l};
