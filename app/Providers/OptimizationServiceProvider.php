@@ -72,7 +72,20 @@ class OptimizationServiceProvider extends ServiceProvider
 
         // Clear cache on deployment
         if ($this->app->environment('production')) {
-            Cache::tags(['app'])->flush();
+            $driver = config('cache.default');
+            
+            try {
+                if ($driver === 'redis' || $driver === 'memcached') {
+                    // These drivers support tags
+                    Cache::tags(['app'])->flush();
+                } else {
+                    // For other drivers, clear the entire cache
+                    Cache::flush();
+                }
+            } catch (\Exception $e) {
+                // If there's any error with cache operations, just log it
+                Log::warning('Cache optimization failed: ' . $e->getMessage());
+            }
         }
     }
 } 
