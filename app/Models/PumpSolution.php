@@ -166,7 +166,7 @@ class PumpSolution extends Model
 
     public static function getCategories()
     {
-        return self::CATEGORIES;
+        return self::query()->distinct()->pluck('category')->toArray();
     }
 
     // Add scopes for filtering
