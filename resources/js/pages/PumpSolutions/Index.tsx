@@ -1,10 +1,10 @@
 import { Head } from '@inertiajs/react';
 import ProductCard from '@/components/ProductCard';
-import { useForm } from '@inertiajs/react';
 import { useEffect, useCallback, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Loader2 } from 'lucide-react';
+import { usePumpSolutions } from '@/hooks/usePumpSolutions';
 
 interface PumpSolution {
     id: number;
@@ -45,62 +45,39 @@ interface Props {
     categories: string[];
 }
 
-export default function Index({ pumpSolutions, filters, categories }: Props) {
-    const [isLoading, setIsLoading] = useState(false);
-    const { data, setData, get } = useForm({
-        category: filters.category || '',
-        min_price: filters.min_price || '',
-        max_price: filters.max_price || '',
-        min_motor: filters.min_motor || '',
-        max_motor: filters.max_motor || '',
-        min_flow: filters.min_flow || '',
-        max_flow: filters.max_flow || '',
-        min_head: filters.min_head || '',
-        max_head: filters.max_head || '',
-        page: pumpSolutions.current_page,
+export default function Index({ pumpSolutions: initialData, filters: initialFilters, categories }: Props) {
+    const [filters, setFilters] = useState({
+        category: initialFilters.category || '',
+        min_price: initialFilters.min_price || '',
+        max_price: initialFilters.max_price || '',
+        min_motor: initialFilters.min_motor || '',
+        max_motor: initialFilters.max_motor || '',
+        min_flow: initialFilters.min_flow || '',
+        max_flow: initialFilters.max_flow || '',
+        min_head: initialFilters.min_head || '',
+        max_head: initialFilters.max_head || '',
+        page: initialData.current_page,
     });
 
-    // Memoize the filter handler to prevent unnecessary re-renders
-    const handleFilter = useCallback(() => {
-        setIsLoading(true);
-        get(route('pump-solutions.index'), {
-            preserveState: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                setIsLoading(false);
-            },
-            onError: () => {
-                setIsLoading(false);
-            }
-        });
-    }, [get]);
+    const { data: pumpSolutions, isLoading, isFetching } = usePumpSolutions(filters);
 
-    // Increased debounce time to 500ms for better performance
+    // Memoize the filter handler to prevent unnecessary re-renders
+    const handleFilter = useCallback((newFilters: typeof filters) => {
+        setFilters(newFilters);
+    }, []);
+
+    // Debounce the filter handler to prevent too many requests
     const debouncedFilter = useMemo(
         () => debounce(handleFilter, 500),
         [handleFilter]
     );
 
     const handlePageChange = useCallback((page: number) => {
-        setIsLoading(true);
-        get(route('pump-solutions.index'), {
-            ...data,
-            page: page,
-        }, {
-            preserveState: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                setIsLoading(false);
-            },
-            onError: () => {
-                setIsLoading(false);
-            }
-        });
-    }, [get, data]);
+        setFilters(prev => ({ ...prev, page }));
+    }, []);
 
     const resetFilters = useCallback(() => {
-        setIsLoading(true);
-        setData({
+        setFilters({
             category: '',
             min_price: '',
             max_price: '',
@@ -112,15 +89,7 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             max_head: '',
             page: 1,
         });
-        get(route('pump-solutions.index'), {}, {
-            onSuccess: () => {
-                setIsLoading(false);
-            },
-            onError: () => {
-                setIsLoading(false);
-            }
-        });
-    }, [get, setData]);
+    }, []);
 
     // Cleanup debounce on unmount
     useEffect(() => {
@@ -128,6 +97,8 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             debouncedFilter.cancel();
         };
     }, [debouncedFilter]);
+
+    const displayData = pumpSolutions || initialData;
 
     return (
         <>
@@ -141,10 +112,10 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Category</label>
                             <select
-                                value={data.category}
+                                value={filters.category}
                                 onChange={(e) => {
-                                    setData('category', e.target.value);
-                                    debouncedFilter();
+                                    const newFilters = { ...filters, category: e.target.value };
+                                    debouncedFilter(newFilters);
                                 }}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                             >
@@ -162,20 +133,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             <div className="flex gap-2">
                                 <input
                                     type="number"
-                                    value={data.min_price}
+                                    value={filters.min_price}
                                     onChange={(e) => {
-                                        setData('min_price', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, min_price: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
-                                    value={data.max_price}
+                                    value={filters.max_price}
                                     onChange={(e) => {
-                                        setData('max_price', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, max_price: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -188,20 +159,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             <div className="flex gap-2">
                                 <input
                                     type="number"
-                                    value={data.min_motor}
+                                    value={filters.min_motor}
                                     onChange={(e) => {
-                                        setData('min_motor', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, min_motor: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
-                                    value={data.max_motor}
+                                    value={filters.max_motor}
                                     onChange={(e) => {
-                                        setData('max_motor', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, max_motor: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -214,20 +185,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             <div className="flex gap-2">
                                 <input
                                     type="number"
-                                    value={data.min_flow}
+                                    value={filters.min_flow}
                                     onChange={(e) => {
-                                        setData('min_flow', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, min_flow: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
-                                    value={data.max_flow}
+                                    value={filters.max_flow}
                                     onChange={(e) => {
-                                        setData('max_flow', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, max_flow: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -240,20 +211,20 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                             <div className="flex gap-2">
                                 <input
                                     type="number"
-                                    value={data.min_head}
+                                    value={filters.min_head}
                                     onChange={(e) => {
-                                        setData('min_head', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, min_head: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <input
                                     type="number"
-                                    value={data.max_head}
+                                    value={filters.max_head}
                                     onChange={(e) => {
-                                        setData('max_head', e.target.value);
-                                        debouncedFilter();
+                                        const newFilters = { ...filters, max_head: e.target.value };
+                                        debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -266,15 +237,15 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                         <button
                             onClick={resetFilters}
                             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-                            disabled={isLoading}
+                            disabled={isLoading || isFetching}
                         >
-                            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Reset Filters'}
+                            {isLoading || isFetching ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Reset Filters'}
                         </button>
                     </div>
                 </div>
 
                 {/* Loading State */}
-                {isLoading && (
+                {(isLoading || isFetching) && (
                     <div className="flex justify-center items-center py-8">
                         <Loader2 className="w-8 h-8 animate-spin text-primary" />
                     </div>
@@ -284,7 +255,7 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                 {!isLoading && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {pumpSolutions.data.map((solution) => (
+                            {displayData.data.map((solution) => (
                                 <ProductCard
                                     key={solution.id}
                                     title={solution.title}
@@ -303,22 +274,22 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                         </div>
 
                         {/* Pagination */}
-                        {pumpSolutions.last_page > 1 && (
+                        {displayData.last_page > 1 && (
                             <div className="mt-8">
                                 <Pagination>
                                     <PaginationContent>
                                         <PaginationItem>
                                             <PaginationPrevious
-                                                onClick={() => handlePageChange(pumpSolutions.current_page - 1)}
-                                                disabled={pumpSolutions.current_page === 1}
+                                                onClick={() => handlePageChange(displayData.current_page - 1)}
+                                                disabled={displayData.current_page === 1}
                                             />
                                         </PaginationItem>
                                         
-                                        {Array.from({ length: pumpSolutions.last_page }, (_, i) => i + 1).map((page) => (
+                                        {Array.from({ length: displayData.last_page }, (_, i) => i + 1).map((page) => (
                                             <PaginationItem key={page}>
                                                 <PaginationLink
                                                     onClick={() => handlePageChange(page)}
-                                                    isActive={page === pumpSolutions.current_page}
+                                                    isActive={page === displayData.current_page}
                                                 >
                                                     {page}
                                                 </PaginationLink>
@@ -327,8 +298,8 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
 
                                         <PaginationItem>
                                             <PaginationNext
-                                                onClick={() => handlePageChange(pumpSolutions.current_page + 1)}
-                                                disabled={pumpSolutions.current_page === pumpSolutions.last_page}
+                                                onClick={() => handlePageChange(displayData.current_page + 1)}
+                                                disabled={displayData.current_page === displayData.last_page}
                                             />
                                         </PaginationItem>
                                     </PaginationContent>

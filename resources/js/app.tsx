@@ -1,3 +1,4 @@
+import './bootstrap';
 import '../css/app.css';
 
 import { createInertiaApp } from '@inertiajs/react';
@@ -7,6 +8,7 @@ import SiteLayout from './layouts/site-layout'; // Import the layout
 import { initializeTheme } from './hooks/use-appearance';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
+import QueryProvider from './providers/QueryProvider';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Hippo Pumps Limited';
 const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -44,10 +46,10 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
         root.render(
-            <>
-                <App {...props} />
+            <QueryProvider>
                 <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-            </>
+                <App {...props} />
+            </QueryProvider>
         );
     },
     progress: {
