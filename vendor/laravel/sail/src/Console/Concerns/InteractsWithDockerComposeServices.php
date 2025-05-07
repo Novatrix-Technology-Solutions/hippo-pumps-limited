@@ -128,11 +128,11 @@ trait InteractsWithDockerComposeServices
             in_array('mariadb', $services) ||
             in_array('pgsql', $services)) {
             $defaults = [
-                '# DB_HOST=127.0.0.1',
+                '# DB_HOST=aws-0-us-east-1.pooler.supabase.com',
                 '# DB_PORT=3306',
-                '# DB_DATABASE=laravel',
-                '# DB_USERNAME=root',
-                '# DB_PASSWORD=',
+                '# DB_DATABASE=postgres',
+                '# DB_USERNAME=postgres.razdqlyekzjlhuzzoxkx',
+                '# DB_PASSWORD=mSLWxlIm9PpZSocy',
             ];
 
             foreach ($defaults as $default) {

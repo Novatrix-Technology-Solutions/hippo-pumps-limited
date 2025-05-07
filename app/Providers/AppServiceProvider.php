@@ -51,11 +51,11 @@ class AppServiceProvider extends ServiceProvider
             // If we're in production, we might want to use a fallback database
             if (app()->environment('production')) {
                 config([
-                    'database.connections.pgsql.host' => '127.0.0.1',
+                    'database.connections.pgsql.host' => 'aws-0-us-east-1.pooler.supabase.com',
                     'database.connections.pgsql.port' => '5432',
-                    'database.connections.pgsql.database' => 'hippo_pumps_fallback',
-                    'database.connections.pgsql.username' => 'postgres',
-                    'database.connections.pgsql.password' => '',
+                    'database.connections.pgsql.database' => 'postgres',
+                    'database.connections.pgsql.username' => 'postgres.razdqlyekzjlhuzzoxkx',
+                    'database.connections.pgsql.password' => 'mSLWxlIm9PpZSocy',
                 ]);
             }
         }
