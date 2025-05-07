@@ -9,21 +9,23 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pump_solutions', function (Blueprint $table) {
-            // Add indexes for frequently filtered columns
-            $table->index('category');
-            $table->index('net_price_zmw');
-            $table->index('motor');
-            $table->index('q_max');
-            $table->index('h_max');
-            
-            // Add indexes for frequently sorted columns
-            $table->index('title');
-            $table->index('order');
-            $table->index('created_at');
-            
-            // Add composite index for common filter combinations
-            $table->index(['category', 'net_price_zmw']);
-            $table->index(['category', 'motor']);
+            if (Schema::hasColumn('pump_solutions', 'category')) {
+                // Add indexes for frequently filtered columns
+                $table->index('category');
+                $table->index('net_price_zmw');
+                $table->index('motor');
+                $table->index('q_max');
+                $table->index('h_max');
+                
+                // Add indexes for frequently sorted columns
+                $table->index('title');
+                $table->index('order');
+                $table->index('created_at');
+                
+                // Add composite index for common filter combinations
+                $table->index(['category', 'net_price_zmw']);
+                $table->index(['category', 'motor']);
+            }
         });
     }
 
