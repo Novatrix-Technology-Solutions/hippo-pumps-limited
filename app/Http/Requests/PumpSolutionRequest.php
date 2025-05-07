@@ -28,7 +28,7 @@ class PumpSolutionRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:pump_solutions,slug,' . $this->pump_solution?->id],
             'description' => ['nullable', 'string'],
-            'category' => ['required', 'string', Rule::in(\App\Models\PumpSolution::getCategories())],
+            'category' => ['required', 'string', Rule::in(['SOLAR PUMPS', 'SOLAR PUMPS MAX', 'SEWAGE PUMPS', 'SUBMERSIBLE PUMPS', 'BOOSTER PUMPS', 'SPRINKLER PUMPS', 'SOLAR PANEL', 'SOLAR LIGHT', 'WIRE ROPE'])],
             'item_code' => ['nullable', 'string', 'max:50'],
             'q_max' => ['nullable', 'numeric', 'min:0'],
             'h_max' => ['nullable', 'numeric', 'min:0'],
