@@ -1,8 +1,10 @@
 import { Head } from '@inertiajs/react';
 import ProductCard from '@/components/ProductCard';
 import { useForm } from '@inertiajs/react';
-import { useEffect, useCallback, useMemo } from 'react';
+import { useEffect, useCallback, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+import { Loader2 } from 'lucide-react';
 
 interface PumpSolution {
     id: number;
@@ -44,6 +46,7 @@ interface Props {
 }
 
 export default function Index({ pumpSolutions, filters, categories }: Props) {
+    const [isLoading, setIsLoading] = useState(false);
     const { data, setData, get } = useForm({
         category: filters.category || '',
         min_price: filters.min_price || '',
@@ -54,37 +57,49 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
         max_flow: filters.max_flow || '',
         min_head: filters.min_head || '',
         max_head: filters.max_head || '',
-        page: 1,
+        page: pumpSolutions.current_page,
     });
 
     // Memoize the filter handler to prevent unnecessary re-renders
     const handleFilter = useCallback(() => {
+        setIsLoading(true);
         get(route('pump-solutions.index'), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
-                setData('page', 1);
+                setIsLoading(false);
             },
+            onError: () => {
+                setIsLoading(false);
+            }
         });
-    }, [get, setData]);
+    }, [get]);
 
-    // Debounce the filter handler to prevent too many requests
+    // Increased debounce time to 500ms for better performance
     const debouncedFilter = useMemo(
-        () => debounce(handleFilter, 300),
+        () => debounce(handleFilter, 500),
         [handleFilter]
     );
 
     const handlePageChange = useCallback((page: number) => {
+        setIsLoading(true);
         get(route('pump-solutions.index'), {
             ...data,
             page: page,
         }, {
             preserveState: true,
             preserveScroll: true,
+            onSuccess: () => {
+                setIsLoading(false);
+            },
+            onError: () => {
+                setIsLoading(false);
+            }
         });
     }, [get, data]);
 
     const resetFilters = useCallback(() => {
+        setIsLoading(true);
         setData({
             category: '',
             min_price: '',
@@ -97,13 +112,15 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
             max_head: '',
             page: 1,
         });
-        get(route('pump-solutions.index'));
+        get(route('pump-solutions.index'), {}, {
+            onSuccess: () => {
+                setIsLoading(false);
+            },
+            onError: () => {
+                setIsLoading(false);
+            }
+        });
     }, [get, setData]);
-
-    // Reset to page 1 when filters change
-    useEffect(() => {
-        setData('page', 1);
-    }, [data.category, data.min_price, data.max_price, data.min_motor, data.max_motor, data.min_flow, data.max_flow, data.min_head, data.max_head, setData]);
 
     // Cleanup debounce on unmount
     useEffect(() => {
@@ -249,51 +266,76 @@ export default function Index({ pumpSolutions, filters, categories }: Props) {
                         <button
                             onClick={resetFilters}
                             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                            disabled={isLoading}
                         >
-                            Reset Filters
+                            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Reset Filters'}
                         </button>
                     </div>
                 </div>
 
-                {/* Solutions Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {pumpSolutions.data.map((solution) => (
-                        <ProductCard
-                            key={solution.id}
-                            title={solution.title}
-                            description={solution.description}
-                            category={solution.category}
-                            specifications={{
-                                qMax: solution.q_max,
-                                hMax: solution.h_max,
-                                ratedQ: solution.rated_q,
-                                ratedH: solution.rated_h,
-                                motor: solution.motor,
-                                price: solution.net_price_zmw,
-                            }}
-                        />
-                    ))}
-                </div>
-
-                {/* Pagination */}
-                {pumpSolutions.last_page > 1 && (
-                    <div className="mt-8 flex justify-center">
-                        <nav className="flex items-center gap-2">
-                            {Array.from({ length: pumpSolutions.last_page }, (_, i) => i + 1).map((page) => (
-                                <button
-                                    key={page}
-                                    onClick={() => handlePageChange(page)}
-                                    className={`px-4 py-2 rounded-md ${
-                                        pumpSolutions.current_page === page
-                                            ? 'bg-indigo-600 text-white'
-                                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                    }`}
-                                >
-                                    {page}
-                                </button>
-                            ))}
-                        </nav>
+                {/* Loading State */}
+                {isLoading && (
+                    <div className="flex justify-center items-center py-8">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
                     </div>
+                )}
+
+                {/* Solutions Grid */}
+                {!isLoading && (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {pumpSolutions.data.map((solution) => (
+                                <ProductCard
+                                    key={solution.id}
+                                    title={solution.title}
+                                    description={solution.description}
+                                    category={solution.category}
+                                    specifications={{
+                                        qMax: solution.q_max,
+                                        hMax: solution.h_max,
+                                        ratedQ: solution.rated_q,
+                                        ratedH: solution.rated_h,
+                                        motor: solution.motor,
+                                        price: solution.net_price_zmw,
+                                    }}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Pagination */}
+                        {pumpSolutions.last_page > 1 && (
+                            <div className="mt-8">
+                                <Pagination>
+                                    <PaginationContent>
+                                        <PaginationItem>
+                                            <PaginationPrevious
+                                                onClick={() => handlePageChange(pumpSolutions.current_page - 1)}
+                                                disabled={pumpSolutions.current_page === 1}
+                                            />
+                                        </PaginationItem>
+                                        
+                                        {Array.from({ length: pumpSolutions.last_page }, (_, i) => i + 1).map((page) => (
+                                            <PaginationItem key={page}>
+                                                <PaginationLink
+                                                    onClick={() => handlePageChange(page)}
+                                                    isActive={page === pumpSolutions.current_page}
+                                                >
+                                                    {page}
+                                                </PaginationLink>
+                                            </PaginationItem>
+                                        ))}
+
+                                        <PaginationItem>
+                                            <PaginationNext
+                                                onClick={() => handlePageChange(pumpSolutions.current_page + 1)}
+                                                disabled={pumpSolutions.current_page === pumpSolutions.last_page}
+                                            />
+                                        </PaginationItem>
+                                    </PaginationContent>
+                                </Pagination>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </>

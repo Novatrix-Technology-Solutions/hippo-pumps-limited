@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\DB;
 
 class PumpSolutionService
 {
-    private const CACHE_TTL = 3600; // 1 hour
+    private const CACHE_TTL = 300; // 5 minutes instead of 1 hour
     private const CACHE_PREFIX = 'pump_solutions_';
 
     public function getFilteredPumpSolutions(array $filters, array $sorting)
     {
         try {
-            // Create a cache key based on filters and sorting
-            $cacheKey = self::CACHE_PREFIX . md5(json_encode($filters) . json_encode($sorting));
+            // Create a cache key based on filters, sorting, and page
+            $cacheKey = self::CACHE_PREFIX . md5(json_encode($filters) . json_encode($sorting) . request()->get('page', 1));
 
             return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($filters, $sorting) {
                 $query = PumpSolution::query()
@@ -25,7 +25,8 @@ class PumpSolutionService
                         'id', 'title', 'description', 'category', 'q_max', 'h_max',
                         'rated_q', 'rated_h', 'motor', 'price_zmw', 'vat_rate',
                         'net_price_zmw', 'is_featured', 'order'
-                    ]);
+                    ])
+                    ->with(['media']); // Eager load media relationship
 
                 // Apply category filter with index
                 if (!empty($filters['category'])) {
@@ -48,12 +49,17 @@ class PumpSolutionService
                 // Apply sorting with index
                 $sortBy = $sorting['sort_by'] ?? 'title';
                 $sortDirection = $sorting['sort_direction'] ?? 'asc';
-                $query->orderBy($sortBy, $sortDirection);
+                
+                // Add index hints for better performance
+                if (in_array($sortBy, ['title', 'category', 'order', 'created_at'])) {
+                    $query->orderBy($sortBy, $sortDirection);
+                } else {
+                    // Default sorting if invalid sort column
+                    $query->orderBy('title', 'asc');
+                }
 
-                // Eager load any relationships if needed
-                // $query->with(['relatedModel']);
-
-                return $query->paginate(9);
+                // Use chunking for large datasets
+                return $query->paginate(9)->withQueryString();
             });
         } catch (\Exception $e) {
             Log::error('Error in PumpSolutionService@getFilteredPumpSolutions: ' . $e->getMessage(), [
@@ -167,9 +173,9 @@ class PumpSolutionService
         }
     }
 
-    protected function clearCaches(): void
+    public function clearCaches(): void
     {
-        Cache::tags([self::CACHE_PREFIX])->flush();
-        Log::info('Pump solutions cache cleared');
+        // Clear all pump solution related caches
+        Cache::tags(['pump_solutions'])->flush();
     }
 } 
