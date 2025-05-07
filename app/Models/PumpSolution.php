@@ -200,7 +200,7 @@ class PumpSolution extends Model
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|in:SOLAR PUMPS,SOLAR PUMPS MAX,SEWAGE PUMPS,SUBMERSIBLE PUMPS,BOOSTER PUMPS,SPRINKLER PUMPS,SOLAR PANEL,SOLAR LIGHT,WIRE ROPE',
+            'category' => 'required|in:SOLAR PUMPS,SEWAGE PUMPS',
             'q_max' => 'nullable|numeric|min:0',
             'h_max' => 'nullable|numeric|min:0',
             'rated_q' => 'nullable|numeric|min:0',

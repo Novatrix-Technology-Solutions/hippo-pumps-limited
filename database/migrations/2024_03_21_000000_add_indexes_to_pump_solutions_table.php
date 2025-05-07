@@ -17,6 +17,7 @@ return new class extends Migration
                 $table->index('q_max');
                 $table->index('h_max');
                 
+                
                 // Add indexes for frequently sorted columns
                 $table->index('title');
                 $table->index('order');

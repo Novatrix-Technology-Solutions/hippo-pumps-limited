@@ -256,3 +256,28 @@
 [2025-05-07 16:57:16] production.WARNING: Slow query detected {"sql":"select exists (select 1 from pg_class c, pg_namespace n where n.nspname = current_schema() and c.relname = 'migrations' and c.relkind in ('r', 'p') and n.oid = c.relnamespace)","bindings":[],"time":1287.76} 
 [2025-05-07 16:57:17] production.WARNING: Slow query detected {"sql":"select \"migration\" from \"migrations\" order by \"batch\" asc, \"migration\" asc","bindings":[],"time":1216.35} 
 [2025-05-07 16:57:19] production.WARNING: Slow query detected {"sql":"select \"migration\" from \"migrations\" order by \"batch\" asc, \"migration\" asc","bindings":[],"time":1092.95} 
+[2025-05-07 17:37:51] production.ERROR: Command "db:query" is not defined.
+
+Did you mean one of these?
+    db
+    db:monitor
+    db:seed
+    db:show
+    db:table
+    db:wipe {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"db:query\" is not defined.
+
+Did you mean one of these?
+    db
+    db:monitor
+    db:seed
+    db:show
+    db:table
+    db:wipe at /Users/mthunzimusumadi/Documents/Work-Repos/hippo-pumps-limited/vendor/symfony/console/Application.php:726)
+[stacktrace]
+#0 /Users/mthunzimusumadi/Documents/Work-Repos/hippo-pumps-limited/vendor/symfony/console/Application.php(284): Symfony\\Component\\Console\\Application->find('db:query')
+#1 /Users/mthunzimusumadi/Documents/Work-Repos/hippo-pumps-limited/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 /Users/mthunzimusumadi/Documents/Work-Repos/hippo-pumps-limited/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(197): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /Users/mthunzimusumadi/Documents/Work-Repos/hippo-pumps-limited/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1234): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /Users/mthunzimusumadi/Documents/Work-Repos/hippo-pumps-limited/artisan(16): Illuminate\\Foundation\\Application->handleCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#5 {main}
+"} 
