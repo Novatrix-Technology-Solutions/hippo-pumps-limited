@@ -28,3 +28,5 @@ next-env.d.ts
 
 # hot
 /public/hot
+
+/public/build
