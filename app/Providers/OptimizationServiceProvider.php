@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class OptimizationServiceProvider extends ServiceProvider
 {
@@ -45,12 +46,22 @@ class OptimizationServiceProvider extends ServiceProvider
     {
         // Enable query logging in development
         if ($this->app->environment('local')) {
-            \DB::enableQueryLog();
+            DB::enableQueryLog();
         }
 
-        // Set strict mode for MySQL
+        // Set database-specific optimizations
         if ($this->app->environment('production')) {
-            \DB::statement('SET SESSION sql_mode = "STRICT_ALL_TABLES"');
+            $connection = config('database.default');
+            
+            if ($connection === 'mysql') {
+                // MySQL specific optimizations
+                DB::statement('SET SESSION sql_mode = "STRICT_ALL_TABLES"');
+            } elseif ($connection === 'pgsql') {
+                // PostgreSQL specific optimizations
+                DB::statement('SET SESSION synchronous_commit = off');
+                DB::statement('SET SESSION work_mem = "64MB"');
+                DB::statement('SET SESSION maintenance_work_mem = "256MB"');
+            }
         }
     }
 
