@@ -11,7 +11,7 @@ import { Head } from '@inertiajs/react';
 // interface PumpSolution { /* ... */ }
 // interface Props { /* ... */ }
 
-export default function Index(/* { pumpSolutions: initialData, filters: initialFilters, categories }: Props */) {
+export default function Index() {
   return (
     <>
       <Head title="Pump Solutions - Test" />
