@@ -1,6 +1,7 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
+import { ChevronLeft } from 'lucide-react';
 
 interface AuthLayoutProps {
     name?: string;
@@ -10,13 +11,24 @@ interface AuthLayoutProps {
 
 export default function AuthSimpleLayout({ children, title, description }: PropsWithChildren<AuthLayoutProps>) {
     return (
-        <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 relative">
+            {/* Back button */}
+            <div className="absolute top-6 left-6">
+                <button 
+                    onClick={() => window.history.back()} 
+                    className="flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                >
+                    <ChevronLeft className="h-4 w-4 mr-1" />
+                    Back
+                </button>
+            </div>
+            
             <div className="w-full max-w-sm">
                 <div className="flex flex-col gap-8">
                     <div className="flex flex-col items-center gap-4">
                         <Link href={route('home')} className="flex flex-col items-center gap-2 font-medium">
-                            <div className="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                                <AppLogoIcon className="size-18 fill-current text-[var(--foreground)]" />
+                            <div className="mb-1 flex h-12 w-12 items-center justify-center rounded-md">
+                                <AppLogoIcon className="size-24 fill-current text-[var(--foreground)]" />
                             </div>
                             <span className="sr-only">{title}</span>
                         </Link>
