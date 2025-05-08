@@ -18,7 +18,7 @@ export default function Layout({ children }: PropsWithChildren) {
               <span className="text-gray-300">|</span>
               <Link href="/products" className="hover:text-gray-900">Products</Link>
               <span className="text-gray-300">|</span>
-              <Link href="/pump-solutions" className="hover:text-gray-900">Pump solutions</Link>
+              <Link href="/products" className="hover:text-gray-900">Pump solutions</Link>
               <span className="text-gray-300">|</span>
               <Link href="/news" className="hover:text-gray-900">News</Link>
               <span className="text-gray-300">|</span>

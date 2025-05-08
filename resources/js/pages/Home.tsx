@@ -60,7 +60,7 @@ export default function Home({ auth }: HomeProps) {
                             </p>
                             <div>
                                 <Link
-                                    href="/pump-solutions"
+                                    href="/products"
                                     className="bg-white text-[#1e4785] px-4 py-2 rounded hover:bg-gray-100 inline-block"
                                 >
                                     Pump solutions &gt;

@@ -26,7 +26,7 @@ interface PumpSolutionsResponse {
 import axios from 'axios';
 
 const fetchPumpSolutions = async (filters: PumpSolutionsFilters): Promise<PumpSolutionsResponse> => {
-    const response = await axios.get('/api/pump-solutions', { params: filters });
+    const response = await axios.get('/api/products', { params: filters });
     return response.data;
 };
 
