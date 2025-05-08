@@ -139,5 +139,10 @@ Route::middleware(['web', 'auth:sanctum', 'verified', 'admin'])->group(function 
         ->middleware('throttle:60,1');
 });
 
+// Test route
+Route::get('/test-page', function () {
+    return Inertia::render('TestPage');
+})->name('test-page');
+
 require __DIR__.'/auth.php';
 
