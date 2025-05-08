@@ -18,23 +18,35 @@ class PumpSolutionController extends Controller
         $this->pumpSolutionService = $pumpSolutionService;
     }
 
+    /**
+     * Render with error handling
+     */
+    protected function renderWithErrorHandling(string $component, $props = [])
+    {
+        try {
+            return Inertia::render($component, $props);
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
     public function index(Request $request)
     {
-        return $this->renderWithErrorHandling('PumpSolutions/Index', function () use ($request) {
-            $filters = [
-                'search' => $request->input('search'),
-                'is_featured' => $request->boolean('is_featured'),
-                'per_page' => $request->input('per_page', 10),
-            ];
+        $filters = [
+            'search' => $request->input('search'),
+            'is_featured' => $request->boolean('is_featured'),
+            'per_page' => $request->input('per_page', 10),
+        ];
 
-            $sorting = [
-                'field' => $request->input('sort_field', 'created_at'),
-                'direction' => $request->input('sort_direction', 'desc'),
-            ];
+        $sorting = [
+            'field' => $request->input('sort_field', 'created_at'),
+            'direction' => $request->input('sort_direction', 'desc'),
+        ];
 
+        try {
             $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);
 
-            return [
+            $props = [
                 'pumpSolutions' => [
                     'data' => $pumpSolutions->items(),
                     'current_page' => $pumpSolutions->currentPage(),
@@ -45,38 +57,48 @@ class PumpSolutionController extends Controller
                 'filters' => $filters,
                 'sorting' => $sorting,
             ];
-        });
+
+            return $this->renderWithErrorHandling('PumpSolutions/Index', $props);
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     public function show(PumpSolution $pumpSolution)
     {
-        return $this->renderWithErrorHandling('PumpSolutions/Show', function () use ($pumpSolution) {
-            return [
+        try {
+            $props = [
                 'pumpSolution' => $pumpSolution->load('media'),
             ];
-        });
+
+            return $this->renderWithErrorHandling('PumpSolutions/Show', $props);
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     public function adminIndex()
     {
-        return $this->renderWithErrorHandling('Admin/PumpSolutions/Index', function () {
+        try {
             $pumpSolutions = Cache::remember('admin_pump_solutions', 300, function () {
                 return PumpSolution::with('media')
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
             });
 
-            return [
+            $props = [
                 'pumpSolutions' => $pumpSolutions,
             ];
-        });
+
+            return $this->renderWithErrorHandling('Admin/PumpSolutions/Index', $props);
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     public function create()
     {
-        return $this->renderWithErrorHandling('Admin/PumpSolutions/Create', function () {
-            return [];
-        });
+        return $this->renderWithErrorHandling('Admin/PumpSolutions/Create', []);
     }
 
     public function store(Request $request)
@@ -107,11 +129,15 @@ class PumpSolutionController extends Controller
 
     public function edit(PumpSolution $pumpSolution)
     {
-        return $this->renderWithErrorHandling('Admin/PumpSolutions/Edit', function () use ($pumpSolution) {
-            return [
+        try {
+            $props = [
                 'pumpSolution' => $pumpSolution->load('media'),
             ];
-        });
+
+            return $this->renderWithErrorHandling('Admin/PumpSolutions/Edit', $props);
+        } catch (\Exception $e) {
+            return back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     public function update(Request $request, PumpSolution $pumpSolution)
@@ -182,15 +208,6 @@ class PumpSolutionController extends Controller
                 'success' => false,
                 'message' => 'An error occurred: ' . $e->getMessage(),
             ], 500);
-        }
-    }
-
-    protected function renderWithErrorHandling(string $page, callable $dataCallback)
-    {
-        try {
-            return Inertia::render($page, $dataCallback());
-        } catch (\Exception $e) {
-            return back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
 }
