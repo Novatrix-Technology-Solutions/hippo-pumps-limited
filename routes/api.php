@@ -39,7 +39,7 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
 
 });
 
-Route::prefix('api')->middleware(['api', \App\Http\Middleware\CorsMiddleware::class])->group(function () {
+Route::middleware([\App\Http\Middleware\CorsMiddleware::class])->group(function () {
     Route::get('/products', [PumpSolutionController::class, 'apiIndex']);
     Route::get('/pumps', [PumpSolutionController::class, 'apiIndex']);
 });

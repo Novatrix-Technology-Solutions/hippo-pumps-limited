@@ -26,7 +26,7 @@ class PumpSolutionController extends Controller
 
     public function index(Request $request)
     {
-        return $this->renderWithErrorHandling('pump-solutions/Index', function () use ($request) {
+        return $this->renderWithErrorHandling('PumpSolutions/Index', function () use ($request) {
             $request->validate([
                 'category' => 'nullable|string',
                 'search' => 'nullable|string',
