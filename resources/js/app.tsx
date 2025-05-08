@@ -8,6 +8,7 @@ import { initializeTheme } from './hooks/use-appearance';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 import QueryProvider from './providers/QueryProvider';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Hippo Pumps Limited';
 const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -45,16 +46,17 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
         root.render(
-            <QueryProvider>
-                <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
-                <App {...props} />
-            </QueryProvider>
+            <ErrorBoundary>
+                <QueryProvider>
+                    <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+                    <App {...props} />
+                </QueryProvider>
+            </ErrorBoundary>
         );
     },
     progress: {
         color: '#4B5563',
     },
-    version: () => import.meta.env.VITE_APP_VERSION,
 });
 
 // This will set light / dark mode on load...

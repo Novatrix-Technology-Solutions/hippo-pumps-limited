@@ -26,7 +26,7 @@ class PumpSolutionController extends Controller
 
     public function index(Request $request)
     {
-        try {
+        return $this->renderWithErrorHandling('PumpSolutions/Index', function () use ($request) {
             $request->validate([
                 'category' => 'nullable|string',
                 'search' => 'nullable|string',
@@ -63,7 +63,7 @@ class PumpSolutionController extends Controller
 
             $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);
 
-            return Inertia::render('PumpSolutions/Index', [
+            return [
                 'pumpSolutions' => [
                     'data' => $pumpSolutions->items(),
                     'current_page' => $pumpSolutions->currentPage(),
@@ -75,93 +75,83 @@ class PumpSolutionController extends Controller
                 'categories' => Cache::remember('pump_categories', 3600, function () {
                     return PumpSolution::getCategories();
                 })
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionController@index: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while loading pump solutions.');
-        }
+            ];
+        });
     }
 
     public function adminIndex()
     {
-        try {
+        return $this->renderWithErrorHandling('Admin/PumpSolutions/Index', function () {
             $pumpSolutions = Cache::remember('admin_pump_solutions', 300, function () {
                 return PumpSolution::orderBy('order')->paginate(9);
             });
 
-            return Inertia::render('Admin/PumpSolutions/Index', [
+            return [
                 'pumpSolutions' => $pumpSolutions,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionController@adminIndex: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while loading pump solutions.');
-        }
+            ];
+        });
     }
 
     public function show(PumpSolution $pumpSolution)
     {
-        return new PumpSolutionResource($pumpSolution);
+        return $this->executeWithErrorHandling(function () use ($pumpSolution) {
+            return new PumpSolutionResource($pumpSolution);
+        });
     }
 
     public function create()
     {
-        try {
-            return Inertia::render('Admin/PumpSolutions/Create', [
+        return $this->renderWithErrorHandling('Admin/PumpSolutions/Create', function () {
+            return [
                 'categories' => Cache::remember('pump_categories', 3600, function () {
                     return PumpSolution::getCategories();
                 })
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionController@create: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while loading the create form.');
-        }
+            ];
+        });
     }
 
     public function store(PumpSolutionRequest $request)
     {
-        $pumpSolution = $this->pumpSolutionService->createPumpSolution($request->validated());
-
-        return new PumpSolutionResource($pumpSolution);
+        return $this->executeWithErrorHandling(function () use ($request) {
+            $pumpSolution = $this->pumpSolutionService->createPumpSolution($request->validated());
+            return new PumpSolutionResource($pumpSolution);
+        });
     }
 
     public function edit(PumpSolution $pumpSolution)
     {
-        try {
-            return Inertia::render('Admin/PumpSolutions/Edit', [
+        return $this->renderWithErrorHandling('Admin/PumpSolutions/Edit', function () use ($pumpSolution) {
+            return [
                 'pumpSolution' => $pumpSolution,
                 'categories' => Cache::remember('pump_categories', 3600, function () {
                     return PumpSolution::getCategories();
                 })
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionController@edit: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while loading the edit form.');
-        }
+            ];
+        });
     }
 
     public function update(PumpSolutionRequest $request, PumpSolution $pumpSolution)
     {
-        $pumpSolution = $this->pumpSolutionService->updatePumpSolution($pumpSolution, $request->validated());
-
-        return new PumpSolutionResource($pumpSolution);
+        return $this->executeWithErrorHandling(function () use ($request, $pumpSolution) {
+            $pumpSolution = $this->pumpSolutionService->updatePumpSolution($pumpSolution, $request->validated());
+            return new PumpSolutionResource($pumpSolution);
+        });
     }
 
     public function destroy(PumpSolution $pumpSolution)
     {
-        $this->pumpSolutionService->deletePumpSolution($pumpSolution);
-
-        return response()->noContent();
+        return $this->executeWithErrorHandling(function () use ($pumpSolution) {
+            $this->pumpSolutionService->deletePumpSolution($pumpSolution);
+            return response()->noContent();
+        });
     }
 
     public function apiIndex()
     {
-        try {
+        return $this->executeWithErrorHandling(function () {
             return Cache::remember('api_pump_solutions', 300, function () {
                 return PumpSolutionResource::collection(PumpSolution::all());
             });
-        } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionController@apiIndex: ' . $e->getMessage());
-            return response()->json(['error' => 'An error occurred while fetching pump solutions.'], 500);
-        }
+        });
     }
 }

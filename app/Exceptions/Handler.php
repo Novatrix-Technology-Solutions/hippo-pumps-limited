@@ -12,6 +12,8 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Throwable;
 use Illuminate\Database\QueryException;
 use PDOException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Inertia\Inertia;
 
 class Handler extends ExceptionHandler
 {
@@ -28,7 +30,7 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    public function register()
+    public function register(): void
     {
         $this->reportable(function (Throwable $e) {
             if (app()->bound('sentry')) {
@@ -36,23 +38,72 @@ class Handler extends ExceptionHandler
             }
         });
 
-        $this->renderable(function (PDOException $e, $request) {
-            if ($request->expectsJson()) {
+        $this->renderable(function (Throwable $e, $request) {
+            if ($request->is('api/*') || $request->wantsJson()) {
+                $statusCode = $this->getStatusCode($e);
+                
                 return response()->json([
-                    'message' => 'Database connection error. Please try again later.',
-                    'error' => config('app.debug') ? $e->getMessage() : null
-                ], 503);
+                    'message' => $this->getErrorMessage($e, $statusCode),
+                    'status' => $statusCode
+                ], $statusCode);
             }
+            
+            if (app()->environment('production')) {
+                $statusCode = $this->getStatusCode($e);
+                
+                if ($statusCode === 500) {
+                    return Inertia::render('Errors/ServerError');
+                }
+                
+                if ($statusCode === 404) {
+                    return Inertia::render('Errors/NotFound');
+                }
+                
+                if ($statusCode === 403) {
+                    return Inertia::render('Errors/Forbidden');
+                }
+            }
+            
+            return null;
         });
+    }
 
-        $this->renderable(function (QueryException $e, $request) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Database query error. Please try again later.',
-                    'error' => config('app.debug') ? $e->getMessage() : null
-                ], 503);
-            }
-        });
+    private function getStatusCode(Throwable $e): int
+    {
+        if ($e instanceof HttpExceptionInterface) {
+            return $e->getStatusCode();
+        }
+        
+        if ($e instanceof ValidationException) {
+            return 422;
+        }
+        
+        if ($e instanceof AuthenticationException) {
+            return 401;
+        }
+        
+        if ($e instanceof AuthorizationException) {
+            return 403;
+        }
+        
+        if ($e instanceof ModelNotFoundException) {
+            return 404;
+        }
+        
+        return 500;
+    }
+    
+    private function getErrorMessage(Throwable $e, int $statusCode): string
+    {
+        if (app()->environment('production') && $statusCode === 500) {
+            return 'Server Error';
+        }
+        
+        if ($e instanceof ValidationException) {
+            return 'The given data was invalid.';
+        }
+        
+        return $e->getMessage() ?: 'Server Error';
     }
 
     public function render($request, Throwable $e)
