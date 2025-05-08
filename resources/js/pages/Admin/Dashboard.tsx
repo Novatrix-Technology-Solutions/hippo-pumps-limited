@@ -10,12 +10,11 @@ import { staggerContainer, staggerItem } from '@/Utils/animations';
 
 interface Props {
     newsCount: number;
-    pumpSolutionsCount: number;
     teamMembersCount: number;
     usersCount: number;
 }
 
-export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCount, usersCount }: Props) {
+export default function Dashboard({ newsCount, teamMembersCount, usersCount }: Props) {
     return (
         <AdminLayout>
             <Head title="Dashboard" />
@@ -43,28 +42,6 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                     <Button asChild className="mt-4">
                                         <Link href={route('news.index')}>
                                             Manage News
-                                        </Link>
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-
-                        <motion.div variants={staggerItem}>
-                            <Card>
-                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">
-                                        Pump Solutions
-                                    </CardTitle>
-                                    <WashingMachine className="h-4 w-4 text-muted-foreground" />
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="text-2xl font-bold">{pumpSolutionsCount}</div>
-                                    <p className="text-xs text-muted-foreground">
-                                        Total pump solutions
-                                    </p>
-                                    <Button asChild className="mt-4">
-                                        <Link href={route('pump-solutions.index')}>
-                                            Manage Solutions
                                         </Link>
                                     </Button>
                                 </CardContent>

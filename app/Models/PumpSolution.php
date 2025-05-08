@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use Illuminate\Support\Str;
 
-class PumpSolution extends Model
+class PumpSolution extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, InteractsWithMedia, HasSlug;
 
     protected $fillable = [
         'title',
@@ -28,6 +33,9 @@ class PumpSolution extends Model
         'notes',
         'is_featured',
         'order',
+        'features',
+        'specifications',
+        'applications',
     ];
 
     protected $casts = [
@@ -40,6 +48,10 @@ class PumpSolution extends Model
         'vat_rate' => 'decimal:2',
         'net_price_zmw' => 'decimal:2',
         'is_featured' => 'boolean',
+        'order' => 'integer',
+        'features' => 'array',
+        'specifications' => 'array',
+        'applications' => 'array',
     ];
 
     protected function decimal_formatter($value) {
@@ -212,5 +224,18 @@ class PumpSolution extends Model
             'is_featured' => 'boolean',
             'order' => 'nullable|integer|min:0',
         ];
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('pump-solutions')
+            ->singleFile();
     }
 } 

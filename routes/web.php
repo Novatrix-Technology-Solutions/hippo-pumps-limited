@@ -33,10 +33,6 @@ Route::get('/the-company', function () {
 Route::get('/news', [NewsController::class, 'index'])->name('public.news.index');
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('public.news.show');
 
-// Public Pump Solutions routes
-Route::get('/products', [PumpSolutionController::class, 'index'])->name('pump-solutions.index');
-Route::get('/products/{pumpSolution:slug}', [PumpSolutionController::class, 'show'])->name('pump-solutions.show');
-
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
@@ -61,16 +57,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{news}/edit', [NewsController::class, 'edit'])->name('edit');
         Route::put('/{news}', [NewsController::class, 'update'])->name('update');
         Route::delete('/{news}', [NewsController::class, 'destroy'])->name('destroy');
-    });
-
-    // Admin Pump Solutions Routes
-    Route::prefix('admin/products')->name('admin.pump-solutions.')->group(function () {
-        Route::get('/', [PumpSolutionController::class, 'adminIndex'])->name('index');
-        Route::get('/create', [PumpSolutionController::class, 'create'])->name('create');
-        Route::post('/', [PumpSolutionController::class, 'store'])->name('store');
-        Route::get('/{pumpSolution}/edit', [PumpSolutionController::class, 'edit'])->name('edit');
-        Route::put('/{pumpSolution}', [PumpSolutionController::class, 'update'])->name('update');
-        Route::delete('/{pumpSolution}', [PumpSolutionController::class, 'destroy'])->name('destroy');
     });
 
     // Admin Team Members Routes
@@ -111,32 +97,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
     // Remove duplicate pump-solutions routes
-});
-
-Route::middleware(['web', 'auth:sanctum', 'verified', 'admin'])->group(function () {
-    Route::get('/admin/products', [PumpSolutionController::class, 'adminIndex'])
-        ->name('admin.pump-solutions.index')
-        ->middleware('throttle:60,1');
-
-    Route::get('/admin/products/create', [PumpSolutionController::class, 'create'])
-        ->name('admin.pump-solutions.create')
-        ->middleware('throttle:60,1');
-
-    Route::post('/admin/products', [PumpSolutionController::class, 'store'])
-        ->name('admin.pump-solutions.store')
-        ->middleware('throttle:60,1');
-
-    Route::get('/admin/products/{pumpSolution}/edit', [PumpSolutionController::class, 'edit'])
-        ->name('admin.pump-solutions.edit')
-        ->middleware('throttle:60,1');
-
-    Route::put('/admin/products/{pumpSolution}', [PumpSolutionController::class, 'update'])
-        ->name('admin.pump-solutions.update')
-        ->middleware('throttle:60,1');
-
-    Route::delete('/admin/products/{pumpSolution}', [PumpSolutionController::class, 'destroy'])
-        ->name('admin.pump-solutions.destroy')
-        ->middleware('throttle:60,1');
 });
 
 // Test route

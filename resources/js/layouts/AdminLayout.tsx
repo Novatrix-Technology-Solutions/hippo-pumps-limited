@@ -3,7 +3,6 @@ import { Link, Head, usePage } from '@inertiajs/react';
 import { 
     LayoutDashboard, 
     Newspaper, 
-    Droplet, 
     Settings, 
     LogOut, 
     User,
@@ -88,9 +87,6 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                 <NavLink href={route('news.index')} icon={Newspaper} routeName="news.index">
                                                     News
                                                 </NavLink>
-                                                <NavLink href={route('pump-solutions.index')} icon={Droplet} routeName="pump-solutions.index">
-                                                    Pump Solutions
-                                                </NavLink>
                                                 <NavLink href={route('admin.team-members.index')} icon={AppWindow} routeName="admin.team-members.index">
                                                     Team Members
                                                 </NavLink>
@@ -155,9 +151,6 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                         </NavLink>
                                         <NavLink href={route('news.index')} icon={Newspaper} routeName="news.index">
                                             News
-                                        </NavLink>
-                                        <NavLink href={route('pump-solutions.index')} icon={Droplet} routeName="pump-solutions.index">
-                                            Pump Solutions
                                         </NavLink>
                                         <NavLink href={route('admin.team-members.index')} icon={AppWindow} routeName="admin.team-members.index">
                                             Team Members

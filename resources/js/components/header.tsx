@@ -23,13 +23,6 @@ export default function Header() {
                 </Link>
                 <span className="mx-5 text-[#004080]">|</span>
                 <Link
-                    href={route('pump-solutions.index')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                >
-                    Pumps Solutions
-                </Link>
-                <span className="mx-5 text-[#004080]">|</span>
-                <Link
                     href={route('meet-the-team')}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
@@ -70,12 +63,6 @@ export default function Header() {
                                         className="text-[#004080] hover:text-[#008000] text-lg font-medium"
                                     >
                                         The Company
-                                    </Link>
-                                    <Link
-                                        href={route('pump-solutions.index')}
-                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
-                                    >
-                                        Pumps Solutions
                                     </Link>
                                     <Link
                                         href={route('meet-the-team')}
