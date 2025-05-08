@@ -33,6 +33,10 @@ Route::get('/the-company', function () {
 Route::get('/news', [NewsController::class, 'index'])->name('public.news.index');
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('public.news.show');
 
+// Public Pump Solutions Routes
+Route::get('/products', [PumpSolutionController::class, 'index'])->name('pump-solutions.index');
+Route::get('/products/{pumpSolution:slug}', [PumpSolutionController::class, 'show'])->name('pump-solutions.show');
+
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
@@ -57,6 +61,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{news}/edit', [NewsController::class, 'edit'])->name('edit');
         Route::put('/{news}', [NewsController::class, 'update'])->name('update');
         Route::delete('/{news}', [NewsController::class, 'destroy'])->name('destroy');
+    });
+
+    // Admin Pump Solutions Routes
+    Route::prefix('admin/products')->name('admin.pump-solutions.')->group(function () {
+        Route::get('/', [PumpSolutionController::class, 'adminIndex'])->name('index');
+        Route::get('/create', [PumpSolutionController::class, 'create'])->name('create');
+        Route::post('/', [PumpSolutionController::class, 'store'])->name('store');
+        Route::get('/{pumpSolution:slug}/edit', [PumpSolutionController::class, 'edit'])->name('edit');
+        Route::put('/{pumpSolution:slug}', [PumpSolutionController::class, 'update'])->name('update');
+        Route::delete('/{pumpSolution:slug}', [PumpSolutionController::class, 'destroy'])->name('destroy');
     });
 
     // Admin Team Members Routes

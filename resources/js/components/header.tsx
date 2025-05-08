@@ -30,6 +30,13 @@ export default function Header() {
                 </Link>
                 <span className="mx-5 text-[#004080]">|</span>
                 <Link
+                    href={route('pump-solutions.index')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                >
+                    Products
+                </Link>
+                <span className="mx-5 text-[#004080]">|</span>
+                <Link
                     href={route('find-us')}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
@@ -71,6 +78,12 @@ export default function Header() {
                                         Meet the Team
                                     </Link>
                                     <Link
+                                        href={route('pump-solutions.index')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        Products
+                                    </Link>
+                                    <Link
                                         href={route('find-us')}
                                         className="text-[#004080] hover:text-[#008000] text-lg font-medium"
                                     >
@@ -91,3 +104,4 @@ export default function Header() {
         </header>
     );
 } 
+

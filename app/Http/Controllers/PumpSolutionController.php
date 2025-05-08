@@ -151,6 +151,40 @@ class PumpSolutionController extends Controller
         }
     }
 
+    public function apiIndex(Request $request)
+    {
+        try {
+            $filters = [
+                'search' => $request->input('search'),
+                'is_featured' => $request->boolean('is_featured'),
+                'per_page' => $request->input('per_page', 10),
+            ];
+
+            $sorting = [
+                'field' => $request->input('sort_field', 'created_at'),
+                'direction' => $request->input('sort_direction', 'desc'),
+            ];
+
+            $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'items' => $pumpSolutions->items(),
+                    'current_page' => $pumpSolutions->currentPage(),
+                    'last_page' => $pumpSolutions->lastPage(),
+                    'per_page' => $pumpSolutions->perPage(),
+                    'total' => $pumpSolutions->total(),
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     protected function renderWithErrorHandling(string $page, callable $dataCallback)
     {
         try {

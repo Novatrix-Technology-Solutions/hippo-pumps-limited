@@ -7,7 +7,8 @@ import {
     LogOut, 
     User,
     AppWindow,
-    Menu
+    Menu,
+    Droplet
 } from 'lucide-react';
 import PageTransition from '@/components/Animated/PageTransition';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -87,6 +88,9 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                 <NavLink href={route('news.index')} icon={Newspaper} routeName="news.index">
                                                     News
                                                 </NavLink>
+                                                <NavLink href={route('admin.pump-solutions.index')} icon={Droplet} routeName="admin.pump-solutions.index">
+                                                    Products
+                                                </NavLink>
                                                 <NavLink href={route('admin.team-members.index')} icon={AppWindow} routeName="admin.team-members.index">
                                                     Team Members
                                                 </NavLink>
@@ -151,6 +155,9 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                         </NavLink>
                                         <NavLink href={route('news.index')} icon={Newspaper} routeName="news.index">
                                             News
+                                        </NavLink>
+                                        <NavLink href={route('admin.pump-solutions.index')} icon={Droplet} routeName="admin.pump-solutions.index">
+                                            Products
                                         </NavLink>
                                         <NavLink href={route('admin.team-members.index')} icon={AppWindow} routeName="admin.team-members.index">
                                             Team Members
