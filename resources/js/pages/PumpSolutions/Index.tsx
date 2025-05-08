@@ -1,4 +1,32 @@
 import { Head } from '@inertiajs/react';
+
+// Temporarily commenting out original imports and props to simplify the component for testing
+// import ProductCard from '@/components/ProductCard';
+// import { useEffect, useCallback, useMemo, useState } from 'react';
+// import { debounce } from 'lodash';
+// import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
+// import { Loader2 } from 'lucide-react';
+// import { usePumpSolutions } from '@/hooks/usePumpSolutions';
+
+// interface PumpSolution { /* ... */ }
+// interface Props { /* ... */ }
+
+export default function Index(/* { pumpSolutions: initialData, filters: initialFilters, categories }: Props */) {
+  return (
+    <>
+      <Head title="Pump Solutions - Test" />
+      <div style={{ padding: '20px', backgroundColor: 'lightyellow', border: '2px solid red', margin: '20px' }}>
+        <h1>Pump Solutions Page Content Test</h1>
+        <p>If you see this, the page component itself is rendering through the layout.</p>
+        <p>The URL should be /pump-solutions.</p>
+      </div>
+    </>
+  );
+}
+
+// ... Original component code commented out below for easy restoration ...
+/*
+import { Head } from '@inertiajs/react';
 import ProductCard from '@/components/ProductCard';
 import { useEffect, useCallback, useMemo, useState } from 'react';
 import { debounce } from 'lodash';
@@ -135,7 +163,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.min_price}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, min_price: e.target.value };
+                                        const newFilters = { ...filters, min_price: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
@@ -145,7 +173,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.max_price}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, max_price: e.target.value };
+                                        const newFilters = { ...filters, max_price: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
@@ -161,7 +189,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.min_motor}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, min_motor: e.target.value };
+                                        const newFilters = { ...filters, min_motor: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
@@ -171,7 +199,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.max_motor}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, max_motor: e.target.value };
+                                        const newFilters = { ...filters, max_motor: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
@@ -187,7 +215,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.min_flow}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, min_flow: e.target.value };
+                                        const newFilters = { ...filters, min_flow: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
@@ -197,7 +225,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.max_flow}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, max_flow: e.target.value };
+                                        const newFilters = { ...filters, max_flow: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
@@ -213,7 +241,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.min_head}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, min_head: e.target.value };
+                                        const newFilters = { ...filters, min_head: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Min"
@@ -223,7 +251,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                                     type="number"
                                     value={filters.max_head}
                                     onChange={(e) => {
-                                        const newFilters = { ...filters, max_head: e.target.value };
+                                        const newFilters = { ...filters, max_head: Number(e.target.value) };
                                         debouncedFilter(newFilters);
                                     }}
                                     placeholder="Max"
@@ -252,7 +280,7 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
                 )}
 
                 {/* Solutions Grid */}
-                {!isLoading && (
+                {!isLoading && displayData && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {displayData.data.map((solution) => (
@@ -312,3 +340,4 @@ export default function Index({ pumpSolutions: initialData, filters: initialFilt
         </>
     );
 }
+*/
