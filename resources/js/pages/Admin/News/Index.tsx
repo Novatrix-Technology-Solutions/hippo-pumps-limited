@@ -11,7 +11,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { format } from 'date-fns';
-import { Pencil, Trash2, Plus, Search, Eye, Calendar } from 'lucide-react';
+import { Pencil, Trash2, Plus, Search, Eye } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -84,6 +84,7 @@ export default function NewsIndex({ news, flash }: Props) {
     return (
         <AdminLayout>
             <Head title="News Management" />
+            
             <div className="container mx-auto py-10">
                 <Card>
                     <CardHeader>
@@ -202,12 +203,10 @@ export default function NewsIndex({ news, flash }: Props) {
                                             ))}
                                         </TableBody>
                                     </Table>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
 
             <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
                 <AlertDialogContent>
