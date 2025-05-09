@@ -40,8 +40,8 @@ export default function Index({ pumpSolutions, filters }: Props) {
         window.location.href = `${route('pump-solutions.index')}?search=${searchTerm}`;
     };
 
-    return (
-        <>
+  return (
+    <>
             <Head title="Products" />
             <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="mb-8">
@@ -157,7 +157,7 @@ export default function Index({ pumpSolutions, filters }: Props) {
                         )}
                     </div>
                 )}
-            </div>
-        </>
-    );
+      </div>
+    </>
+  );
 } 

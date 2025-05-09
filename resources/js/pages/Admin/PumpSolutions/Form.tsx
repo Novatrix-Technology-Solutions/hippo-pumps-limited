@@ -142,22 +142,22 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="title">Title</Label>
-                            <Input
-                                id="title"
-                                value={data.title}
+                        <Label htmlFor="title">Title</Label>
+                        <Input
+                            id="title"
+                            value={data.title}
                                 onChange={(e) => setData('title', e.target.value)}
                                 placeholder="Enter product title"
-                            />
+                        />
                             {errors.title && <div className="text-red-500 text-sm">{errors.title}</div>}
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="description">Description</Label>
-                            <RichTextEditor
+                        <RichTextEditor
                                 id="description"
-                                value={data.description}
-                                onChange={(value) => setData('description', value)}
+                            value={data.description}
+                            onChange={(value) => setData('description', value)}
                                 placeholder="Enter product description"
                             />
                             {errors.description && <div className="text-red-500 text-sm">{errors.description}</div>}
@@ -165,11 +165,11 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="order">Display Order</Label>
-                                <Input
-                                    id="order"
-                                    type="number"
-                                    value={data.order}
+                        <Label htmlFor="order">Display Order</Label>
+                        <Input
+                            id="order"
+                            type="number"
+                            value={data.order}
                                     onChange={(e) => setData('order', parseInt(e.target.value))}
                                     placeholder="Enter display order"
                                 />
@@ -180,8 +180,8 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
                                 <Label className="block mb-4">Settings</Label>
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
-                                        id="is_featured"
-                                        checked={data.is_featured}
+                            id="is_featured"
+                            checked={data.is_featured}
                                         onCheckedChange={(checked) => setData('is_featured', checked as boolean)}
                                     />
                                     <label
@@ -241,18 +241,18 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
                 </Card>
 
                 <CardFooter className="flex justify-end space-x-4 px-0">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => window.history.back()}
-                    >
-                        Cancel
-                    </Button>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => window.history.back()}
+                        >
+                            Cancel
+                        </Button>
                     <Button type="submit" disabled={processing}>
                         {isEdit ? 'Update Product' : 'Create Product'}
-                    </Button>
+                        </Button>
                 </CardFooter>
             </div>
-        </form>
+                </form>
     );
 } 

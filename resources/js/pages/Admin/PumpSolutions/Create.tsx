@@ -12,4 +12,4 @@ export default function Create() {
             </div>
         </AdminLayout>
     );
-} 
+}

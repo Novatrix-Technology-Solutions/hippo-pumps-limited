@@ -14,6 +14,7 @@ use Illuminate\Database\QueryException;
 use PDOException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Inertia\Inertia;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -106,52 +107,58 @@ class Handler extends ExceptionHandler
         return $e->getMessage() ?: 'Server Error';
     }
 
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $exception)
     {
         if ($request->expectsJson()) {
-            if ($e instanceof ModelNotFoundException) {
+            if ($exception instanceof ModelNotFoundException) {
                 return response()->json([
                     'message' => 'Resource not found'
                 ], 404);
             }
 
-            if ($e instanceof AuthenticationException) {
+            if ($exception instanceof AuthenticationException) {
                 return response()->json([
                     'message' => 'Unauthenticated'
                 ], 401);
             }
 
-            if ($e instanceof AuthorizationException) {
+            if ($exception instanceof AuthorizationException) {
                 return response()->json([
                     'message' => 'This action is unauthorized'
                 ], 403);
             }
 
-            if ($e instanceof ValidationException) {
+            if ($exception instanceof ValidationException) {
                 return response()->json([
                     'message' => 'The given data was invalid',
-                    'errors' => $e->errors()
+                    'errors' => $exception->errors()
                 ], 422);
             }
 
-            if ($e instanceof NotFoundHttpException) {
+            if ($exception instanceof NotFoundHttpException) {
                 return response()->json([
                     'message' => 'The requested resource was not found'
                 ], 404);
             }
 
-            if ($e instanceof MethodNotAllowedHttpException) {
+            if ($exception instanceof MethodNotAllowedHttpException) {
                 return response()->json([
                     'message' => 'The specified method for the request is invalid'
                 ], 405);
             }
 
+            if ($exception instanceof TokenMismatchException) {
+                return response()->json([
+                    'message' => 'Your session has expired. Please log in again.'
+                ], 419);
+            }
+
             if (config('app.debug')) {
                 return response()->json([
-                    'message' => $e->getMessage(),
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTrace()
+                    'message' => $exception->getMessage(),
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
+                    'trace' => $exception->getTrace()
                 ], 500);
             }
 
@@ -160,6 +167,11 @@ class Handler extends ExceptionHandler
             ], 500);
         }
 
-        return parent::render($request, $e);
+        // Handle TokenMismatchException for web requests
+        if ($exception instanceof TokenMismatchException) {
+            return redirect()->route('login')->with('error', 'Your session has expired. Please log in again.');
+        }
+
+        return parent::render($request, $exception);
     }
 } 

@@ -4,13 +4,17 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
 import { type BreadcrumbItem } from '@/types';
 import { type PropsWithChildren } from 'react';
+import { usePage } from '@inertiajs/react';
 
 export default function AppSidebarLayout({ children, breadcrumbs = [] }: PropsWithChildren<{ breadcrumbs?: BreadcrumbItem[] }>) {
+    const { url } = usePage();
+    const isAuthPage = url.startsWith('/login') || url.startsWith('/register');
+
     return (
         <AppShell variant="sidebar">
-            <AppSidebar />
+            {!isAuthPage && <AppSidebar />}
             <AppContent variant="sidebar">
-                <AppSidebarHeader breadcrumbs={breadcrumbs} />
+                {!isAuthPage && <AppSidebarHeader breadcrumbs={breadcrumbs} />}
                 {children}
             </AppContent>
         </AppShell>

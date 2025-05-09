@@ -3,15 +3,15 @@ import AdminLayout from '@/layouts/AdminLayout';
 import Form from './Form';
 
 interface PumpSolution {
-    id: number;
-    title: string;
+        id: number;
+        title: string;
     slug: string;
-    description: string;
+        description: string;
     features: string[];
     specifications: string[];
     applications: string[];
-    is_featured: boolean;
-    order: number;
+        is_featured: boolean;
+        order: number;
     media: { id: number; original_url: string }[];
 }
 
@@ -29,4 +29,4 @@ export default function Edit({ pumpSolution }: Props) {
             </div>
         </AdminLayout>
     );
-} 
+}
