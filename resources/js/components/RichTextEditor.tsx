@@ -8,7 +8,6 @@ import Table from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
-import Color from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
 import CharacterCount from '@tiptap/extension-character-count';
 import { 
@@ -26,7 +25,6 @@ import {
     Heading3,
     Undo,
     Redo,
-    Code,
     Table as TableIcon,
     Palette,
     Hash
@@ -83,11 +81,11 @@ const RichTextEditor = ({
                 bulletList: {
                     keepMarks: true,
                     keepAttributes: false,
-                  },
-                  orderedList: {
+                },
+                orderedList: {
                     keepMarks: true,
                     keepAttributes: false,
-                  },
+                },
             }),
             Link.configure({
                 openOnClick: false,
@@ -130,7 +128,6 @@ const RichTextEditor = ({
             CharacterCount.configure({
                 limit: maxLength ?? 1000,
             }),
-            Color,
             TextStyle,
         ],
         content: value,
@@ -310,19 +307,6 @@ const RichTextEditor = ({
                         type="button"
                         variant="ghost"
                         size="sm"
-                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                        className={cn(
-                            "h-8 w-8 p-0",
-                            editor.isActive('codeBlock') && "bg-gray-200"
-                        )}
-                    >
-                        <Code className="h-4 w-4" />
-                    </Button>
-
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
                         onClick={addTable}
                         className={cn(
                             "h-8 w-8 p-0",
@@ -331,36 +315,6 @@ const RichTextEditor = ({
                     >
                         <TableIcon className="h-4 w-4" />
                     </Button>
-
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 p-0"
-                            >
-                                <Palette className="h-4 w-4" />
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-64 bg-white p-4 shadow-lg border border-gray-200">
-                            <div className="grid grid-cols-8 gap-1">
-                                {[
-                                    '#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef',
-                                    '#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4',
-                                    '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722',
-                                ].map((color) => (
-                                    <button
-                                        type="button"
-                                        key={color}
-                                        className="w-6 h-6 rounded-md hover:ring-2 hover:ring-offset-2 hover:ring-gray-400"
-                                        style={{ backgroundColor: color }}
-                                        onClick={() => editor.chain().focus().setColor(color).run()}
-                                    />
-                                ))}
-                            </div>
-                        </PopoverContent>
-                    </Popover>
 
                     <Dialog open={isLinkModalOpen} onOpenChange={setIsLinkModalOpen}>
                         <DialogTrigger asChild>
@@ -468,7 +422,7 @@ const RichTextEditor = ({
 
                 <EditorContent 
                     editor={editor} 
-                    className="prose max-w-none p-4 min-h-[200px] focus:outline-none bg-white"
+                    className="prose prose-lg max-w-none p-4 min-h-[200px] focus:outline-none bg-white"
                 />
 
                 <div className="flex justify-end px-4 py-2 border-t bg-gray-50 text-sm text-gray-500">
