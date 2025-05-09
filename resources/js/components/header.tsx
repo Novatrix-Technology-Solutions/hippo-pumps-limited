@@ -72,22 +72,16 @@ export default function Header() {
                                         The Company
                                     </Link>
                                     <Link
-                                        href={route('meet-the-team')}
-                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
-                                    >
-                                        Meet the Team
-                                    </Link>
-                                    <Link
                                         href={route('pump-solutions.index')}
                                         className="text-[#004080] hover:text-[#008000] text-lg font-medium"
                                     >
                                         Products
                                     </Link>
                                     <Link
-                                        href={route('find-us')}
+                                        href={route('meet-the-team')}
                                         className="text-[#004080] hover:text-[#008000] text-lg font-medium"
                                     >
-                                        Find Us
+                                        Meet the Team
                                     </Link>
                                     <Link
                                         href={route('public.news.index')}
@@ -95,6 +89,12 @@ export default function Header() {
                                     >
                                         News
                                     </Link>
+                                    <Link
+                                        href={route('find-us')}
+                                        className="text-[#004080] hover:text-[#008000] text-lg font-medium"
+                                    >
+                                        Find Us
+                                    </Link>                                    
                                 </nav>
                             </Disclosure.Panel>
                         </>
