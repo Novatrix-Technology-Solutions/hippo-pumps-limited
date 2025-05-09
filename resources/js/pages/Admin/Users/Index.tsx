@@ -140,6 +140,9 @@ export default function UsersIndex({ users, flash }: Props) {
         return status.charAt(0).toUpperCase() + status.slice(1);
     };
 
+    // Pagination links if paginated
+    const paginationLinks = Array.isArray(users) ? null : (users && Array.isArray((users as any).links) ? (users as any).links : null);
+
     // Show flash message if exists
     if (flash?.message) {
         if (flash.type === 'success') {
@@ -296,6 +299,27 @@ export default function UsersIndex({ users, flash }: Props) {
                         </div>
                     </CardContent>
                 </Card>
+
+                {/* Pagination Controls */}
+                {paginationLinks && (
+                    <div className="flex justify-center mt-8 gap-2 flex-wrap">
+                        {paginationLinks.map((link: any, idx: number) => (
+                            <Link
+                                key={idx}
+                                href={link.url || '#'}
+                                className={`px-3 py-1 rounded border text-sm ${
+                                    link.active
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : !link.url
+                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                preserveScroll
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
             <AlertDialog open={!!userToDelete} onOpenChange={() => setUserToDelete(null)}>

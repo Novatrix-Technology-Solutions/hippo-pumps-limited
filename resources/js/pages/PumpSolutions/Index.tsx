@@ -52,6 +52,11 @@ export default function Index({ pumpSolutions, filters }: Props) {
         window.location.href = `${route('pump-solutions.index')}?search=${searchTerm}`;
     };
 
+    // Pagination links if paginated
+    const paginationLinks = pumpSolutions && Array.isArray((pumpSolutions as any).links)
+        ? (pumpSolutions as any).links
+        : null;
+
     return (
         <>
             <Head title="Products" />
@@ -167,6 +172,27 @@ export default function Index({ pumpSolutions, filters }: Props) {
                                 <ChevronRight className="w-4 h-4 ml-1" />
                             </Link>
                         )}
+                    </div>
+                )}
+
+                {/* Pagination Controls */}
+                {paginationLinks && (
+                    <div className="flex justify-center mt-8 gap-2 flex-wrap">
+                        {paginationLinks.map((link: any, idx: number) => (
+                            <Link
+                                key={idx}
+                                href={link.url || '#'}
+                                className={`px-3 py-1 rounded border text-sm ${
+                                    link.active
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : !link.url
+                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                preserveScroll
+                            />
+                        ))}
                     </div>
                 )}
             </div>

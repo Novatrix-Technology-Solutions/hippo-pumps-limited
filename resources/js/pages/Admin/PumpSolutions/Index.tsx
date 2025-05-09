@@ -104,6 +104,11 @@ export default function Index({ pumpSolutions }: Props) {
         }
     };
 
+    // Pagination links if paginated
+    const paginationLinks = pumpSolutions && Array.isArray((pumpSolutions as any).links)
+        ? (pumpSolutions as any).links
+        : null;
+
     return (
         <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Products" />
@@ -244,22 +249,22 @@ export default function Index({ pumpSolutions }: Props) {
                         </TableBody>
                     </Table>
                 </div>
-
-                {/* Pagination */}
-                {pumpSolutions.links.length > 3 && (
-                    <div className="flex items-center justify-center space-x-1 mt-8">
-                        {pumpSolutions.links.map((link, index) => (
+                {/* Pagination Controls */}
+                {paginationLinks && (
+                    <div className="flex justify-center mt-8 gap-2 flex-wrap">
+                        {paginationLinks.map((link: any, idx: number) => (
                             <Link
-                                key={index}
+                                key={idx}
                                 href={link.url || '#'}
-                                className={`px-4 py-2 text-sm border rounded ${
+                                className={`px-3 py-1 rounded border text-sm ${
                                     link.active
-                                        ? 'bg-blue-500 text-white border-blue-500'
-                                        : link.url
-                                        ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                                        : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : !link.url
+                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                                 }`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
+                                preserveScroll
                             />
                         ))}
                     </div>

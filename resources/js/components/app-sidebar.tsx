@@ -1,10 +1,9 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, X } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Newspaper, Users, Group, Settings, Package } from 'lucide-react';
 import AppLogo from './app-logo';
 import React from 'react';
 
@@ -14,18 +13,30 @@ const mainNavItems: NavItem[] = [
         href: '/admin/dashboard',
         icon: LayoutGrid,
     },
-];
-
-const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'News',
+        href: '/admin/news',
+        icon: Newspaper,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        title: 'Products',
+        href: '/admin/pump-solutions',
+        icon: Package,
+    },
+    {
+        title: 'Team Members',
+        href: '/admin/team-members',
+        icon: Group,
+    },
+    {
+        title: 'Users',
+        href: '/admin/users',
+        icon: Users,
+    },
+    {
+        title: 'Profile',
+        href: '/admin/profile',
+        icon: Settings,
     },
 ];
 
@@ -46,7 +57,7 @@ export function AppSidebar({ open = false, onClose }: AppSidebarProps) {
                 onClick={onClose}
                 aria-label="Close sidebar"
             >
-                <X className="h-6 w-6" />
+                <BookOpen className="h-6 w-6" />
             </button>
             <SidebarHeader className="border-b">
                 <SidebarMenu>
@@ -65,7 +76,6 @@ export function AppSidebar({ open = false, onClose }: AppSidebarProps) {
             </SidebarContent>
 
             <SidebarFooter className="border-t">
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </aside>

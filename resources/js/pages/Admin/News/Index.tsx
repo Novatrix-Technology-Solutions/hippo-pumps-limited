@@ -101,6 +101,10 @@ export default function NewsIndex({ news, flash }: Props) {
     const filteredNews = newsList.filter((article: any) =>
         article.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    // Pagination links if paginated
+    const paginationLinks = !Array.isArray(news) && news && Array.isArray((news as any).links)
+        ? (news as any).links
+        : null;
 
     return (
         <AppSidebarLayout breadcrumbs={breadcrumbs}>
@@ -142,6 +146,26 @@ export default function NewsIndex({ news, flash }: Props) {
                         </div>
                     ))}
                 </div>
+                {/* Pagination Controls */}
+                {paginationLinks && (
+                    <div className="flex justify-center mt-8 gap-2 flex-wrap">
+                        {paginationLinks.map((link: any, idx: number) => (
+                            <Link
+                                key={idx}
+                                href={link.url || '#'}
+                                className={`px-3 py-1 rounded border text-sm ${
+                                    link.active
+                                        ? 'bg-blue-600 text-white border-blue-600'
+                                        : !link.url
+                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                }`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                preserveScroll
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
             <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
