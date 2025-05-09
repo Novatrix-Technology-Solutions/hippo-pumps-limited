@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import {
@@ -33,15 +33,29 @@ import {
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import toast from 'react-hot-toast';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+    {
+        title: 'News',
+        href: '/admin/news',
+    },
+];
 
 interface News {
     id: number;
     title: string;
-    slug: string;
-    published_at: string;
+    content: string;
+    featured_image: string | null;
     created_at: string;
-    status: 'published' | 'draft';
-    excerpt?: string;
+    status: string;
+    published_at: string | null;
+    excerpt: string | null;
+    slug: string;
 }
 
 interface Props {
@@ -82,133 +96,46 @@ export default function NewsIndex({ news, flash }: Props) {
     );
 
     return (
-        <AuthLayout 
-            title="News Management" 
-            description="Manage your news articles and blog posts"
-        >
-            <Head title="News Management" />
-            <div className="container mx-auto py-10">
-                <Card>
-                    <CardHeader>
-                        <div className="flex justify-between items-center">
-                            <CardTitle>News Management</CardTitle>
-                            <Button asChild>
-                                <Link href={route('news.create')}>
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Create News
-                                </Link>
-                            </Button>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="mb-4">
-                            <Input
-                                type="text"
-                                placeholder="Search news..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="max-w-sm"
-                            />
-                        </div>
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
+            <Head title="News" />
+            <div className="container mx-auto py-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-3xl font-bold">News</h1>
+                    <Button asChild>
+                        <Link href={route('news.create')}>
+                            Create News
+                        </Link>
+                    </Button>
+                </div>
 
-                        <div className="rounded-md border">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Title</TableHead>
-                                        <TableHead>Status</TableHead>
-                                        <TableHead>Published Date</TableHead>
-                                        <TableHead>Created At</TableHead>
-                                        <TableHead className="text-right">Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filteredNews.map((article) => (
-                                        <TableRow key={article.id}>
-                                            <TableCell className="font-medium">
-                                                <div className="flex flex-col gap-1">
-                                                    <span>{article.title}</span>
-                                                    {article.excerpt && (
-                                                        <div className="text-sm text-muted-foreground prose prose-sm max-w-none">
-                                                            {renderHTML(article.excerpt)}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    variant={article.status === 'published' ? 'default' : 'secondary'}
-                                                >
-                                                    {article.status}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell>
-                                                        {article.published_at
-                                                            ? format(new Date(article.published_at), 'MMM d, yyyy')
-                                                            : 'Not published'}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {format(new Date(article.created_at), 'MMM d, yyyy')}
-                                                    </TableCell>
-                                                    <TableCell className="text-right">
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger asChild>
-                                                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                                                    <span className="sr-only">Open menu</span>
-                                                                    <svg
-                                                                        className="h-4 w-4"
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 24 24"
-                                                                        fill="none"
-                                                                        stroke="currentColor"
-                                                                        strokeWidth="2"
-                                                                        strokeLinecap="round"
-                                                                        strokeLinejoin="round"
-                                                                    >
-                                                                        <circle cx="12" cy="12" r="1" />
-                                                                        <circle cx="12" cy="5" r="1" />
-                                                                        <circle cx="12" cy="19" r="1" />
-                                                                    </svg>
-                                                                </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                <DropdownMenuItem asChild>
-                                                                    <Link
-                                                                        href={route('news.edit', article.id)}
-                                                                        className="flex items-center"
-                                                                    >
-                                                                        <Pencil className="w-4 h-4 mr-2" />
-                                                                        Edit
-                                                                    </Link>
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuItem asChild>
-                                                                    <Link
-                                                                        href={route('public.news.show', article.slug)}
-                                                                        className="flex items-center"
-                                                                        target="_blank"
-                                                                    >
-                                                                        <Eye className="w-4 h-4 mr-2" />
-                                                                        View
-                                                                    </Link>
-                                                                </DropdownMenuItem>
-                                                                <DropdownMenuItem
-                                                                    className="text-red-600 focus:text-red-600"
-                                                                    onClick={() => setDeleteId(article.id)}
-                                                                >
-                                                                    <Trash2 className="w-4 h-4 mr-2" />
-                                                                    Delete
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {news.map((item) => (
+                        <div key={item.id} className="bg-white rounded-lg shadow overflow-hidden">
+                            {item.featured_image && (
+                                <img
+                                    src={item.featured_image}
+                                    alt={item.title}
+                                    className="w-full h-48 object-cover"
+                                />
+                            )}
+                            <div className="p-4">
+                                <h3 className="text-lg font-semibold">{item.title}</h3>
+                                <p className="text-gray-600 mt-2">
+                                    {new Date(item.created_at).toLocaleDateString()}
+                                </p>
+                                <div className="mt-4">
+                                    <Link
+                                        href={route('news.edit', item.id)}
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                    >
+                                        Edit
+                                    </Link>
                                 </div>
-                            </CardContent>
-                        </Card>
-                    </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
                 <AlertDialogContent>
@@ -226,6 +153,6 @@ export default function NewsIndex({ news, flash }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 }

@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import RichTextEditor from '@/components/RichTextEditor';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { staggerContainer, staggerItem } from '@/Utils/animations';
+import { type BreadcrumbItem } from '@/types';
 
 interface News {
     id: number;
@@ -23,6 +24,21 @@ interface Props {
 }
 
 export default function Edit({ news }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/admin/dashboard',
+        },
+        {
+            title: 'News',
+            href: '/admin/news',
+        },
+        {
+            title: `Edit: ${news.title}`,
+            href: `/admin/news/${news.id}/edit`,
+        },
+    ];
+
     const { data, setData, put, processing, errors } = useForm({
         title: news.title,
         content: news.content,
@@ -37,10 +53,7 @@ export default function Edit({ news }: Props) {
     };
 
     return (
-        <AuthLayout 
-            title={`Edit News: ${news.title}`}
-            description="Update news article content and details"
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title={`Edit News: ${news.title}`} />
             <AnimatedPage>
                 <motion.div
@@ -115,6 +128,6 @@ export default function Edit({ news }: Props) {
                     </Card>
                 </motion.div>
             </AnimatedPage>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 }

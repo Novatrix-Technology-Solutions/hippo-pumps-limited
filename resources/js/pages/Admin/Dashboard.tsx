@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Link } from '@inertiajs/react';
 import { Newspaper, Settings, WashingMachine, Users, Group } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { staggerContainer, staggerItem } from '@/Utils/animations';
+import { type BreadcrumbItem } from '@/types';
 
 interface Props {
     newsCount: number;
@@ -15,12 +16,16 @@ interface Props {
     usersCount: number;
 }
 
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+];
+
 export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCount, usersCount }: Props) {
     return (
-        <AuthLayout 
-            title="Dashboard" 
-            description="Welcome to your admin dashboard"
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <AnimatedPage>
                 <motion.div 
@@ -142,6 +147,6 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                     </div>
                 </motion.div>
             </AnimatedPage>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 } 

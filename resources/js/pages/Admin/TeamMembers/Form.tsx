@@ -1,13 +1,14 @@
 import { Head, useForm } from '@inertiajs/react';
 import { ChangeEvent, useState } from 'react';
 import { motion } from 'framer-motion';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import AnimatedCard from '@/components/Animated/AnimatedCard';
 import AnimatedButton from '@/components/Animated/AnimatedButton';
 import AnimatedErrorMessage from '@/components/Animated/AnimatedErrorMessage';
 import RichTextEditor from '@/components/RichTextEditor';
 import { staggerContainer, staggerItem, imagePreview } from '@/Utils/animations';
+import { type BreadcrumbItem } from '@/types';
 
 interface TeamMember {
     id?: number;
@@ -25,6 +26,21 @@ interface Props {
 }
 
 export default function Form({ teamMember, isEdit = false }: Props) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Dashboard',
+            href: '/admin/dashboard',
+        },
+        {
+            title: 'Team Members',
+            href: '/admin/team-members',
+        },
+        {
+            title: isEdit ? `Edit: ${teamMember?.name}` : 'Add Team Member',
+            href: isEdit ? `/admin/team-members/${teamMember?.id}/edit` : '/admin/team-members/create',
+        },
+    ];
+
     const { data, setData, post, put, processing, errors } = useForm({
         name: teamMember?.name || '',
         position: teamMember?.position || '',
@@ -53,10 +69,7 @@ export default function Form({ teamMember, isEdit = false }: Props) {
     };
 
     return (
-        <AuthLayout 
-            title={isEdit ? 'Edit Team Member' : 'Add Team Member'}
-            description={isEdit ? 'Update team member information' : 'Add a new team member'}
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title={isEdit ? 'Edit Team Member' : 'Add Team Member'} />
             <AnimatedPage>
                 <motion.div
@@ -156,6 +169,6 @@ export default function Form({ teamMember, isEdit = false }: Props) {
                     </AnimatedCard>
                 </motion.div>
             </AnimatedPage>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 } 

@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -39,6 +39,18 @@ import { format } from 'date-fns';
 import { Plus, Search, Mail, Shield, Clock, Pencil, Trash2, UserPlus } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+    {
+        title: 'Users',
+        href: '/admin/users',
+    },
+];
 
 interface User {
     id: number;
@@ -138,10 +150,7 @@ export default function UsersIndex({ users, flash }: Props) {
     }
 
     return (
-        <AuthLayout 
-            title="Users" 
-            description="Manage system users and their permissions"
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Users" />
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -310,6 +319,6 @@ export default function UsersIndex({ users, flash }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 } 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Pencil, ExternalLink, Trash2 } from 'lucide-react';
@@ -23,6 +23,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { type BreadcrumbItem } from '@/types';
 
 interface PumpSolution {
     id: number;
@@ -45,6 +46,17 @@ interface Props {
         total: number;
     };
 }
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+    {
+        title: 'Products',
+        href: '/admin/pump-solutions',
+    },
+];
 
 export default function Index({ pumpSolutions }: Props) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -93,14 +105,11 @@ export default function Index({ pumpSolutions }: Props) {
     };
 
     return (
-        <AuthLayout 
-            title="Products" 
-            description="Manage your pump solutions and products"
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Products" />
-            <div className="container mx-auto py-10">
+            <div className="container mx-auto py-6">
+                <h1 className="text-3xl font-bold mb-6">Products</h1>
                 <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold">Products</h1>
                     <Button asChild>
                         <Link href={route('admin.pump-solutions.create')}>
                             <Plus className="w-4 h-4 mr-2" />
@@ -256,6 +265,6 @@ export default function Index({ pumpSolutions }: Props) {
                     </div>
                 )}
             </div>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 } 

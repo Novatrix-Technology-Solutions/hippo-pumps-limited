@@ -1,9 +1,25 @@
 import { Head, useForm } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+    {
+        title: 'Users',
+        href: '/admin/users',
+    },
+    {
+        title: 'Create User',
+        href: '/admin/users/create',
+    },
+];
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
@@ -19,10 +35,7 @@ export default function Create() {
     }
 
     return (
-        <AuthLayout 
-            title="Create User" 
-            description="Create a new system user"
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Create User" />
             <div className="container mx-auto py-6">
                 <Card>
@@ -90,6 +103,6 @@ export default function Create() {
                     </CardContent>
                 </Card>
             </div>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 } 

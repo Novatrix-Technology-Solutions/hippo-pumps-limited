@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import AuthLayout from '@/layouts/auth-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -38,6 +38,18 @@ import {
 import { useState } from 'react';
 import { Plus, Search, Mail, Phone, Pencil, Trash2, ArrowUpDown } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { type BreadcrumbItem } from '@/types';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+    {
+        title: 'Team Members',
+        href: '/admin/team-members',
+    },
+];
 
 interface TeamMember {
     id: number;
@@ -103,17 +115,14 @@ export default function TeamMembersIndex({ teamMembers, flash }: Props) {
     }
 
     return (
-        <AuthLayout 
-            title="Team Members" 
-            description="Manage your team members and their profiles"
-        >
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Team Members" />
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">Team Members</h1>
                         <p className="text-muted-foreground">
-                            Manage your team members and their information
+                            Manage your team members and their profiles
                         </p>
                     </div>
                     <Button asChild>
@@ -263,6 +272,6 @@ export default function TeamMembersIndex({ teamMembers, flash }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </AuthLayout>
+        </AppSidebarLayout>
     );
 } 
