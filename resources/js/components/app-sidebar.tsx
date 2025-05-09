@@ -10,7 +10,7 @@ import AppLogo from './app-logo';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: '/admin/dashboard',
         icon: LayoutGrid,
     },
 ];
@@ -30,12 +30,15 @@ const footerNavItems: NavItem[] = [
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar 
+            collapsible="icon" 
+            className="border-r bg-background"
+        >
+            <SidebarHeader className="border-b">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href="/admin/dashboard" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -47,7 +50,7 @@ export function AppSidebar() {
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className="border-t">
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
