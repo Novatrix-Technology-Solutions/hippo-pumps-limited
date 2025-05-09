@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from '@inertiajs/react';
-import AuthenticatedLayout from '../Layouts/AuthenticatedLayout';
-
+import AuthLayout from '@/layouts/auth-layout';
 interface DashboardProps {
   auth: {
     user: {
@@ -13,7 +12,7 @@ interface DashboardProps {
 
 const Dashboard: React.FC<DashboardProps> = ({ auth }) => {
   return (
-    <AuthenticatedLayout
+    <AuthLayout
       user={auth.user}
       header={
         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
@@ -77,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({ auth }) => {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </AuthLayout>
   );
 };
 
