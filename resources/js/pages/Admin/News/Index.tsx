@@ -91,7 +91,14 @@ export default function NewsIndex({ news, flash }: Props) {
         }
     };
 
-    const filteredNews = news.filter((article) =>
+    // Ensure news is always an array
+    type NewsItem = typeof news extends Array<infer U> ? U : any;
+    const newsList: NewsItem[] = Array.isArray(news)
+        ? news
+        : (news && Array.isArray((news as any).data)
+            ? (news as any).data
+            : []);
+    const filteredNews = newsList.filter((article: any) =>
         article.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -109,7 +116,7 @@ export default function NewsIndex({ news, flash }: Props) {
                 </div>
 
                 <div className="grid gap-8 mt-8 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                    {news.map((item) => (
+                    {filteredNews.map((item: any) => (
                         <div key={item.id} className="bg-white rounded-lg shadow overflow-hidden">
                             {item.featured_image && (
                                 <img
