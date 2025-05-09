@@ -32,11 +32,11 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                     variants={staggerContainer}
                     initial="hidden"
                     animate="visible"
-                    className="container mx-auto py-6"
+                    className="h-full w-full"
                 >
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         <motion.div variants={staggerItem}>
-                            <Card>
+                            <Card className="h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
                                         News Articles
@@ -58,7 +58,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                         </motion.div>
 
                         <motion.div variants={staggerItem}>
-                            <Card>
+                            <Card className="h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
                                         Products
@@ -80,7 +80,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                         </motion.div>
 
                         <motion.div variants={staggerItem}>
-                            <Card>
+                            <Card className="h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
                                         Team Members
@@ -102,7 +102,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                         </motion.div>
 
                         <motion.div variants={staggerItem}>
-                            <Card>
+                            <Card className="h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
                                         Users
@@ -124,7 +124,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                         </motion.div>
 
                         <motion.div variants={staggerItem}>
-                            <Card>
+                            <Card className="h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">
                                         Settings

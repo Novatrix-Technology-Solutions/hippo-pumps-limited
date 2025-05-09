@@ -9,8 +9,10 @@ export function AppContent({ variant = 'header', children, ...props }: AppConten
     if (variant === 'sidebar') {
         return (
             <SidebarInset className="flex-1 bg-background" {...props}>
-                <div className="h-full w-full">
-                    {children}
+                <div className="h-full w-full overflow-x-hidden">
+                    <div className="mx-auto h-full w-full max-w-[1400px] p-6">
+                        {children}
+                    </div>
                 </div>
             </SidebarInset>
         );
