@@ -37,9 +37,10 @@ createInertiaApp({
             throw new Error(`No default export found for page ${name}`);
         }
 
-        // Only set layout if the component exists
+        // Only set layout if the component exists and it's not an auth page
+        const isAuthPage = name.startsWith('Auth/');
         component.default.layout = component.default.layout || 
-            ((page: React.ReactNode) => <SiteLayout>{page}</SiteLayout>);
+            ((page: React.ReactNode) => isAuthPage ? page : <SiteLayout>{page}</SiteLayout>);
             
         return component;
     },

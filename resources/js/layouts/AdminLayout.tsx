@@ -14,6 +14,7 @@ import PageTransition from '@/components/Animated/PageTransition';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import AdminFooter from '@/components/admin-footer';
 
 interface Props {
     title?: string;
@@ -52,10 +53,10 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
     );
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 flex flex-col">
             <Head title={title} />
 
-            <div className="min-h-screen">
+            <div className="flex-1">
                 <PageTransition>
                     <div className="min-h-screen">
                         {/* Mobile Header - Only show on admin routes */}
@@ -68,7 +69,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                 <Menu className="h-5 w-5" />
                                             </Button>
                                         </SheetTrigger>
-                                        <SheetContent side="left" className="w-64 p-0 z-[101] bg-white">
+                                        <SheetContent>
                                             <SheetHeader className="p-4 border-b bg-white">
                                                 <div className="flex items-center justify-between">
                                                     <SheetTitle className="text-xl font-bold text-gray-800">
@@ -81,7 +82,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                     </SheetTitle>
                                                 </div>
                                             </SheetHeader>
-                                            <nav className="flex-1 px-4 py-4 space-y-1 bg-white">
+                                            <nav className="p-4 space-y-2">
                                                 <NavLink href={route('dashboard')} icon={LayoutDashboard} routeName="dashboard">
                                                     Dashboard
                                                 </NavLink>
@@ -101,7 +102,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                     Settings
                                                 </NavLink>
                                             </nav>
-                                            <div className="p-4 border-t border-gray-200 bg-white">
+                                            <div className="p-4 border-t">
                                                 <div className="flex items-center justify-between">
                                                     <div>
                                                         <p className="text-sm font-medium text-gray-900">{user?.name}</p>
@@ -149,7 +150,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                     </div>
 
                                     {/* Navigation */}
-                                    <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+                                    <nav className="flex-1 p-4 space-y-2">
                                         <NavLink href={route('dashboard')} icon={LayoutDashboard} routeName="dashboard">
                                             Dashboard
                                         </NavLink>
@@ -171,7 +172,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                     </nav>
 
                                     {/* User Section */}
-                                    <div className="p-4 border-t border-gray-200 bg-gray-50">
+                                    <div className="p-4 border-t">
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <p className="text-sm font-medium text-gray-900">{user?.name}</p>
@@ -203,6 +204,9 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                     </div>
                 </PageTransition>
             </div>
+
+            {/* Admin Footer */}
+            <AdminFooter />
         </div>
     );
 };
