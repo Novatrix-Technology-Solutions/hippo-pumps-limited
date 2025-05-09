@@ -67,8 +67,8 @@ export default function UsersIndex({ users, flash }: Props) {
     const { delete: destroy, processing } = useForm();
 
     // Get unique roles and statuses
-    const roles = ['all', ...new Set(users.map(user => user.role))];
-    const statuses = ['all', ...new Set(users.map(user => user.status))];
+    const roles = ['all', ...new Set(users.map(user => user.role || 'user'))];
+    const statuses = ['all', ...new Set(users.map(user => user.status || 'active'))];
 
     const filteredUsers = users.filter(user => {
         const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -94,7 +94,7 @@ export default function UsersIndex({ users, flash }: Props) {
         });
     };
 
-    const getStatusColor = (status: User['status']) => {
+    const getStatusColor = (status: User['status'] = 'active') => {
         switch (status) {
             case 'active':
                 return 'bg-green-500';
@@ -107,7 +107,7 @@ export default function UsersIndex({ users, flash }: Props) {
         }
     };
 
-    const getRoleColor = (role: User['role']) => {
+    const getRoleColor = (role: User['role'] = 'user') => {
         switch (role) {
             case 'admin':
                 return 'bg-purple-500';
@@ -118,6 +118,14 @@ export default function UsersIndex({ users, flash }: Props) {
             default:
                 return 'bg-gray-500';
         }
+    };
+
+    const formatRole = (role: string = 'user') => {
+        return role.charAt(0).toUpperCase() + role.slice(1);
+    };
+
+    const formatStatus = (status: string = 'active') => {
+        return status.charAt(0).toUpperCase() + status.slice(1);
     };
 
     // Show flash message if exists
@@ -163,7 +171,7 @@ export default function UsersIndex({ users, flash }: Props) {
                                     <SelectContent>
                                         {roles.map((role) => (
                                             <SelectItem key={role} value={role}>
-                                                {role === 'all' ? 'All Roles' : role.charAt(0).toUpperCase() + role.slice(1)}
+                                                {role === 'all' ? 'All Roles' : formatRole(role)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -178,7 +186,7 @@ export default function UsersIndex({ users, flash }: Props) {
                                     <SelectContent>
                                         {statuses.map((status) => (
                                             <SelectItem key={status} value={status}>
-                                                {status === 'all' ? 'All Statuses' : status.charAt(0).toUpperCase() + status.slice(1)}
+                                                {status === 'all' ? 'All Statuses' : formatStatus(status)}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

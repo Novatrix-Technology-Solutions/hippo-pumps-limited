@@ -22,6 +22,11 @@ interface Props {
 }
 
 export default function Show({ pumpSolution }: Props) {
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    };
+
     return (
         <>
             <Head title={pumpSolution.title} />
@@ -58,7 +63,7 @@ export default function Show({ pumpSolution }: Props) {
                             {pumpSolution.title}
                         </h1>
                         <div className="prose max-w-none mb-8">
-                            <p>{pumpSolution.description}</p>
+                            {renderHTML(pumpSolution.description)}
                         </div>
 
                         <div className="mb-8">
@@ -77,7 +82,7 @@ export default function Show({ pumpSolution }: Props) {
                                 {pumpSolution.features && pumpSolution.features.length > 0 ? (
                                     <ul className="list-disc pl-5 space-y-2">
                                         {pumpSolution.features.map((feature, index) => (
-                                            <li key={index}>{feature}</li>
+                                            <li key={index}>{renderHTML(feature)}</li>
                                         ))}
                                     </ul>
                                 ) : (
@@ -88,7 +93,7 @@ export default function Show({ pumpSolution }: Props) {
                                 {pumpSolution.specifications && pumpSolution.specifications.length > 0 ? (
                                     <ul className="list-disc pl-5 space-y-2">
                                         {pumpSolution.specifications.map((spec, index) => (
-                                            <li key={index}>{spec}</li>
+                                            <li key={index}>{renderHTML(spec)}</li>
                                         ))}
                                     </ul>
                                 ) : (
@@ -99,7 +104,7 @@ export default function Show({ pumpSolution }: Props) {
                                 {pumpSolution.applications && pumpSolution.applications.length > 0 ? (
                                     <ul className="list-disc pl-5 space-y-2">
                                         {pumpSolution.applications.map((application, index) => (
-                                            <li key={index}>{application}</li>
+                                            <li key={index}>{renderHTML(application)}</li>
                                         ))}
                                     </ul>
                                 ) : (

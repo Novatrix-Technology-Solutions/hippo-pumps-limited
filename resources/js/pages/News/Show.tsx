@@ -23,6 +23,11 @@ interface Props {
 }
 
 export default function Show({ news }: Props) {
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    };
+
     return (
         <AnimatedPage>
             <Head title={news.title} />
@@ -84,21 +89,11 @@ export default function Show({ news }: Props) {
                     </motion.div>
 
                     {/* Article Content */}
-                    <motion.div 
+                    <motion.div
                         variants={staggerItem}
                         className="prose prose-lg max-w-none"
                     >
-                        <div className="whitespace-pre-line leading-relaxed">
-                            {news.content.split('\n\n').map((paragraph, index) => (
-                                <motion.p
-                                    key={index}
-                                    variants={fadeIn}
-                                    className="mb-6 text-gray-700"
-                                >
-                                    {paragraph}
-                                </motion.p>
-                            ))}
-                        </div>
+                        {renderHTML(news.content)}
                     </motion.div>
 
                     {/* Share Section */}

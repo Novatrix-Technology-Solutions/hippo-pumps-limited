@@ -35,13 +35,25 @@ interface Props {
 export default function Index({ pumpSolutions, filters }: Props) {
     const [searchTerm, setSearchTerm] = useState(filters.search || '');
 
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    };
+
+    // Function to strip HTML tags for excerpt
+    const stripHtml = (html: string) => {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || '';
+    };
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         window.location.href = `${route('pump-solutions.index')}?search=${searchTerm}`;
     };
 
-  return (
-    <>
+    return (
+        <>
             <Head title="Products" />
             <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="mb-8">
@@ -104,9 +116,9 @@ export default function Index({ pumpSolutions, filters }: Props) {
                                 </div>
                                 <div className="p-6 flex-grow">
                                     <h3 className="text-xl font-semibold text-[#004080] mb-2">{solution.title}</h3>
-                                    <p className="text-gray-600 line-clamp-3 mb-4">
-                                        {solution.description}
-                                    </p>
+                                    <div className="text-gray-600 line-clamp-3 mb-4 prose prose-sm max-w-none">
+                                        {renderHTML(stripHtml(solution.description).substring(0, 150) + '...')}
+                                    </div>
                                     <Link
                                         href={route('pump-solutions.show', solution.slug)}
                                         className="text-[#008000] hover:text-[#006000] font-medium inline-flex items-center"
@@ -157,7 +169,7 @@ export default function Index({ pumpSolutions, filters }: Props) {
                         )}
                     </div>
                 )}
-      </div>
-    </>
-  );
+            </div>
+        </>
+    );
 } 

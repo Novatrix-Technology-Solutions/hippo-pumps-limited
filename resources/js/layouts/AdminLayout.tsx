@@ -69,7 +69,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                 <Menu className="h-5 w-5" />
                                             </Button>
                                         </SheetTrigger>
-                                        <SheetContent>
+                                        <SheetContent side="left" className="p-0">
                                             <SheetHeader className="p-4 border-b bg-white">
                                                 <div className="flex items-center justify-between">
                                                     <SheetTitle className="text-xl font-bold text-gray-800">

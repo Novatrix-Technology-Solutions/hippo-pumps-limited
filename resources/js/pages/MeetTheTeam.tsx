@@ -15,6 +15,11 @@ interface MeetTheTeamProps extends PageProps {
 }
 
 export default function MeetTheTeam({ auth, teamMembers }: MeetTheTeamProps) {
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    };
+
     return (
         <>
             <Head title="Meet the Team" />
@@ -42,7 +47,9 @@ export default function MeetTheTeam({ auth, teamMembers }: MeetTheTeamProps) {
                             <div className="p-6">
                                 <h2 className="text-xl font-bold text-[#1e4785]">{member.name}</h2>
                                 <p className="text-[#e63946] font-semibold mb-4">{member.position}</p>
-                                <p className="text-[#333333]">{member.bio}</p>
+                                <div className="text-[#333333] prose prose-sm max-w-none">
+                                    {renderHTML(member.bio)}
+                                </div>
                             </div>
                         </div>
                     ))}

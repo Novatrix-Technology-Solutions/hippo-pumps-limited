@@ -23,6 +23,18 @@ interface Props extends PageProps {
 }
 
 export default function NewsIndex({ news }: Props) {
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
+    };
+
+    // Function to strip HTML tags for excerpt
+    const stripHtml = (html: string) => {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || '';
+    };
+
     return (
         <>
             <Head title="News & Updates" />
@@ -45,9 +57,9 @@ export default function NewsIndex({ news }: Props) {
                                     <time className="text-sm text-gray-500 mb-4 block">
                                         {format(new Date(item.published_at), 'MMMM d, yyyy')}
                                     </time>
-                                    <p className="text-gray-600">
-                                        {item.meta_description || item.content.substring(0, 150)}...
-                                    </p>
+                                    <div className="text-gray-600 prose prose-sm max-w-none">
+                                        {item.meta_description || stripHtml(item.content).substring(0, 150) + '...'}
+                                    </div>
                                 </div>
                             </article>
                         </Link>

@@ -48,78 +48,66 @@ interface Props {
     news: News[];
     flash?: {
         message?: string;
-        type?: 'success' | 'error';
     };
 }
 
 export default function NewsIndex({ news, flash }: Props) {
     const [searchQuery, setSearchQuery] = useState('');
-    const [articleToDelete, setArticleToDelete] = useState<News | null>(null);
-    const { delete: destroy, processing } = useForm();
+    const [deleteId, setDeleteId] = useState<number | null>(null);
 
-    const filteredNews = news.filter(article =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        article.excerpt?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
-    const handleDelete = () => {
-        if (!articleToDelete) return;
-
-        destroy(route('news.destroy', articleToDelete.id), {
-            onSuccess: () => {
-                toast.success('Article deleted successfully');
-                setArticleToDelete(null);
-            },
-            onError: () => {
-                toast.error('Failed to delete article');
-            },
-        });
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
     };
 
-    // Show flash message if exists
-    if (flash?.message) {
-        if (flash.type === 'success') {
-            toast.success(flash.message);
-        } else if (flash.type === 'error') {
-            toast.error(flash.message);
+    const { delete: destroy } = useForm();
+
+    const handleDelete = () => {
+        if (deleteId) {
+            destroy(route('news.destroy', deleteId), {
+                onSuccess: () => {
+                    toast.success('News article deleted successfully');
+                    setDeleteId(null);
+                },
+                onError: () => {
+                    toast.error('Failed to delete news article');
+                    setDeleteId(null);
+                },
+            });
         }
-    }
+    };
+
+    const filteredNews = news.filter((article) =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <AdminLayout>
-            <Head title="News Articles" />
-            <div className="container mx-auto py-6 space-y-6">
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight">News Articles</h1>
-                        <p className="text-muted-foreground">
-                            Manage your news articles and blog posts
-                        </p>
-                    </div>
-                    <Button asChild>
-                        <Link href={route('news.create')} className="gap-2">
-                            <Plus className="h-4 w-4" />
-                            Create New Article
-                        </Link>
-                    </Button>
-                </div>
-
+            <Head title="News Management" />
+            <div className="container mx-auto py-10">
                 <Card>
                     <CardHeader>
-                        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                            <CardTitle>All Articles</CardTitle>
-                            <div className="relative w-full md:w-72">
-                                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                    placeholder="Search articles..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="pl-8"
-                                />
-                            </div>
+                        <div className="flex justify-between items-center">
+                            <CardTitle>News Management</CardTitle>
+                            <Button asChild>
+                                <Link href={route('news.create')}>
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Create News
+                                </Link>
+                            </Button>
                         </div>
                     </CardHeader>
                     <CardContent>
+                        <div className="mb-4">
+                            <Input
+                                type="text"
+                                placeholder="Search news..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="max-w-sm"
+                            />
+                        </div>
+
                         <div className="rounded-md border">
                             <Table>
                                 <TableHeader>
@@ -138,83 +126,101 @@ export default function NewsIndex({ news, flash }: Props) {
                                                 <div className="flex flex-col gap-1">
                                                     <span>{article.title}</span>
                                                     {article.excerpt && (
-                                                        <span className="text-sm text-muted-foreground">
-                                                            {article.excerpt}
-                                                        </span>
+                                                        <div className="text-sm text-muted-foreground prose prose-sm max-w-none">
+                                                            {renderHTML(article.excerpt)}
+                                                        </div>
                                                     )}
                                                 </div>
                                             </TableCell>
                                             <TableCell>
-                                                <Badge variant={article.status === 'published' ? 'default' : 'secondary'}>
+                                                <Badge
+                                                    variant={article.status === 'published' ? 'default' : 'secondary'}
+                                                >
                                                     {article.status}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
-                                                <div className="flex items-center gap-2">
-                                                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                                                    {format(new Date(article.published_at), 'PPP')}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell>
-                                                {format(new Date(article.created_at), 'PPP')}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            <span className="sr-only">Open menu</span>
-                                                            <Pencil className="h-4 w-4" />
-                                                        </Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem asChild>
-                                                            <Link href={route('news.edit', article.id)}>
-                                                                <Pencil className="mr-2 h-4 w-4" />
-                                                                Edit
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem asChild>
-                                                            <Link href={route('news.show', article.slug)}>
-                                                                <Eye className="mr-2 h-4 w-4" />
-                                                                Preview
-                                                            </Link>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            className="text-red-600"
-                                                            onClick={() => setArticleToDelete(article)}
-                                                        >
-                                                            <Trash2 className="mr-2 h-4 w-4" />
-                                                            Delete
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                                        {article.published_at
+                                                            ? format(new Date(article.published_at), 'MMM d, yyyy')
+                                                            : 'Not published'}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {format(new Date(article.created_at), 'MMM d, yyyy')}
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                                    <span className="sr-only">Open menu</span>
+                                                                    <svg
+                                                                        className="h-4 w-4"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="none"
+                                                                        stroke="currentColor"
+                                                                        strokeWidth="2"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    >
+                                                                        <circle cx="12" cy="12" r="1" />
+                                                                        <circle cx="12" cy="5" r="1" />
+                                                                        <circle cx="12" cy="19" r="1" />
+                                                                    </svg>
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem asChild>
+                                                                    <Link
+                                                                        href={route('news.edit', article.id)}
+                                                                        className="flex items-center"
+                                                                    >
+                                                                        <Pencil className="w-4 h-4 mr-2" />
+                                                                        Edit
+                                                                    </Link>
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem asChild>
+                                                                    <Link
+                                                                        href={route('public.news.show', article.slug)}
+                                                                        className="flex items-center"
+                                                                        target="_blank"
+                                                                    >
+                                                                        <Eye className="w-4 h-4 mr-2" />
+                                                                        View
+                                                                    </Link>
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    className="text-red-600 focus:text-red-600"
+                                                                    onClick={() => setDeleteId(article.id)}
+                                                                >
+                                                                    <Trash2 className="w-4 h-4 mr-2" />
+                                                                    Delete
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                            </Card>
                         </div>
                     </CardContent>
                 </Card>
             </div>
 
-            <AlertDialog open={!!articleToDelete} onOpenChange={() => setArticleToDelete(null)}>
+            <AlertDialog open={deleteId !== null} onOpenChange={() => setDeleteId(null)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This action cannot be undone. This will permanently delete the article
-                            "{articleToDelete?.title}".
+                            This action cannot be undone. This will permanently delete the news article.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={handleDelete}
-                            className="bg-red-600 hover:bg-red-700"
-                            disabled={processing}
-                        >
-                            {processing ? 'Deleting...' : 'Delete'}
+                        <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
+                            Delete
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
