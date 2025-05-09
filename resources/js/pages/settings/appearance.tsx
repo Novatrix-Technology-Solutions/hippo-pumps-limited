@@ -1,30 +1,40 @@
 import { Head } from '@inertiajs/react';
-
-import AppearanceTabs from '@/components/appearance-tabs';
-import HeadingSmall from '@/components/heading-small';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
-
-import AppLayout from '@/layouts/app-layout';
+import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Appearance settings',
+        title: 'Dashboard',
+        href: '/admin/dashboard',
+    },
+    {
+        title: 'Settings',
+        href: '/settings',
+    },
+    {
+        title: 'Appearance',
         href: '/settings/appearance',
     },
 ];
 
 export default function Appearance() {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Appearance settings" />
-
-            <SettingsLayout>
-                <div className="space-y-6">
-                    <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
-                    <AppearanceTabs />
-                </div>
-            </SettingsLayout>
-        </AppLayout>
+        <AppSidebarLayout breadcrumbs={breadcrumbs}>
+            <Head title="Appearance Settings" />
+            <div className="container mx-auto py-6">
+                <SettingsLayout>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Appearance Settings</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {/* Add appearance settings content here */}
+                        </CardContent>
+                    </Card>
+                </SettingsLayout>
+            </div>
+        </AppSidebarLayout>
     );
 }

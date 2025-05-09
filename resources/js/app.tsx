@@ -39,8 +39,13 @@ createInertiaApp({
 
         // Only set layout if the component exists and it's not an auth page
         const isAuthPage = name.startsWith('Auth/');
+        const isAdminPage = name.startsWith('Admin/');
         component.default.layout = component.default.layout || 
-            ((page: React.ReactNode) => isAuthPage ? page : <SiteLayout>{page}</SiteLayout>);
+            ((page: React.ReactNode) => {
+                if (isAuthPage) return page;
+                if (isAdminPage) return page; // Admin pages will use their own layout
+                return <SiteLayout>{page}</SiteLayout>; // Only apply SiteLayout to public pages
+            });
             
         return component;
     },
