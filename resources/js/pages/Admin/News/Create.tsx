@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { staggerContainer, staggerItem } from '@/Utils/animations';
 import { type BreadcrumbItem } from '@/types';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,9 +34,11 @@ export default function Create() {
         meta_description: '',
         is_published: false,
     });
+    const [editorContent, setEditorContent] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setData('content', editorContent);
         post(route('news.store'));
     };
 
@@ -71,8 +74,9 @@ export default function Create() {
                                 <motion.div variants={staggerItem}>
                                     <Label htmlFor="content">Content</Label>
                                     <RichTextEditor
-                                        value={data.content}
-                                        onChange={(content) => setData('content', content)}
+                                        value={editorContent}
+                                        onChange={setEditorContent}
+                                        error={errors.content}
                                     />
                                     {errors.content && (
                                         <p className="text-red-500 text-sm mt-1">{errors.content}</p>

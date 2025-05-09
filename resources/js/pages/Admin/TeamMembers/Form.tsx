@@ -50,9 +50,11 @@ export default function Form({ teamMember, isEdit = false }: Props) {
     });
 
     const [preview, setPreview] = useState<string | null>(teamMember?.image_url || null);
+    const [editorContent, setEditorContent] = useState(teamMember?.bio || '');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setData('bio', editorContent);
         if (isEdit && teamMember?.id) {
             put(route('admin.team-members.update', teamMember.id));
         } else {
@@ -113,10 +115,11 @@ export default function Form({ teamMember, isEdit = false }: Props) {
                                     Bio
                                 </label>
                                 <RichTextEditor
-                                    value={data.bio}
-                                    onChange={(value) => setData('bio', value)}
+                                    value={editorContent}
+                                    onChange={setEditorContent}
+                                    error={errors.bio}
+                                    label="Bio"
                                 />
-                                <AnimatedErrorMessage error={errors.bio} />
                             </motion.div>
 
                             <motion.div variants={staggerItem}>

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { staggerContainer, staggerItem } from '@/Utils/animations';
 import { type BreadcrumbItem } from '@/types';
+import { useState } from 'react';
 
 interface News {
     id: number;
@@ -46,9 +47,11 @@ export default function Edit({ news }: Props) {
         meta_description: news.meta_description || '',
         is_published: news.is_published,
     });
+    const [editorContent, setEditorContent] = useState(news.content || '');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setData('content', editorContent);
         put(route('news.update', news.id));
     };
 
@@ -84,8 +87,9 @@ export default function Edit({ news }: Props) {
                                 <motion.div variants={staggerItem}>
                                     <Label htmlFor="content">Content</Label>
                                     <RichTextEditor
-                                        value={data.content}
-                                        onChange={(content) => setData('content', content)}
+                                        value={editorContent}
+                                        onChange={setEditorContent}
+                                        error={errors.content}
                                     />
                                     {errors.content && (
                                         <p className="text-red-500 text-sm mt-1">{errors.content}</p>
