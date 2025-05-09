@@ -32,9 +32,9 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                     variants={staggerContainer}
                     initial="hidden"
                     animate="visible"
-                    className="h-full w-full"
+                    className="h-full w-full mt-8"
                 >
-                    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                         <motion.div variants={staggerItem}>
                             <Card className="h-full">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

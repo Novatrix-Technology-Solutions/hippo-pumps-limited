@@ -216,7 +216,7 @@ export default function UsersIndex({ users, flash }: Props) {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="rounded-md border">
+                        <div className="rounded-md border mt-8">
                             <Table>
                                 <TableHeader>
                                     <TableRow>

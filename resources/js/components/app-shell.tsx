@@ -14,9 +14,10 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
         return <div className="flex min-h-screen w-full flex-col">{children}</div>;
     }
 
+    // Use grid: sidebar (fixed width) + content (auto)
     return (
         <SidebarProvider defaultOpen={isOpen}>
-            <div className="flex min-h-screen w-full">
+            <div className="min-h-screen w-full grid grid-cols-1 md:grid-cols-[16rem_1fr]">
                 {children}
             </div>
         </SidebarProvider>

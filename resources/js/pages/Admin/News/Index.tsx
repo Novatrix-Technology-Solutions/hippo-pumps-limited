@@ -108,7 +108,7 @@ export default function NewsIndex({ news, flash }: Props) {
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid gap-8 mt-8 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {news.map((item) => (
                         <div key={item.id} className="bg-white rounded-lg shadow overflow-hidden">
                             {item.featured_image && (

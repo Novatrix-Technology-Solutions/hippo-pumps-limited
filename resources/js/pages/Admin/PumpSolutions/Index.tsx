@@ -134,7 +134,7 @@ export default function Index({ pumpSolutions }: Props) {
                     </form>
                 </div>
 
-                <div className="bg-white rounded-md shadow">
+                <div className="bg-white rounded-md shadow mt-8">
                     <Table>
                         <TableHeader>
                             <TableRow>

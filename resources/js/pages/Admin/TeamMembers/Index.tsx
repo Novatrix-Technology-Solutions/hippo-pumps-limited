@@ -166,7 +166,7 @@ export default function TeamMembersIndex({ teamMembers, flash }: Props) {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <div className="rounded-md border">
+                        <div className="rounded-md border mt-8">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
