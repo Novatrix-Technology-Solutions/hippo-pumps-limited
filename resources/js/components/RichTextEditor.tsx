@@ -131,9 +131,7 @@ const RichTextEditor = ({
                 limit: maxLength ?? 1000,
             }),
             Color,
-            TextStyle.configure({
-                types: ['textStyle'],
-            }),
+            TextStyle,
         ],
         content: value,
         onUpdate: ({ editor }) => {
@@ -179,6 +177,7 @@ const RichTextEditor = ({
             <div className="border rounded-lg overflow-hidden bg-white">
                 <div className="border-b bg-gray-50 p-2 flex flex-wrap gap-1">
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -191,6 +190,7 @@ const RichTextEditor = ({
                     </Button>
                     
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -203,6 +203,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -215,6 +216,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -227,6 +229,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
@@ -239,6 +242,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -251,6 +255,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleOrderedList().run()}
@@ -263,6 +268,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().setTextAlign('left').run()}
@@ -275,6 +281,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().setTextAlign('center').run()}
@@ -287,6 +294,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().setTextAlign('right').run()}
@@ -299,6 +307,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
@@ -311,6 +320,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={addTable}
@@ -325,6 +335,7 @@ const RichTextEditor = ({
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
+                                type="button"
                                 variant="ghost"
                                 size="sm"
                                 className="h-8 w-8 p-0"
@@ -354,6 +365,7 @@ const RichTextEditor = ({
                     <Dialog open={isLinkModalOpen} onOpenChange={setIsLinkModalOpen}>
                         <DialogTrigger asChild>
                             <Button
+                                type="button"
                                 variant="ghost"
                                 size="sm"
                                 className={cn(
@@ -393,6 +405,7 @@ const RichTextEditor = ({
                     <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
                         <DialogTrigger asChild>
                             <Button
+                                type="button"
                                 variant="ghost"
                                 size="sm"
                                 className="h-8 w-8 p-0"
@@ -433,6 +446,7 @@ const RichTextEditor = ({
                     </Dialog>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().undo().run()}
@@ -442,6 +456,7 @@ const RichTextEditor = ({
                     </Button>
 
                     <Button
+                        type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => editor.chain().focus().redo().run()}
