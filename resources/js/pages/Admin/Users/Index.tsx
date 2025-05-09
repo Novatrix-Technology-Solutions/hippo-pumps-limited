@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -138,7 +138,10 @@ export default function UsersIndex({ users, flash }: Props) {
     }
 
     return (
-        <AdminLayout>
+        <AuthLayout 
+            title="Users" 
+            description="Manage system users and their permissions"
+        >
             <Head title="Users" />
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -307,6 +310,6 @@ export default function UsersIndex({ users, flash }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </AdminLayout>
+        </AuthLayout>
     );
 } 

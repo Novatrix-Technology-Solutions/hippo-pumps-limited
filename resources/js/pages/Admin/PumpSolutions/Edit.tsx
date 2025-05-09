@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import Form from './Form';
 
 interface PumpSolution {
@@ -21,12 +21,15 @@ interface Props {
 
 export default function Edit({ pumpSolution }: Props) {
     return (
-        <AdminLayout title={`Edit Product: ${pumpSolution.title}`}>
+        <AuthLayout 
+            title={`Edit Product: ${pumpSolution.title}`}
+            description="Update product information and details"
+        >
             <Head title={`Edit Product: ${pumpSolution.title}`} />
             <div className="container mx-auto py-10">
                 <h1 className="text-3xl font-bold mb-6">Edit Product</h1>
                 <Form pumpSolution={pumpSolution} isEdit={true} />
             </div>
-        </AdminLayout>
+        </AuthLayout>
     );
 }

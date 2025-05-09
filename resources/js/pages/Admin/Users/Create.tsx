@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,7 +19,10 @@ export default function Create() {
     }
 
     return (
-        <AdminLayout>
+        <AuthLayout 
+            title="Create User" 
+            description="Create a new system user"
+        >
             <Head title="Create User" />
             <div className="container mx-auto py-6">
                 <Card>
@@ -32,14 +35,12 @@ export default function Create() {
                                 <Label htmlFor="name">Name</Label>
                                 <Input
                                     id="name"
-                                    type="text"
                                     value={data.name}
-                                    onChange={e => setData('name', e.target.value)}
+                                    onChange={(e) => setData('name', e.target.value)}
                                     className="mt-1"
-                                    required
                                 />
                                 {errors.name && (
-                                    <p className="text-sm text-red-600 mt-1">{errors.name}</p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                                 )}
                             </div>
 
@@ -49,12 +50,11 @@ export default function Create() {
                                     id="email"
                                     type="email"
                                     value={data.email}
-                                    onChange={e => setData('email', e.target.value)}
+                                    onChange={(e) => setData('email', e.target.value)}
                                     className="mt-1"
-                                    required
                                 />
                                 {errors.email && (
-                                    <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
                                 )}
                             </div>
 
@@ -64,12 +64,11 @@ export default function Create() {
                                     id="password"
                                     type="password"
                                     value={data.password}
-                                    onChange={e => setData('password', e.target.value)}
+                                    onChange={(e) => setData('password', e.target.value)}
                                     className="mt-1"
-                                    required
                                 />
                                 {errors.password && (
-                                    <p className="text-sm text-red-600 mt-1">{errors.password}</p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
                                 )}
                             </div>
 
@@ -79,19 +78,18 @@ export default function Create() {
                                     id="password_confirmation"
                                     type="password"
                                     value={data.password_confirmation}
-                                    onChange={e => setData('password_confirmation', e.target.value)}
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
                                     className="mt-1"
-                                    required
                                 />
                             </div>
 
                             <Button type="submit" disabled={processing}>
-                                Create User
+                                {processing ? 'Creating...' : 'Create User'}
                             </Button>
                         </form>
                     </CardContent>
                 </Card>
             </div>
-        </AdminLayout>
+        </AuthLayout>
     );
 } 

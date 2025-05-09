@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Plus, Pencil, ExternalLink, Trash2 } from 'lucide-react';
@@ -93,7 +93,10 @@ export default function Index({ pumpSolutions }: Props) {
     };
 
     return (
-        <AdminLayout title="Products">
+        <AuthLayout 
+            title="Products" 
+            description="Manage your pump solutions and products"
+        >
             <Head title="Products" />
             <div className="container mx-auto py-10">
                 <div className="flex justify-between items-center mb-6">
@@ -253,6 +256,6 @@ export default function Index({ pumpSolutions }: Props) {
                     </div>
                 )}
             </div>
-        </AdminLayout>
+        </AuthLayout>
     );
 } 

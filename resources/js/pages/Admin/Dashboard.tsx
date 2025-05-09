@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,10 @@ interface Props {
 
 export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCount, usersCount }: Props) {
     return (
-        <AdminLayout>
+        <AuthLayout 
+            title="Dashboard" 
+            description="Welcome to your admin dashboard"
+        >
             <Head title="Dashboard" />
             <AnimatedPage>
                 <motion.div 
@@ -139,6 +142,6 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                     </div>
                 </motion.div>
             </AnimatedPage>
-        </AdminLayout>
+        </AuthLayout>
     );
 } 

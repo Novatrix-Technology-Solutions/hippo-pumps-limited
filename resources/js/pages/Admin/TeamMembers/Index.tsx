@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -103,7 +103,10 @@ export default function TeamMembersIndex({ teamMembers, flash }: Props) {
     }
 
     return (
-        <AdminLayout>
+        <AuthLayout 
+            title="Team Members" 
+            description="Manage your team members and their profiles"
+        >
             <Head title="Team Members" />
             <div className="container mx-auto py-6 space-y-6">
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -260,6 +263,6 @@ export default function TeamMembersIndex({ teamMembers, flash }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </AdminLayout>
+        </AuthLayout>
     );
 } 

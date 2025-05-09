@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import AnimatedPage from '@/components/Animated/AnimatedPage';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +30,10 @@ export default function Edit({ mustVerifyEmail, status }: Props) {
     };
 
     return (
-        <AdminLayout>
+        <AuthLayout 
+            title="Profile" 
+            description="Update your profile information and settings"
+        >
             <Head title="Profile" />
             <AnimatedPage>
                 <motion.div
@@ -195,6 +198,6 @@ export default function Edit({ mustVerifyEmail, status }: Props) {
                     </div>
                 </motion.div>
             </AnimatedPage>
-        </AdminLayout>
+        </AuthLayout>
     );
 }

@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/AdminLayout';
+import AuthLayout from '@/layouts/auth-layout';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
 import {
@@ -82,9 +82,11 @@ export default function NewsIndex({ news, flash }: Props) {
     );
 
     return (
-        <AdminLayout>
+        <AuthLayout 
+            title="News Management" 
+            description="Manage your news articles and blog posts"
+        >
             <Head title="News Management" />
-            
             <div className="container mx-auto py-10">
                 <Card>
                     <CardHeader>
@@ -224,6 +226,6 @@ export default function NewsIndex({ news, flash }: Props) {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </AdminLayout>
+        </AuthLayout>
     );
 }
