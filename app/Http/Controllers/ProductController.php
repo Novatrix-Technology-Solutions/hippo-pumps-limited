@@ -26,9 +26,16 @@ class ProductController extends Controller
 
     public function adminIndex()
     {
-        $products = Product::orderBy('order')->get();
-        return Inertia::render('Admin/PumpSolutions/Index', [
-            'products' => $products
+        $products = Product::orderBy('order')->paginate(10);
+        
+        return Inertia::render('Admin/Products/Index', [
+            'products' => [
+                'data' => $products->items(),
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'per_page' => $products->perPage(),
+                'total' => $products->total(),
+            ]
         ]);
     }
 
