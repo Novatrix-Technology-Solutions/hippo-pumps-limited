@@ -48,26 +48,45 @@ class ProductController extends Controller // Changed class name
     // Admin store - Saves a new product
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
-            'q_max' => 'nullable|string|max:255',
-            'h_max' => 'nullable|string|max:255',
-            'rated_q' => 'nullable|string|max:255',
-            'rated_h' => 'nullable|string|max:255',
-            'motor' => 'nullable|string|max:255',
-            'price_zmw_no_vat' => 'nullable|string|max:255',
-            'vat_rate' => 'nullable|string|max:255',
-            'price_zmw_including_vat' => 'nullable|string|max:255',
-            'is_featured' => 'boolean',
-            'order' => 'integer',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
+                'q_max' => 'nullable|string|max:255',
+                'h_max' => 'nullable|string|max:255',
+                'rated_q' => 'nullable|string|max:255',
+                'rated_h' => 'nullable|string|max:255',
+                'motor' => 'nullable|string|max:255',
+                'price_zmw_no_vat' => 'nullable|string|max:255',
+                'vat_rate' => 'nullable|string|max:255',
+                'price_zmw_including_vat' => 'nullable|string|max:255',
+                'is_featured' => 'boolean',
+                'order' => 'integer',
+            ], [
+                'title.required' => 'The product title is required.',
+                'category.required' => 'Please select a category.',
+                'category.in' => 'Please select a valid category.',
+            ]);
 
-        $product = new Product($validated);
-        $product->slug = Str::slug($validated['title']);
-        $product->save();
+            $product = new Product($validated);
+            $product->slug = Str::slug($validated['title']);
+            
+            if (!$product->save()) {
+                throw new \Exception('Failed to save the product.');
+            }
 
-        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
+            return redirect()
+                ->route('admin.products.index')
+                ->with('success', 'Product created successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()
+                ->withErrors($e->validator)
+                ->withInput();
+        } catch (\Exception $e) {
+            return back()
+                ->with('error', 'An error occurred while creating the product: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     // Admin edit - Shows the form to edit an existing product
@@ -81,26 +100,45 @@ class ProductController extends Controller // Changed class name
     // Admin update - Updates an existing product
     public function update(Request $request, Product $product) // Changed type hint and variable name
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
-            'q_max' => 'nullable|string|max:255',
-            'h_max' => 'nullable|string|max:255',
-            'rated_q' => 'nullable|string|max:255',
-            'rated_h' => 'nullable|string|max:255',
-            'motor' => 'nullable|string|max:255',
-            'price_zmw_no_vat' => 'nullable|string|max:255',
-            'vat_rate' => 'nullable|string|max:255',
-            'price_zmw_including_vat' => 'nullable|string|max:255',
-            'is_featured' => 'boolean',
-            'order' => 'integer',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
+                'q_max' => 'nullable|string|max:255',
+                'h_max' => 'nullable|string|max:255',
+                'rated_q' => 'nullable|string|max:255',
+                'rated_h' => 'nullable|string|max:255',
+                'motor' => 'nullable|string|max:255',
+                'price_zmw_no_vat' => 'nullable|string|max:255',
+                'vat_rate' => 'nullable|string|max:255',
+                'price_zmw_including_vat' => 'nullable|string|max:255',
+                'is_featured' => 'boolean',
+                'order' => 'integer',
+            ], [
+                'title.required' => 'The product title is required.',
+                'category.required' => 'Please select a category.',
+                'category.in' => 'Please select a valid category.',
+            ]);
 
-        $product->fill($validated);
-        $product->slug = Str::slug($validated['title']);
-        $product->save();
+            $product->fill($validated);
+            $product->slug = Str::slug($validated['title']);
+            
+            if (!$product->save()) {
+                throw new \Exception('Failed to update the product.');
+            }
 
-        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
+            return redirect()
+                ->route('admin.products.index')
+                ->with('success', 'Product updated successfully.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return back()
+                ->withErrors($e->validator)
+                ->withInput();
+        } catch (\Exception $e) {
+            return back()
+                ->with('error', 'An error occurred while updating the product: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     // Admin destroy - Deletes a product

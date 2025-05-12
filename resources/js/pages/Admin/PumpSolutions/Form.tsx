@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import RichTextEditor from '@/components/RichTextEditor';
 import { X, Plus } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 import {
     Card,
     CardContent,
@@ -39,7 +40,8 @@ interface Props {
 }
 
 export default function Form({ pumpSolution, isEdit = false }: Props) {
-    const { data, setData, post, put, errors, processing } = useForm({
+    const { toast } = useToast();
+    const { data, setData, post, put, errors, processing, reset } = useForm({
         category: pumpSolution?.category || '',
         title: pumpSolution?.title || '',
         q_max: pumpSolution?.q_max || '',
@@ -56,10 +58,40 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
         if (isEdit && pumpSolution) {
-            put(route('admin.pump-solutions.update', pumpSolution.slug));
+            put(route('admin.pump-solutions.update', pumpSolution.slug), {
+                onSuccess: () => {
+                    toast({
+                        title: "Success",
+                        description: "Product updated successfully.",
+                    });
+                },
+                onError: (errors) => {
+                    toast({
+                        title: "Error",
+                        description: "Failed to update product. Please check the form for errors.",
+                        variant: "destructive",
+                    });
+                },
+            });
         } else {
-            post(route('admin.pump-solutions.store'));
+            post(route('admin.pump-solutions.store'), {
+                onSuccess: () => {
+                    toast({
+                        title: "Success",
+                        description: "Product created successfully.",
+                    });
+                    reset();
+                },
+                onError: (errors) => {
+                    toast({
+                        title: "Error",
+                        description: "Failed to create product. Please check the form for errors.",
+                        variant: "destructive",
+                    });
+                },
+            });
         }
     };
 
