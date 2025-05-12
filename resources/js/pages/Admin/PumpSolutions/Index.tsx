@@ -54,7 +54,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Products',
-        href: '/admin/pump-solutions',
+        href: '/admin/products',
     },
 ];
 
@@ -76,7 +76,7 @@ export default function Index({ pumpSolutions }: Props) {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        window.location.href = `${route('admin.pump-solutions.index')}?search=${searchTerm}`;
+        window.location.href = `${route('admin.products.index')}?search=${searchTerm}`;
     };
 
     const confirmDelete = (id: number) => {
@@ -87,7 +87,7 @@ export default function Index({ pumpSolutions }: Props) {
         if (deleteId) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = route('admin.pump-solutions.destroy', deleteId);
+            form.action = route('admin.products.destroy', deleteId);
             
             const methodInput = document.createElement('input');
             methodInput.name = '_method';
@@ -116,7 +116,7 @@ export default function Index({ pumpSolutions }: Props) {
                 <h1 className="text-3xl font-bold mb-6">Products</h1>
                 <div className="flex justify-between items-center mb-6">
                     <Button asChild>
-                        <Link href={route('admin.pump-solutions.create')}>
+                        <Link href={route('admin.products.create')}>
                             <Plus className="w-4 h-4 mr-2" />
                             Add Product
                         </Link>
@@ -192,7 +192,7 @@ export default function Index({ pumpSolutions }: Props) {
                                                 className="h-8 w-8"
                                             >
                                                 <Link
-                                                    href={route('admin.pump-solutions.edit', solution.slug)}
+                                                    href={route('admin.products.edit', solution.slug)}
                                                     className="text-gray-500 hover:text-gray-700"
                                                 >
                                                     <Pencil className="h-4 w-4" />
@@ -205,7 +205,7 @@ export default function Index({ pumpSolutions }: Props) {
                                                 className="h-8 w-8"
                                             >
                                                 <Link
-                                                    href={route('pump-solutions.show', solution.slug)}
+                                                    href={route('products.show', solution.slug)}
                                                     className="text-gray-500 hover:text-gray-700"
                                                     target="_blank"
                                                 >

@@ -71,7 +71,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                         Total products
                                     </p>
                                     <Button asChild className="mt-4">
-                                        <Link href={route('admin.pump-solutions.index')}>
+                                        <Link href={route('admin.products.index')}>
                                             Manage Products
                                         </Link>
                                     </Button>

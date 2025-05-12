@@ -23,7 +23,7 @@ export default function Header() {
                 </Link>
                 <span className="mx-5 text-[#004080]">|</span>
                 <Link
-                    href={route('pump-solutions.index')}
+                    href={route('products.index')}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     Products
@@ -73,7 +73,7 @@ export default function Header() {
                                         The Company
                                     </Link>
                                     <Link
-                                        href={route('pump-solutions.index')}
+                                        href={route('products.index')}
                                         className="text-[#004080] hover:text-[#008000] text-lg font-medium"
                                     >
                                         Products

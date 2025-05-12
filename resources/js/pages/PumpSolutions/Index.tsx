@@ -49,7 +49,7 @@ export default function Index({ pumpSolutions, filters }: Props) {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        window.location.href = `${route('pump-solutions.index')}?search=${searchTerm}`;
+        window.location.href = `${route('products.index')}?search=${searchTerm}`;
     };
 
     return (
@@ -120,7 +120,7 @@ export default function Index({ pumpSolutions, filters }: Props) {
                                         {renderHTML(stripHtml(solution.description).substring(0, 150) + '...')}
                                     </div>
                                     <Link
-                                        href={route('pump-solutions.show', solution.slug)}
+                                        href={route('products.show', solution.slug)}
                                         className="text-[#008000] hover:text-[#006000] font-medium inline-flex items-center"
                                     >
                                         View details
@@ -139,7 +139,7 @@ export default function Index({ pumpSolutions, filters }: Props) {
                         {Array.from({ length: pumpSolutions.last_page }, (_, i) => i + 1).map((page) => (
                             <Link
                                 key={page}
-                                href={route('pump-solutions.index', { page })}
+                                href={route('products.index', { page })}
                                 className={`px-4 py-2 rounded ${
                                     page === pumpSolutions.current_page
                                         ? 'bg-[#004080] text-white'

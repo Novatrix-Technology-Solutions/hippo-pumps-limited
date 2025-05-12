@@ -33,7 +33,7 @@ export default function Show({ pumpSolution }: Props) {
             <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div className="mb-8">
                     <Link 
-                        href={route('pump-solutions.index')} 
+                        href={route('products.index')} 
                         className="inline-flex items-center text-[#004080] hover:text-[#006000]"
                     >
                         <ChevronLeft className="w-4 h-4 mr-1" />

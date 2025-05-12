@@ -89,7 +89,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                                 <NavLink href={route('news.index')} icon={Newspaper} routeName="news.index">
                                                     News
                                                 </NavLink>
-                                                <NavLink href={route('admin.pump-solutions.index')} icon={Droplet} routeName="admin.pump-solutions.index">
+                                                <NavLink href={route('admin.products.index')} icon={Droplet} routeName="admin.products.index">
                                                     Products
                                                 </NavLink>
                                                 <NavLink href={route('admin.team-members.index')} icon={AppWindow} routeName="admin.team-members.index">
@@ -157,7 +157,7 @@ const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
                                         <NavLink href={route('news.index')} icon={Newspaper} routeName="news.index">
                                             News
                                         </NavLink>
-                                        <NavLink href={route('admin.pump-solutions.index')} icon={Droplet} routeName="admin.pump-solutions.index">
+                                        <NavLink href={route('admin.products.index')} icon={Droplet} routeName="admin.products.index">
                                             Products
                                         </NavLink>
                                         <NavLink href={route('admin.team-members.index')} icon={AppWindow} routeName="admin.team-members.index">

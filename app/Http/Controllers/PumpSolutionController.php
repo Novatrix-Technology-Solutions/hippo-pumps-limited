@@ -129,7 +129,7 @@ class PumpSolutionController extends Controller
 
         try {
             $pumpSolution = $this->pumpSolutionService->createPumpSolution($validator->validated());
-            return redirect()->route('admin.pump-solutions.index')
+            return redirect()->route('admin.products.index')
                 ->with('success', 'Pump solution created successfully.');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to create pump solution: ' . $e->getMessage());
@@ -177,7 +177,7 @@ class PumpSolutionController extends Controller
 
         try {
             $this->pumpSolutionService->updatePumpSolution($pumpSolution, $validator->validated());
-            return redirect()->route('admin.pump-solutions.index')
+            return redirect()->route('admin.products.index')
                 ->with('success', 'Pump solution updated successfully.');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to update pump solution: ' . $e->getMessage());
@@ -188,7 +188,7 @@ class PumpSolutionController extends Controller
     {
         try {
             $this->pumpSolutionService->deletePumpSolution($pumpSolution);
-            return redirect()->route('admin.pump-solutions.index')
+            return redirect()->route('admin.products.index')
                 ->with('success', 'Pump solution deleted successfully.');
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to delete pump solution: ' . $e->getMessage());
