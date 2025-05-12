@@ -49,7 +49,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                         Total news articles
                                     </p>
                                     <Button asChild className="mt-4">
-                                        <Link href={route('news.index')}>
+                                        <Link href={route('admin.news.index')}>
                                             Manage News
                                         </Link>
                                     </Button>
