@@ -32,23 +32,57 @@ export default function ProductCard({ product }: Props) {
   return (
     <>
       <div 
-        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
         onClick={() => setIsOpen(true)}
       >
         <div className="p-6">
-          <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
-          <div className="space-y-2 text-gray-600">
-            <p><span className="font-medium">Category:</span> {product.category}</p>
-            {product.q_max && <p><span className="font-medium">Q Max:</span> {product.q_max}</p>}
-            {product.h_max && <p><span className="font-medium">H Max:</span> {product.h_max}</p>}
-            {product.rated_q && <p><span className="font-medium">Rated Q:</span> {product.rated_q}</p>}
-            {product.rated_h && <p><span className="font-medium">Rated H:</span> {product.rated_h}</p>}
-            {product.motor && <p><span className="font-medium">Motor:</span> {product.motor}</p>}
-            {product.price_zmw_including_vat && (
-              <p className="text-lg font-bold text-primary-600">
-                {formatPrice(product.price_zmw_including_vat)}
-              </p>
+          <div className="mb-4">
+            <span className="inline-block px-3 py-1 text-sm font-semibold text-primary-600 bg-primary-50 rounded-full">
+              {product.category}
+            </span>
+          </div>
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">{product.title}</h2>
+          <div className="space-y-3 text-gray-600">
+            {product.q_max && (
+              <div className="flex items-center">
+                <span className="font-medium w-24">Q Max:</span>
+                <span>{product.q_max}</span>
+              </div>
             )}
+            {product.h_max && (
+              <div className="flex items-center">
+                <span className="font-medium w-24">H Max:</span>
+                <span>{product.h_max}</span>
+              </div>
+            )}
+            {product.rated_q && (
+              <div className="flex items-center">
+                <span className="font-medium w-24">Rated Q:</span>
+                <span>{product.rated_q}</span>
+              </div>
+            )}
+            {product.rated_h && (
+              <div className="flex items-center">
+                <span className="font-medium w-24">Rated H:</span>
+                <span>{product.rated_h}</span>
+              </div>
+            )}
+            {product.motor && (
+              <div className="flex items-center">
+                <span className="font-medium w-24">Motor:</span>
+                <span>{product.motor}</span>
+              </div>
+            )}
+            {product.price_zmw_including_vat && (
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <p className="text-xl font-bold text-primary-600">
+                  {formatPrice(product.price_zmw_including_vat)}
+                </p>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 text-primary-600 font-medium">
+            Click to view details →
           </div>
         </div>
       </div>
@@ -79,12 +113,24 @@ export default function ProductCard({ product }: Props) {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-2xl font-bold leading-6 text-gray-900 mb-4"
-                  >
-                    {product.title}
-                  </Dialog.Title>
+                  <div className="flex justify-between items-start mb-6">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-2xl font-bold leading-6 text-gray-900"
+                    >
+                      {product.title}
+                    </Dialog.Title>
+                    <button
+                      type="button"
+                      className="text-gray-400 hover:text-gray-500"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span className="sr-only">Close</span>
+                      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
 
                   <div className="mt-2">
                     <div className="grid grid-cols-2 gap-4 mb-6">
@@ -132,17 +178,10 @@ export default function ProductCard({ product }: Props) {
                       )}
                     </div>
 
-                    <div className="flex justify-end gap-4 mt-6">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        Close
-                      </button>
+                    <div className="mt-8 flex justify-end gap-4">
                       <Link
                         href={route('find-us')}
-                        className="inline-flex justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-primary-600 px-6 py-3 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 transition-colors"
                       >
                         Contact Us
                       </Link>
