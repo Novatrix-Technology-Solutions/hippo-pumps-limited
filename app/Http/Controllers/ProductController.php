@@ -2,150 +2,122 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product; // Changed from PumpSolution
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
-class ProductController extends Controller // Changed class name
+class ProductController extends Controller
 {
-    // Public index - Renders the frontend product listing page
     public function index()
     {
-        $products = Product::orderBy('order')->get(); // Changed variable and model
-        $categories = $products->pluck('category')->unique()->values(); // Changed variable
-
-        // Consider if this public view path needs changing too, e.g., 'Products/Index'
-        return Inertia::render('Public/Products/Index', [ // KEEPING OLD VIEW PATH FOR NOW - Needs frontend refactor later
-            'products' => $products, // Changed variable name
-            'categories' => $categories,
+        $products = Product::orderBy('order')->get();
+        return Inertia::render('Products/Index', [
+            'products' => $products
         ]);
     }
 
-    // Public show - Renders the frontend single product page
-    public function show(Product $product) // Changed type hint and variable name
+    public function show(Product $product)
     {
-         // Consider if this public view path needs changing too, e.g., 'Products/Show'
-        return Inertia::render('Public/Products/Show', [ // KEEPING OLD VIEW PATH FOR NOW - Needs frontend refactor later
-            'product' => $product, // Changed variable name
+        return Inertia::render('Products/Show', [
+            'product' => $product
         ]);
     }
 
-    // Admin index - Renders the admin product listing page
-    public function adminIndex() // New method for admin listing
+    public function adminIndex()
     {
-        return Inertia::render('Admin/Products/Index', [ // Changed view path
-            'products' => Product::orderBy('order')->get(), // Changed model
+        $products = Product::orderBy('order')->get();
+        return Inertia::render('Admin/PumpSolutions/Index', [
+            'products' => $products
         ]);
     }
 
-    // Admin create - Shows the form to create a new product
     public function create()
     {
-        return Inertia::render('Admin/Products/Create'); // Changed view path
+        return Inertia::render('Admin/PumpSolutions/Form');
     }
 
-    // Admin store - Saves a new product
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
-                'q_max' => 'nullable|string|max:255',
-                'h_max' => 'nullable|string|max:255',
-                'rated_q' => 'nullable|string|max:255',
-                'rated_h' => 'nullable|string|max:255',
-                'motor' => 'nullable|string|max:255',
-                'price_zmw_no_vat' => 'nullable|string|max:255',
-                'vat_rate' => 'nullable|string|max:255',
-                'price_zmw_including_vat' => 'nullable|string|max:255',
-                'is_featured' => 'boolean',
-                'order' => 'integer',
-            ], [
-                'title.required' => 'The product title is required.',
-                'category.required' => 'Please select a category.',
-                'category.in' => 'Please select a valid category.',
-            ]);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'q_max' => 'nullable|string|max:255',
+            'h_max' => 'nullable|string|max:255',
+            'rated_q' => 'nullable|string|max:255',
+            'rated_h' => 'nullable|string|max:255',
+            'motor' => 'nullable|string|max:255',
+            'price_zmw_no_vat' => 'nullable|string|max:255',
+            'vat_rate' => 'nullable|string|max:255',
+            'price_zmw_including_vat' => 'nullable|string|max:255',
+            'is_featured' => 'boolean',
+            'order' => 'integer',
+        ]);
 
-            $product = new Product($validated);
-            $product->slug = Str::slug($validated['title']);
+        try {
+            $validated['slug'] = Str::slug($validated['title']);
             
-            if (!$product->save()) {
-                throw new \Exception('Failed to save the product.');
+            $product = Product::create($validated);
+
+            if (!$product) {
+                throw new \Exception('Failed to create product');
             }
 
-            return redirect()
-                ->route('admin.products.index')
+            return redirect()->route('admin.products.index')
                 ->with('success', 'Product created successfully.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return back()
-                ->withErrors($e->validator)
-                ->withInput();
         } catch (\Exception $e) {
-            return back()
-                ->with('error', 'An error occurred while creating the product: ' . $e->getMessage())
-                ->withInput();
+            return back()->withErrors(['error' => 'Failed to create product: ' . $e->getMessage()]);
         }
     }
 
-    // Admin edit - Shows the form to edit an existing product
-    public function edit(Product $product) // Changed type hint and variable name
+    public function edit(Product $product)
     {
-        return Inertia::render('Admin/Products/Edit', [ // Changed view path
-            'product' => $product, // Changed variable name
+        return Inertia::render('Admin/PumpSolutions/Form', [
+            'product' => $product
         ]);
     }
 
-    // Admin update - Updates an existing product
-    public function update(Request $request, Product $product) // Changed type hint and variable name
+    public function update(Request $request, Product $product)
     {
-        try {
-            $validated = $request->validate([
-                'title' => 'required|string|max:255',
-                'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
-                'q_max' => 'nullable|string|max:255',
-                'h_max' => 'nullable|string|max:255',
-                'rated_q' => 'nullable|string|max:255',
-                'rated_h' => 'nullable|string|max:255',
-                'motor' => 'nullable|string|max:255',
-                'price_zmw_no_vat' => 'nullable|string|max:255',
-                'vat_rate' => 'nullable|string|max:255',
-                'price_zmw_including_vat' => 'nullable|string|max:255',
-                'is_featured' => 'boolean',
-                'order' => 'integer',
-            ], [
-                'title.required' => 'The product title is required.',
-                'category.required' => 'Please select a category.',
-                'category.in' => 'Please select a valid category.',
-            ]);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'q_max' => 'nullable|string|max:255',
+            'h_max' => 'nullable|string|max:255',
+            'rated_q' => 'nullable|string|max:255',
+            'rated_h' => 'nullable|string|max:255',
+            'motor' => 'nullable|string|max:255',
+            'price_zmw_no_vat' => 'nullable|string|max:255',
+            'vat_rate' => 'nullable|string|max:255',
+            'price_zmw_including_vat' => 'nullable|string|max:255',
+            'is_featured' => 'boolean',
+            'order' => 'integer',
+        ]);
 
-            $product->fill($validated);
-            $product->slug = Str::slug($validated['title']);
+        try {
+            $validated['slug'] = Str::slug($validated['title']);
             
-            if (!$product->save()) {
-                throw new \Exception('Failed to update the product.');
+            $updated = $product->update($validated);
+
+            if (!$updated) {
+                throw new \Exception('Failed to update product');
             }
 
-            return redirect()
-                ->route('admin.products.index')
+            return redirect()->route('admin.products.index')
                 ->with('success', 'Product updated successfully.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return back()
-                ->withErrors($e->validator)
-                ->withInput();
         } catch (\Exception $e) {
-            return back()
-                ->with('error', 'An error occurred while updating the product: ' . $e->getMessage())
-                ->withInput();
+            return back()->withErrors(['error' => 'Failed to update product: ' . $e->getMessage()]);
         }
     }
 
-    // Admin destroy - Deletes a product
-    public function destroy(Product $product) // Changed type hint and variable name
+    public function destroy(Product $product)
     {
-        $product->delete(); // Changed variable
-         // Changed redirect route name (assuming admin resource route)
-        return redirect()->route('admin.products.index');
+        try {
+            $product->delete();
+            return redirect()->route('admin.products.index')
+                ->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Failed to delete product: ' . $e->getMessage()]);
+        }
     }
 }

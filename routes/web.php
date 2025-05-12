@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\PumpSolutionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -33,45 +33,33 @@ Route::get('/the-company', function () {
 Route::get('/news', [NewsController::class, 'index'])->name('public.news.index');
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('public.news.show');
 
-// Public Pump Solutions Routes
-Route::get('/products', [PumpSolutionController::class, 'index'])->name('pump-solutions.index');
-Route::get('/products/{pumpSolution:slug}', [PumpSolutionController::class, 'show'])->name('pump-solutions.show');
+// Public Products Routes
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         $newsCount = \App\Models\News::count();
-        $pumpSolutionsCount = \App\Models\PumpSolution::count();
+        $productsCount = \App\Models\Product::count();
         $teamMembersCount = \App\Models\TeamMember::count();
         $usersCount = \App\Models\User::count();
         
         return Inertia::render('Admin/Dashboard', [
             'newsCount' => $newsCount,
-            'pumpSolutionsCount' => $pumpSolutionsCount,
+            'productsCount' => $productsCount,
             'teamMembersCount' => $teamMembersCount,
             'usersCount' => $usersCount,
         ]);
     })->name('dashboard');
 
-    // Admin News Routes
-    Route::prefix('admin/news')->name('news.')->group(function () {
-        Route::get('/', [NewsController::class, 'adminIndex'])->name('index');
-        Route::get('/create', [NewsController::class, 'create'])->name('create');
-        Route::post('/', [NewsController::class, 'store'])->name('store');
-        Route::get('/{news}/edit', [NewsController::class, 'edit'])->name('edit');
-        Route::put('/{news}', [NewsController::class, 'update'])->name('update');
-        Route::delete('/{news}', [NewsController::class, 'destroy'])->name('destroy');
-    });
-
-    // Admin Pump Solutions Routes
-    Route::prefix('admin/products')->name('admin.pump-solutions.')->group(function () {
-        Route::get('/', [PumpSolutionController::class, 'adminIndex'])->name('index');
-        Route::get('/create', [PumpSolutionController::class, 'create'])->name('create');
-        Route::post('/', [PumpSolutionController::class, 'store'])->name('store');
-        Route::get('/{pumpSolution:slug}/edit', [PumpSolutionController::class, 'edit'])->name('edit');
-        Route::put('/{pumpSolution:slug}', [PumpSolutionController::class, 'update'])->name('update');
-        Route::delete('/{pumpSolution:slug}', [PumpSolutionController::class, 'destroy'])->name('destroy');
-    });
+    // Admin Products Routes
+    Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
+    Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
+    Route::post('/admin/products', [ProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/admin/products/{product}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/admin/products/{product}', [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/admin/products/{product}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 
     // Admin Team Members Routes
     Route::prefix('admin/team-members')->name('team-members.')->group(function () {
@@ -110,7 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
-    // Remove duplicate pump-solutions routes
+    // Remove duplicate products routes
 });
 
 // Test route

@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { Link } from '@inertiajs/react';
+import { Product } from '@/types/product';
 
 interface Specifications {
   qMax: number;
@@ -13,13 +14,10 @@ interface Specifications {
 }
 
 interface Props {
-  title: string;
-  description: string;
-  category: string;
-  specifications: Specifications;
+  product: Product;
 }
 
-export default function ProductCard({ title, description, category, specifications }: Props) {
+export default function ProductCard({ product }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const formatPrice = (price: number) => {
@@ -33,26 +31,29 @@ export default function ProductCard({ title, description, category, specificatio
 
   return (
     <>
-      <div 
-        className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-        onClick={() => setIsOpen(true)}
-      >
-        <div className="p-6 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold text-gray-800">{title}</h3>
-            <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-              {category}
-            </span>
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
+          <div className="space-y-2 text-gray-600">
+            <p><span className="font-medium">Category:</span> {product.category}</p>
+            {product.q_max && <p><span className="font-medium">Q Max:</span> {product.q_max}</p>}
+            {product.h_max && <p><span className="font-medium">H Max:</span> {product.h_max}</p>}
+            {product.rated_q && <p><span className="font-medium">Rated Q:</span> {product.rated_q}</p>}
+            {product.rated_h && <p><span className="font-medium">Rated H:</span> {product.rated_h}</p>}
+            {product.motor && <p><span className="font-medium">Motor:</span> {product.motor}</p>}
+            {product.price_zmw_including_vat && (
+              <p className="text-lg font-bold text-primary-600">
+                ZMW {parseFloat(product.price_zmw_including_vat).toLocaleString()}
+              </p>
+            )}
           </div>
-          <p className="text-gray-600 text-sm line-clamp-2">{description}</p>
-          <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
-            <Spec label="Q.Max (m³/hr)" value={specifications.qMax} />
-            <Spec label="H.Max (m)" value={specifications.hMax} />
-            <Spec label="Motor (HP)" value={specifications.motor} />
-            <Spec
-              label="Price"
-              value={specifications.price ? formatPrice(specifications.price) : 'N/A'}
-            />
+          <div className="mt-4">
+            <Link
+              href={route('products.show', product.slug)}
+              className="inline-block bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 transition-colors"
+            >
+              View Details
+            </Link>
           </div>
         </div>
       </div>
@@ -87,22 +88,24 @@ export default function ProductCard({ title, description, category, specificatio
                     as="h3"
                     className="text-2xl font-bold leading-6 text-gray-900 mb-4"
                   >
-                    {title}
+                    {product.title}
                   </Dialog.Title>
 
                   <div className="mt-2">
-                    <p className="text-gray-600 mb-6">{description}</p>
+                    <p className="text-gray-600 mb-6">{product.description}</p>
                     
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                      <Spec label="Q.Max (m³/hr)" value={specifications.qMax} />
-                      <Spec label="H.Max (m)" value={specifications.hMax} />
-                      <Spec label="Rated Q (m³/hr)" value={specifications.ratedQ} />
-                      <Spec label="Rated H (m)" value={specifications.ratedH} />
-                      <Spec label="Motor (HP)" value={specifications.motor} />
-                      <Spec
-                        label="Price"
-                        value={specifications.price ? formatPrice(specifications.price) : 'N/A'}
-                      />
+                      {product.q_max && <Spec label="Q.Max (m³/hr)" value={product.q_max} />}
+                      {product.h_max && <Spec label="H.Max (m)" value={product.h_max} />}
+                      {product.rated_q && <Spec label="Rated Q (m³/hr)" value={product.rated_q} />}
+                      {product.rated_h && <Spec label="Rated H (m)" value={product.rated_h} />}
+                      {product.motor && <Spec label="Motor (HP)" value={product.motor} />}
+                      {product.price_zmw_including_vat && (
+                        <Spec
+                          label="Price"
+                          value={formatPrice(parseFloat(product.price_zmw_including_vat))}
+                        />
+                      )}
                     </div>
 
                     <div className="mt-6 flex justify-end space-x-4">
