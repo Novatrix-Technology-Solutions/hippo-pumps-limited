@@ -78,7 +78,7 @@ export default function NewsIndex({ news, flash }: Props) {
 
     const handleDelete = () => {
         if (deleteId) {
-            destroy(route('news.destroy', deleteId), {
+            destroy(route('admin.news.destroy', deleteId), {
                 onSuccess: () => {
                     toast.success('News article deleted successfully');
                     setDeleteId(null);
@@ -113,7 +113,7 @@ export default function NewsIndex({ news, flash }: Props) {
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-3xl font-bold">News</h1>
                     <Button asChild>
-                        <Link href={route('news.create')}>
+                        <Link href={route('admin.news.create')}>
                             Create News
                         </Link>
                     </Button>
@@ -136,7 +136,7 @@ export default function NewsIndex({ news, flash }: Props) {
                                 </p>
                                 <div className="mt-4">
                                     <Link
-                                        href={route('news.edit', item.id)}
+                                        href={route('admin.news.edit', item.id)}
                                         className="text-indigo-600 hover:text-indigo-900"
                                     >
                                         Edit
