@@ -77,7 +77,7 @@ class NewsController extends Controller
 
         $news->save();
 
-        return redirect()->route('news.index')
+        return redirect()->route('admin.news.index')
             ->with('success', 'News created successfully.');
     }
 
@@ -117,7 +117,7 @@ class NewsController extends Controller
 
         $news->save();
         
-        return redirect()->route('news.index')
+        return redirect()->route('admin.news.index')
             ->with('success', 'News updated successfully.');
     }
 
@@ -125,7 +125,7 @@ class NewsController extends Controller
     public function destroy(News $news)
     {
         $news->delete();
-        return redirect()->route('news.index')
+        return redirect()->route('admin.news.index')
             ->with('success', 'News deleted successfully.');
     }
     

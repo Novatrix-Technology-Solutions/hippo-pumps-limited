@@ -53,6 +53,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->name('dashboard');
 
+    // Admin News Routes
+    Route::get('/admin/news', [NewsController::class, 'adminIndex'])->name('admin.news.index');
+    Route::get('/admin/news/create', [NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/admin/news', [NewsController::class, 'store'])->name('admin.news.store');
+    Route::get('/admin/news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
+    Route::put('/admin/news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
+    Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+
     // Admin Products Routes
     Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
     Route::get('/admin/products/create', [ProductController::class, 'create'])->name('admin.products.create');
