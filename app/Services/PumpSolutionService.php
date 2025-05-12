@@ -11,13 +11,14 @@ class PumpSolutionService
     public function getFilteredPumpSolutions(array $filters, array $sorting): LengthAwarePaginator
     {
         try {
-            $query = PumpSolution::query();
+            $query = PumpSolution::query()->with('media');
 
             // Apply filters
             if (!empty($filters['search'])) {
                 $query->where(function ($q) use ($filters) {
                     $q->where('title', 'like', '%' . $filters['search'] . '%')
-                        ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+                        ->orWhere('description', 'like', '%' . $filters['search'] . '%')
+                        ->orWhere('category', 'like', '%' . $filters['search'] . '%');
                 });
             }
 
@@ -26,11 +27,11 @@ class PumpSolutionService
             }
 
             // Apply sorting
-            $sortField = $sorting['field'] ?? 'created_at';
-            $sortDirection = $sorting['direction'] ?? 'desc';
+            $sortField = $sorting['field'] ?? 'order';
+            $sortDirection = $sorting['direction'] ?? 'asc';
             $query->orderBy($sortField, $sortDirection);
 
-            return $query->paginate($filters['per_page'] ?? 10);
+            return $query->paginate($filters['per_page'] ?? 9);
         } catch (\Exception $e) {
             Log::error('Error in PumpSolutionService@getFilteredPumpSolutions: ' . $e->getMessage(), [
                 'filters' => $filters,

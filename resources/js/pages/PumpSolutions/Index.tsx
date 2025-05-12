@@ -52,11 +52,6 @@ export default function Index({ pumpSolutions, filters }: Props) {
         window.location.href = `${route('pump-solutions.index')}?search=${searchTerm}`;
     };
 
-    // Pagination links if paginated
-    const paginationLinks = pumpSolutions && Array.isArray((pumpSolutions as any).links)
-        ? (pumpSolutions as any).links
-        : null;
-
     return (
         <>
             <Head title="Products" />
@@ -97,9 +92,9 @@ export default function Index({ pumpSolutions, filters }: Props) {
 
                 {pumpSolutions.data.length === 0 ? (
                     <div className="text-center py-12">
-                        <h3 className="text-lg font-medium text-gray-900">No products found</h3>
+                        <h3 className="text-lg font-medium text-gray-900">No products available</h3>
                         <p className="mt-2 text-sm text-gray-500">
-                            Try adjusting your search or filter to find what you're looking for.
+                            There are no products available at this time. Please check back later.
                         </p>
                     </div>
                 ) : (
@@ -139,59 +134,20 @@ export default function Index({ pumpSolutions, filters }: Props) {
                     </div>
                 )}
 
-                {pumpSolutions.last_page > 1 && (
-                    <div className="mt-12 flex justify-between items-center">
-                        {pumpSolutions.current_page > 1 ? (
+                {pumpSolutions.data.length > 0 && pumpSolutions.last_page > 1 && (
+                    <div className="mt-8 flex justify-center gap-2">
+                        {Array.from({ length: pumpSolutions.last_page }, (_, i) => i + 1).map((page) => (
                             <Link
-                                href={route('pump-solutions.index', {
-                                    page: pumpSolutions.current_page - 1,
-                                    search: filters.search,
-                                })}
-                                className="inline-flex items-center px-4 py-2 text-sm font-medium text-[#004080] bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                            >
-                                <ChevronLeft className="w-4 h-4 mr-1" />
-                                Previous
-                            </Link>
-                        ) : (
-                            <div></div>
-                        )}
-
-                        <div className="text-sm text-gray-700">
-                            Showing page {pumpSolutions.current_page} of {pumpSolutions.last_page}
-                        </div>
-
-                        {pumpSolutions.current_page < pumpSolutions.last_page && (
-                            <Link
-                                href={route('pump-solutions.index', {
-                                    page: pumpSolutions.current_page + 1,
-                                    search: filters.search,
-                                })}
-                                className="inline-flex items-center px-4 py-2 text-sm font-medium text-[#004080] bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-                            >
-                                Next
-                                <ChevronRight className="w-4 h-4 ml-1" />
-                            </Link>
-                        )}
-                    </div>
-                )}
-
-                {/* Pagination Controls */}
-                {paginationLinks && (
-                    <div className="flex justify-center mt-8 gap-2 flex-wrap">
-                        {paginationLinks.map((link: any, idx: number) => (
-                            <Link
-                                key={idx}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 rounded border text-sm ${
-                                    link.active
-                                        ? 'bg-blue-600 text-white border-blue-600'
-                                        : !link.url
-                                        ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                key={page}
+                                href={route('pump-solutions.index', { page })}
+                                className={`px-4 py-2 rounded ${
+                                    page === pumpSolutions.current_page
+                                        ? 'bg-[#004080] text-white'
+                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                                 }`}
-                                dangerouslySetInnerHTML={{ __html: link.label }}
-                                preserveScroll
-                            />
+                            >
+                                {page}
+                            </Link>
                         ))}
                     </div>
                 )}

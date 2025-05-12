@@ -35,12 +35,12 @@ class PumpSolutionController extends Controller
         $filters = [
             'search' => $request->input('search'),
             'is_featured' => $request->boolean('is_featured'),
-            'per_page' => $request->input('per_page', 10),
+            'per_page' => $request->input('per_page', 9),
         ];
 
         $sorting = [
-            'field' => $request->input('sort_field', 'created_at'),
-            'direction' => $request->input('sort_direction', 'desc'),
+            'field' => $request->input('sort_field', 'order'),
+            'direction' => $request->input('sort_direction', 'asc'),
         ];
 
         try {
@@ -82,7 +82,7 @@ class PumpSolutionController extends Controller
         try {
             $pumpSolutions = Cache::remember('admin_pump_solutions', 300, function () {
                 return PumpSolution::with('media')
-                    ->orderBy('created_at', 'desc')
+                    ->orderBy('order', 'asc')
                     ->paginate(10);
             });
 
@@ -104,11 +104,20 @@ class PumpSolutionController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'category' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'features' => 'nullable|array',
             'specifications' => 'nullable|array',
             'applications' => 'nullable|array',
+            'q_max' => 'nullable|string|max:255',
+            'h_max' => 'nullable|string|max:255',
+            'rated_q' => 'nullable|string|max:255',
+            'rated_h' => 'nullable|string|max:255',
+            'motor' => 'nullable|string|max:255',
+            'price_zmw_no_vat' => 'nullable|string|max:255',
+            'vat_rate' => 'nullable|string|max:255',
+            'price_zmw_including_vat' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'order' => 'integer',
             'image' => 'nullable|image|max:10240', // 10MB max
@@ -143,11 +152,20 @@ class PumpSolutionController extends Controller
     public function update(Request $request, PumpSolution $pumpSolution)
     {
         $validator = Validator::make($request->all(), [
+            'category' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'features' => 'nullable|array',
             'specifications' => 'nullable|array',
             'applications' => 'nullable|array',
+            'q_max' => 'nullable|string|max:255',
+            'h_max' => 'nullable|string|max:255',
+            'rated_q' => 'nullable|string|max:255',
+            'rated_h' => 'nullable|string|max:255',
+            'motor' => 'nullable|string|max:255',
+            'price_zmw_no_vat' => 'nullable|string|max:255',
+            'vat_rate' => 'nullable|string|max:255',
+            'price_zmw_including_vat' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'order' => 'integer',
             'image' => 'nullable|image|max:10240', // 10MB max
@@ -183,12 +201,12 @@ class PumpSolutionController extends Controller
             $filters = [
                 'search' => $request->input('search'),
                 'is_featured' => $request->boolean('is_featured'),
-                'per_page' => $request->input('per_page', 10),
+                'per_page' => $request->input('per_page', 9),
             ];
 
             $sorting = [
-                'field' => $request->input('sort_field', 'created_at'),
-                'direction' => $request->input('sort_direction', 'desc'),
+                'field' => $request->input('sort_field', 'order'),
+                'direction' => $request->input('sort_direction', 'asc'),
             ];
 
             $pumpSolutions = $this->pumpSolutionService->getFilteredPumpSolutions($filters, $sorting);

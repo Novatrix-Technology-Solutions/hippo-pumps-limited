@@ -23,24 +23,10 @@ export default function Header() {
                 </Link>
                 <span className="mx-5 text-[#004080]">|</span>
                 <Link
-                    href={route('meet-the-team')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                >
-                    Meet the Team
-                </Link>
-                <span className="mx-5 text-[#004080]">|</span>
-                <Link
                     href={route('pump-solutions.index')}
                     className="text-[#004080] hover:text-[#008000] text-base"
                 >
                     Products
-                </Link>
-                <span className="mx-5 text-[#004080]">|</span>
-                <Link
-                    href={route('find-us')}
-                    className="text-[#004080] hover:text-[#008000] text-base"
-                >
-                    Find Us
                 </Link>
                 <span className="mx-5 text-[#004080]">|</span>
                 <Link
@@ -49,6 +35,21 @@ export default function Header() {
                 >
                     News
                 </Link>
+                <span className="mx-5 text-[#004080]">|</span>
+                <Link
+                    href={route('meet-the-team')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                >
+                    Meet the Team
+                </Link>
+                <span className="mx-5 text-[#004080]">|</span>
+                <Link
+                    href={route('find-us')}
+                    className="text-[#004080] hover:text-[#008000] text-base"
+                >
+                    Find Us
+                </Link>
+                
             </nav>
 
             {/* Mobile menu button */}
