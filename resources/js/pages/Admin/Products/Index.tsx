@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { Product } from '@/types/product';
 import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Plus, Search, Pencil, ExternalLink, Trash2 } from 'lucide-react';
+import { Plus, Pencil, ExternalLink, Trash2 } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -38,12 +37,23 @@ const breadcrumbs = [
 
 export default function Index({ products }: Props) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        window.location.href = `${route('admin.products.index')}?search=${searchTerm}`;
-    };
+    // Get unique categories from all products (not just current page)
+    const categories = useMemo(() => {
+        return Array.from(new Set(products.data.map(product => product.category)));
+    }, [products]);
+
+    // Filter products based on search term and category
+    const filteredProducts = useMemo(() => {
+        return products.data.filter(product => {
+            const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                  product.category.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesCategory = !selectedCategory || product.category === selectedCategory;
+            return matchesSearch && matchesCategory;
+        });
+    }, [products, searchTerm, selectedCategory]);
 
     const confirmDelete = (id: number) => {
         setDeleteId(id);
@@ -84,20 +94,39 @@ export default function Index({ products }: Props) {
                     </Button>
                 </div>
 
-                <div className="mb-6">
-                    <form onSubmit={handleSearch} className="flex max-w-md gap-2">
-                        <Input
-                            type="text"
-                            placeholder="Search products..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="flex-1"
-                        />
-                        <Button type="submit" variant="default">
-                            <Search className="h-4 w-4 mr-2" />
-                            Search
-                        </Button>
-                    </form>
+                {/* Filters */}
+                <div className="mb-8 space-y-4">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                        {/* Search Input */}
+                        <div className="flex-1">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            />
+                        </div>
+                        {/* Category Filter */}
+                        <div className="w-full sm:w-64">
+                            <select
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            >
+                                <option value="">All Categories</option>
+                                {categories.map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    {/* Results count */}
+                    <p className="text-sm text-gray-500">
+                        Showing {filteredProducts.length} of {products.data.length} products on this page
+                    </p>
                 </div>
 
                 <div className="bg-white rounded-lg shadow">
@@ -113,7 +142,7 @@ export default function Index({ products }: Props) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {products.data.map((product) => (
+                            {filteredProducts.map((product) => (
                                 <TableRow key={product.id}>
                                     <TableCell className="font-medium">{product.title}</TableCell>
                                     <TableCell>{product.category}</TableCell>
