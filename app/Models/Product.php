@@ -19,15 +19,21 @@ class Product extends Model // Renamed class from PumpSolution
     protected $fillable = [
         'title',
         'slug',
-        'image',
         'category',
-        'specifications',
+        'q_max',
+        'h_max',
+        'rated_q',
+        'rated_h',
+        'motor',
+        'price_zmw_no_vat',
+        'vat_rate',
+        'price_zmw_including_vat',
         'is_featured',
         'order',
     ];
 
     protected $casts = [
-        'specifications' => 'array',
         'is_featured' => 'boolean',
+        'order' => 'integer',
     ];
 }

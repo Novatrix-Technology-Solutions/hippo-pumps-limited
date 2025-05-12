@@ -50,25 +50,24 @@ class ProductController extends Controller // Changed class name
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
             'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
-            'specifications' => 'nullable|array',
+            'q_max' => 'nullable|string|max:255',
+            'h_max' => 'nullable|string|max:255',
+            'rated_q' => 'nullable|string|max:255',
+            'rated_h' => 'nullable|string|max:255',
+            'motor' => 'nullable|string|max:255',
+            'price_zmw_no_vat' => 'nullable|string|max:255',
+            'vat_rate' => 'nullable|string|max:255',
+            'price_zmw_including_vat' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'order' => 'integer',
         ]);
 
-        $product = new Product($validated); // Changed model
-        $product->slug = Str::slug($validated['title']); // Changed variable
+        $product = new Product($validated);
+        $product->slug = Str::slug($validated['title']);
+        $product->save();
 
-        if ($request->hasFile('image')) {
-            // Changed storage path
-            $product->image = $request->file('image')->store('products', 'public'); // Changed variable
-        }
-
-        $product->save(); // Changed variable
-
-        // Changed redirect route name (assuming admin resource route)
-        return redirect()->route('admin.products.index');
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
     // Admin edit - Shows the form to edit an existing product
@@ -84,25 +83,24 @@ class ProductController extends Controller // Changed class name
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
             'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
-            'specifications' => 'nullable|array',
+            'q_max' => 'nullable|string|max:255',
+            'h_max' => 'nullable|string|max:255',
+            'rated_q' => 'nullable|string|max:255',
+            'rated_h' => 'nullable|string|max:255',
+            'motor' => 'nullable|string|max:255',
+            'price_zmw_no_vat' => 'nullable|string|max:255',
+            'vat_rate' => 'nullable|string|max:255',
+            'price_zmw_including_vat' => 'nullable|string|max:255',
             'is_featured' => 'boolean',
             'order' => 'integer',
         ]);
 
-        $product->fill($validated); // Changed variable
-        $product->slug = Str::slug($validated['title']); // Changed variable
+        $product->fill($validated);
+        $product->slug = Str::slug($validated['title']);
+        $product->save();
 
-        if ($request->hasFile('image')) {
-             // Changed storage path
-            $product->image = $request->file('image')->store('products', 'public'); // Changed variable
-        }
-
-        $product->save(); // Changed variable
-
-        // Changed redirect route name (assuming admin resource route)
-        return redirect()->route('admin.products.index');
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 
     // Admin destroy - Deletes a product
