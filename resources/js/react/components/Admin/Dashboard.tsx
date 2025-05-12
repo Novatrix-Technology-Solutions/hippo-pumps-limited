@@ -29,13 +29,13 @@ const Dashboard: React.FC<DashboardProps> = ({ auth }) => {
                 <h3 className="text-lg font-semibold mb-4">News Management</h3>
                 <div className="space-y-4">
                   <Link
-                    href={route('news.create')}
+                    href={route('admin.news.create')}
                     className="block w-full text-left px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                   >
                     Create New Article
                   </Link>
                   <Link
-                    href={route('news.index')}
+                    href={route('admin.news.index')}
                     className="block w-full text-left px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
                   >
                     View All Articles
