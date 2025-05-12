@@ -202,24 +202,6 @@ export default function Index({ products }: Props) {
                         </TableBody>
                     </Table>
                 </div>
-
-                {products.last_page > 1 && (
-                    <div className="mt-4 flex justify-center gap-2">
-                        {Array.from({ length: products.last_page }, (_, i) => i + 1).map((page) => (
-                            <Link
-                                key={page}
-                                href={route('admin.products.index', { page })}
-                                className={`px-4 py-2 rounded ${
-                                    page === products.current_page
-                                        ? 'bg-primary-600 text-white'
-                                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                }`}
-                            >
-                                {page}
-                            </Link>
-                        ))}
-                    </div>
-                )}
             </div>
         </AppSidebarLayout>
     );
