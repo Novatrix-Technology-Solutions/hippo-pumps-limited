@@ -21,7 +21,6 @@ interface PumpSolution {
     category: string;
     title: string;
     slug: string;
-    description: string;
     features: string[];
     specifications: string[];
     applications: string[];
@@ -47,7 +46,6 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
     const { data, setData, post, put, errors, processing } = useForm({
         category: pumpSolution?.category || '',
         title: pumpSolution?.title || '',
-        description: pumpSolution?.description || '',
         features: pumpSolution?.features || [''],
         specifications: pumpSolution?.specifications || [''],
         applications: pumpSolution?.applications || [''],
@@ -70,11 +68,8 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
             : null
     );
 
-    const [editorContent, setEditorContent] = useState(pumpSolution?.description || '');
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setData('description', editorContent);
         if (isEdit && pumpSolution) {
             put(route('admin.pump-solutions.update', pumpSolution.slug));
         } else {
@@ -193,17 +188,6 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
                                 placeholder="Enter product title"
                             />
                             {errors.title && <div className="text-red-500 text-sm">{errors.title}</div>}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="description">Description</Label>
-                        <RichTextEditor
-                            value={editorContent}
-                            onChange={setEditorContent}
-                            error={errors.description}
-                            label="Description"
-                        />
-                            {errors.description && <div className="text-red-500 text-sm">{errors.description}</div>}
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

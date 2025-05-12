@@ -19,7 +19,6 @@ class Product extends Model // Renamed class from PumpSolution
     protected $fillable = [
         'title',
         'slug',
-        'description',
         'image',
         'category',
         'specifications',

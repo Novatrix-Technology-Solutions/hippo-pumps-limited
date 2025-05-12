@@ -20,7 +20,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Products',
-        href: '/admin/pump-solutions',
+        href: '/admin/products',
         icon: Package,
     },
     {

@@ -50,9 +50,8 @@ class ProductController extends Controller // Changed class name
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
-            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES), // Keep categories for now
+            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
             'specifications' => 'nullable|array',
             'is_featured' => 'boolean',
             'order' => 'integer',
@@ -85,9 +84,8 @@ class ProductController extends Controller // Changed class name
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
             'image' => 'nullable|image|max:2048',
-            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES), // Keep categories for now
+            'category' => 'required|string|in:' . implode(',', \App\Models\Product::CATEGORIES),
             'specifications' => 'nullable|array',
             'is_featured' => 'boolean',
             'order' => 'integer',

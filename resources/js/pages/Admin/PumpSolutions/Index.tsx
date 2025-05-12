@@ -169,11 +169,7 @@ export default function Index({ pumpSolutions }: Props) {
                                         )}
                                     </TableCell>
                                     <TableCell className="font-medium">{solution.title}</TableCell>
-                                    <TableCell>
-                                        <div className="prose prose-sm max-w-none">
-                                            {renderHTML(stripHtml(solution.description).substring(0, 100) + '...')}
-                                        </div>
-                                    </TableCell>
+                                    <TableCell>{solution.category}</TableCell>
                                     <TableCell>
                                         {solution.is_featured ? (
                                             <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
