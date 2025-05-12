@@ -20,18 +20,21 @@ interface Props {
 export default function ProductCard({ product }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: string) => {
     return new Intl.NumberFormat('en-ZM', {
       style: 'currency',
       currency: 'ZMW',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
-    }).format(price);
+    }).format(parseFloat(price));
   };
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div 
+        className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+        onClick={() => setIsOpen(true)}
+      >
         <div className="p-6">
           <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
           <div className="space-y-2 text-gray-600">
@@ -43,17 +46,9 @@ export default function ProductCard({ product }: Props) {
             {product.motor && <p><span className="font-medium">Motor:</span> {product.motor}</p>}
             {product.price_zmw_including_vat && (
               <p className="text-lg font-bold text-primary-600">
-                ZMW {parseFloat(product.price_zmw_including_vat).toLocaleString()}
+                {formatPrice(product.price_zmw_including_vat)}
               </p>
             )}
-          </div>
-          <div className="mt-4">
-            <Link
-              href={route('products.show', product.slug)}
-              className="inline-block bg-primary-600 text-white px-4 py-2 rounded hover:bg-primary-700 transition-colors"
-            >
-              View Details
-            </Link>
           </div>
         </div>
       </div>
@@ -92,23 +87,52 @@ export default function ProductCard({ product }: Props) {
                   </Dialog.Title>
 
                   <div className="mt-2">
-                    <p className="text-gray-600 mb-6">{product.description}</p>
-                    
                     <div className="grid grid-cols-2 gap-4 mb-6">
-                      {product.q_max && <Spec label="Q.Max (m³/hr)" value={product.q_max} />}
-                      {product.h_max && <Spec label="H.Max (m)" value={product.h_max} />}
-                      {product.rated_q && <Spec label="Rated Q (m³/hr)" value={product.rated_q} />}
-                      {product.rated_h && <Spec label="Rated H (m)" value={product.rated_h} />}
-                      {product.motor && <Spec label="Motor (HP)" value={product.motor} />}
+                      <div className="flex justify-between border-b py-2">
+                        <span className="font-medium text-gray-700">Category</span>
+                        <span className="text-gray-900">{product.category}</span>
+                      </div>
+                      {product.q_max && (
+                        <div className="flex justify-between border-b py-2">
+                          <span className="font-medium text-gray-700">Q Max</span>
+                          <span className="text-gray-900">{product.q_max}</span>
+                        </div>
+                      )}
+                      {product.h_max && (
+                        <div className="flex justify-between border-b py-2">
+                          <span className="font-medium text-gray-700">H Max</span>
+                          <span className="text-gray-900">{product.h_max}</span>
+                        </div>
+                      )}
+                      {product.rated_q && (
+                        <div className="flex justify-between border-b py-2">
+                          <span className="font-medium text-gray-700">Rated Q</span>
+                          <span className="text-gray-900">{product.rated_q}</span>
+                        </div>
+                      )}
+                      {product.rated_h && (
+                        <div className="flex justify-between border-b py-2">
+                          <span className="font-medium text-gray-700">Rated H</span>
+                          <span className="text-gray-900">{product.rated_h}</span>
+                        </div>
+                      )}
+                      {product.motor && (
+                        <div className="flex justify-between border-b py-2">
+                          <span className="font-medium text-gray-700">Motor</span>
+                          <span className="text-gray-900">{product.motor}</span>
+                        </div>
+                      )}
                       {product.price_zmw_including_vat && (
-                        <Spec
-                          label="Price"
-                          value={formatPrice(parseFloat(product.price_zmw_including_vat))}
-                        />
+                        <div className="flex justify-between border-b py-2">
+                          <span className="font-medium text-gray-700">Price (Including VAT)</span>
+                          <span className="text-gray-900 font-bold">
+                            {formatPrice(product.price_zmw_including_vat)}
+                          </span>
+                        </div>
                       )}
                     </div>
 
-                    <div className="mt-6 flex justify-end space-x-4">
+                    <div className="flex justify-end gap-4 mt-6">
                       <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
@@ -118,7 +142,7 @@ export default function ProductCard({ product }: Props) {
                       </button>
                       <Link
                         href={route('find-us')}
-                        className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
                       >
                         Contact Us
                       </Link>
