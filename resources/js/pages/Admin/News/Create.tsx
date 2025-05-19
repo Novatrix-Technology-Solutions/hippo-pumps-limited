@@ -78,9 +78,6 @@ export default function Create() {
                                         onChange={setEditorContent}
                                         error={errors.content}
                                     />
-                                    {errors.content && (
-                                        <p className="text-red-500 text-sm mt-1">{errors.content}</p>
-                                    )}
                                 </motion.div>
 
                                 <motion.div variants={staggerItem}>
