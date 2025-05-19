@@ -128,5 +128,15 @@ class NewsController extends Controller
         return redirect()->route('admin.news.index')
             ->with('success', 'News deleted successfully.');
     }
-    
+
+    public function togglePublish(Request $request, News $news)
+    {
+        $request->validate([
+            'is_published' => 'required|boolean',
+        ]);
+        $news->is_published = $request->is_published;
+        $news->published_at = $request->is_published ? now() : null;
+        $news->save();
+        return back()->with('success', 'Publish status updated successfully.');
+    }
 }

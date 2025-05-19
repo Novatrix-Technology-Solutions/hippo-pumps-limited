@@ -107,6 +107,22 @@ export default function Create() {
                                 </motion.div>
 
                                 <motion.div variants={staggerItem}>
+                                    <Label htmlFor="is_published" className="flex items-center gap-2">
+                                        <input
+                                            id="is_published"
+                                            type="checkbox"
+                                            checked={data.is_published}
+                                            onChange={e => setData('is_published', Boolean(e.target.checked))}
+                                            className="form-checkbox h-4 w-4 text-blue-600"
+                                        />
+                                        Publish immediately
+                                    </Label>
+                                    {errors.is_published && (
+                                        <p className="text-red-500 text-sm mt-1">{errors.is_published}</p>
+                                    )}
+                                </motion.div>
+
+                                <motion.div variants={staggerItem}>
                                     <Button type="submit" disabled={processing}>
                                         {processing ? 'Creating...' : 'Create News'}
                                     </Button>

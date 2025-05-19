@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
@@ -56,6 +56,7 @@ interface News {
     published_at: string | null;
     excerpt: string | null;
     slug: string;
+    is_published: boolean;
 }
 
 interface Props {
@@ -106,6 +107,16 @@ export default function NewsIndex({ news, flash }: Props) {
         ? (news as any).links
         : null;
 
+    const handleTogglePublish = (item: News) => {
+        router.put(route('admin.news.toggle-publish', item.id), {
+            is_published: !item.is_published,
+        }, {
+            onSuccess: () => toast.success(`News article ${!item.is_published ? 'published' : 'unpublished'} successfully.`),
+            onError: () => toast.error('Failed to update publish status'),
+            preserveScroll: true,
+        });
+    };
+
     return (
         <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="News" />
@@ -131,6 +142,15 @@ export default function NewsIndex({ news, flash }: Props) {
                             )}
                             <div className="p-4">
                                 <h3 className="text-lg font-semibold">{item.title}</h3>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <input
+                                        type="checkbox"
+                                        checked={!!item.is_published}
+                                        onChange={() => handleTogglePublish(item)}
+                                        className="form-checkbox h-4 w-4 text-blue-600"
+                                    />
+                                    <span className="text-sm">{item.is_published ? 'Published' : 'Unpublished'}</span>
+                                </div>
                                 <p className="text-gray-600 mt-2">
                                     {new Date(item.created_at).toLocaleDateString()}
                                 </p>

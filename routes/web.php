@@ -60,6 +60,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/news/{news}/edit', [NewsController::class, 'edit'])->name('admin.news.edit');
     Route::put('/admin/news/{news}', [NewsController::class, 'update'])->name('admin.news.update');
     Route::delete('/admin/news/{news}', [NewsController::class, 'destroy'])->name('admin.news.destroy');
+    Route::put('/admin/news/{news}/toggle-publish', [NewsController::class, 'togglePublish'])->name('admin.news.toggle-publish');
 
     // Admin Products Routes
     Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
