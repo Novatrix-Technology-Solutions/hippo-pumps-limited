@@ -34,7 +34,7 @@ const NewsForm: React.FC<Props> = ({ news }) => {
         if (news?.id) {
             put(route('news.update', news.id));
         } else {
-            post(route('news.store'));
+            post(route('admin.news.store'));
         }
     };
 

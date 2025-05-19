@@ -39,7 +39,7 @@ export default function Create() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setData('content', editorContent);
-        post(route('news.store'));
+        post(route('admin.news.store'));
     };
 
     return (
