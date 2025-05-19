@@ -84,7 +84,7 @@ export default function NewsIndex({ news, flash }: Props) {
                     setDeleteId(null);
                 },
                 onError: () => {
-                    toast.error('Failed to delete news article');
+                    toast.error('Failed to delete the news article');
                     setDeleteId(null);
                 },
             });
