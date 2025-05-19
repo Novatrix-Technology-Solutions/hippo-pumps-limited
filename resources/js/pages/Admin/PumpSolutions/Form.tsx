@@ -60,7 +60,7 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
         e.preventDefault();
         
         if (isEdit && pumpSolution) {
-            put(route('admin.pump-solutions.update', pumpSolution.slug), {
+            put(route('admin.products.update', pumpSolution.slug), {
                 onSuccess: () => {
                     toast({
                         title: "Success",
@@ -76,7 +76,7 @@ export default function Form({ pumpSolution, isEdit = false }: Props) {
                 },
             });
         } else {
-            post(route('admin.pump-solutions.store'), {
+                post(route('admin.products.store'), {
                 onSuccess: () => {
                     toast({
                         title: "Success",
