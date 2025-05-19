@@ -17,7 +17,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 
-interface PumpSolution {
+interface Product {
     id: number;
     category: string;
     title: string;
@@ -35,32 +35,32 @@ interface PumpSolution {
 }
 
 interface Props {
-    pumpSolution?: PumpSolution;
+    product?: Product;
     isEdit?: boolean;
 }
 
-export default function Form({ pumpSolution, isEdit = false }: Props) {
+export default function Form({ product, isEdit = false }: Props) {
     const { toast } = useToast();
     const { data, setData, post, put, errors, processing, reset } = useForm({
-        category: pumpSolution?.category || '',
-        title: pumpSolution?.title || '',
-        q_max: pumpSolution?.q_max || '',
-        h_max: pumpSolution?.h_max || '',
-        rated_q: pumpSolution?.rated_q || '',
-        rated_h: pumpSolution?.rated_h || '',
-        motor: pumpSolution?.motor || '',
-        price_zmw_no_vat: pumpSolution?.price_zmw_no_vat || '',
-        vat_rate: pumpSolution?.vat_rate || '',
-        price_zmw_including_vat: pumpSolution?.price_zmw_including_vat || '',
-        is_featured: pumpSolution?.is_featured || false,
-        order: pumpSolution?.order || 0,
+        category: product?.category || '',
+        title: product?.title || '',
+        q_max: product?.q_max || '',
+        h_max: product?.h_max || '',
+        rated_q: product?.rated_q || '',
+        rated_h: product?.rated_h || '',
+        motor: product?.motor || '',
+        price_zmw_no_vat: product?.price_zmw_no_vat || '',
+        vat_rate: product?.vat_rate || '',
+        price_zmw_including_vat: product?.price_zmw_including_vat || '',
+        is_featured: product?.is_featured || false,
+        order: product?.order || 0,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         
-        if (isEdit && pumpSolution) {
-            put(route('admin.products.update', pumpSolution.slug), {
+        if (isEdit && product) {
+            put(route('admin.products.update', product.slug), {
                 onSuccess: () => {
                     toast({
                         title: "Success",

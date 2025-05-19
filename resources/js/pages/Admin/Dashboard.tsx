@@ -11,7 +11,7 @@ import { type BreadcrumbItem } from '@/types';
 
 interface Props {
     newsCount: number;
-    pumpSolutionsCount: number;
+    productsCount: number;
     teamMembersCount: number;
     usersCount: number;
 }
@@ -23,7 +23,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCount, usersCount }: Props) {
+export default function Dashboard({ newsCount, productsCount, teamMembersCount, usersCount }: Props) {
     return (
         <AppSidebarLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -66,7 +66,7 @@ export default function Dashboard({ newsCount, pumpSolutionsCount, teamMembersCo
                                     <WashingMachine className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="text-2xl font-bold">{pumpSolutionsCount}</div>
+                                    <div className="text-2xl font-bold">{productsCount}</div>
                                     <p className="text-xs text-muted-foreground">
                                         Total products
                                     </p>

@@ -1,114 +1,117 @@
-import React from 'react';
 import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
-import { Product } from '@/types/product';
 import { Link } from '@inertiajs/react';
+import { ChevronLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-interface Props extends PageProps {
-    product: Product;
+interface ProductSolution {
+    id: number;
+    title: string;
+    slug: string;
+    description: string;
+    features: string[];
+    specifications: string[];
+    applications: string[];
+    is_featured: boolean;
+    order: number;
+    media: { id: number; original_url: string }[];
 }
 
-export default function Show({ product }: Props) {
-    const formatPrice = (price: string) => {
-        return new Intl.NumberFormat('en-ZM', {
-            style: 'currency',
-            currency: 'ZMW',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(parseFloat(price));
+interface Props {
+    productSolution: ProductSolution;
+}
+
+export default function Show({ productSolution }: Props) {
+    // Function to safely render HTML content
+    const renderHTML = (html: string) => {
+        return <div dangerouslySetInnerHTML={{ __html: html }} />;
     };
 
     return (
         <>
-            <Head title={product.title} />
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <div className="mb-6">
-                                <Link
-                                    href={route('products.index')}
-                                    className="text-primary-600 hover:text-primary-700"
-                                >
-                                    ← Back to Products
-                                </Link>
-                            </div>
+            <Head title={productSolution.title} />
+            <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                <div className="mb-8">
+                    <Link 
+                        href={route('products.index')} 
+                        className="inline-flex items-center text-[#004080] hover:text-[#006000]"
+                    >
+                        <ChevronLeft className="w-4 h-4 mr-1" />
+                        Back to Products
+                    </Link>
+                </div>
 
-                            <h1 className="text-3xl font-bold mb-6">{product.title}</h1>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="space-y-6">
-                                    <div>
-                                        <h2 className="text-xl font-semibold mb-4">Product Details</h2>
-                                        <div className="space-y-4">
-                                            <div className="flex justify-between border-b py-2">
-                                                <span className="font-medium text-gray-700">Category</span>
-                                                <span className="text-gray-900">{product.category}</span>
-                                            </div>
-                                            {product.q_max && (
-                                                <div className="flex justify-between border-b py-2">
-                                                    <span className="font-medium text-gray-700">Q Max</span>
-                                                    <span className="text-gray-900">{product.q_max}</span>
-                                                </div>
-                                            )}
-                                            {product.h_max && (
-                                                <div className="flex justify-between border-b py-2">
-                                                    <span className="font-medium text-gray-700">H Max</span>
-                                                    <span className="text-gray-900">{product.h_max}</span>
-                                                </div>
-                                            )}
-                                            {product.rated_q && (
-                                                <div className="flex justify-between border-b py-2">
-                                                    <span className="font-medium text-gray-700">Rated Q</span>
-                                                    <span className="text-gray-900">{product.rated_q}</span>
-                                                </div>
-                                            )}
-                                            {product.rated_h && (
-                                                <div className="flex justify-between border-b py-2">
-                                                    <span className="font-medium text-gray-700">Rated H</span>
-                                                    <span className="text-gray-900">{product.rated_h}</span>
-                                                </div>
-                                            )}
-                                            {product.motor && (
-                                                <div className="flex justify-between border-b py-2">
-                                                    <span className="font-medium text-gray-700">Motor</span>
-                                                    <span className="text-gray-900">{product.motor}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {product.price_zmw_including_vat && (
-                                        <div>
-                                            <h2 className="text-xl font-semibold mb-4">Pricing</h2>
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between border-b py-2">
-                                                    <span className="font-medium text-gray-700">Price (Including VAT)</span>
-                                                    <span className="text-gray-900 font-bold">
-                                                        {formatPrice(product.price_zmw_including_vat)}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div>
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                            {productSolution.media?.length > 0 ? (
+                                <img
+                                    src={productSolution.media[0].original_url}
+                                    alt={productSolution.title}
+                                    className="w-full h-auto object-cover"
+                                />
+                            ) : (
+                                <div className="aspect-[4/3] flex items-center justify-center bg-gray-100">
+                                    <span className="text-gray-400">No image available</span>
                                 </div>
-
-                                <div className="space-y-6">
-                                    <div className="bg-gray-50 p-6 rounded-lg">
-                                        <h2 className="text-xl font-semibold mb-4">Contact Us</h2>
-                                        <p className="text-gray-600 mb-4">
-                                            Interested in this product? Contact us for more information or to place an order.
-                                        </p>
-                                        <Link
-                                            href={route('find-us')}
-                                            className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-                                        >
-                                            Get in Touch
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
+                            )}
                         </div>
+                    </div>
+
+                    <div>
+                        <h1 className="text-3xl md:text-4xl font-bold text-[#004080] mb-4">
+                            {productSolution.title}
+                        </h1>
+                        <div className="prose max-w-none mb-8">
+                            {renderHTML(productSolution.description)}
+                        </div>
+
+                        <div className="mb-8">
+                            <Button variant="default" className="w-full sm:w-auto">
+                                Get a Quote
+                            </Button>
+                        </div>
+
+                        <Tabs defaultValue="features" className="w-full">
+                            <TabsList className="grid w-full grid-cols-3">
+                                <TabsTrigger value="features">Features</TabsTrigger>
+                                <TabsTrigger value="specifications">Specifications</TabsTrigger>
+                                <TabsTrigger value="applications">Applications</TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="features" className="p-4 border rounded-md mt-2">
+                                {productSolution.features && productSolution.features.length > 0 ? (
+                                    <ul className="list-disc pl-5 space-y-2">
+                                        {productSolution.features.map((feature, index) => (
+                                            <li key={index}>{renderHTML(feature)}</li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-gray-500">No features specified.</p>
+                                )}
+                            </TabsContent>
+                            <TabsContent value="specifications" className="p-4 border rounded-md mt-2">
+                                {productSolution.specifications && productSolution.specifications.length > 0 ? (
+                                    <ul className="list-disc pl-5 space-y-2">
+                                        {productSolution.specifications.map((spec, index) => (
+                                            <li key={index}>{renderHTML(spec)}</li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-gray-500">No specifications available.</p>
+                                )}
+                            </TabsContent>
+                            <TabsContent value="applications" className="p-4 border rounded-md mt-2">
+                                {productSolution.applications && productSolution.applications.length > 0 ? (
+                                    <ul className="list-disc pl-5 space-y-2">
+                                        {productSolution.applications.map((application, index) => (
+                                            <li key={index}>{renderHTML(application)}</li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-gray-500">No applications specified.</p>
+                                )}
+                            </TabsContent>
+                        </Tabs>
                     </div>
                 </div>
             </div>

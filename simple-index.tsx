@@ -2,7 +2,7 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
 interface Props {
-  pumpSolutions: {
+  products: {
     data: any[];
     current_page: number;
     last_page: number;
@@ -23,16 +23,16 @@ interface Props {
   categories: string[];
 }
 
-export default function Index({ pumpSolutions, filters, categories }: Props) {
+export default function Index({ products, filters, categories }: Props) {
   return (
     <>
-      <Head title="Pump Solutions" />
+      <Head title="Products" />
       <div className="container mx-auto py-12">
-        <h1 className="text-4xl font-bold text-center mb-12">Our Pump Solutions</h1>
+        <h1 className="text-4xl font-bold text-center mb-12">Our Products</h1>
         <div style={{ padding: '20px', backgroundColor: 'lightyellow', border: '2px solid red', margin: '20px' }}>
-          <h2>Simplified Pump Solutions Page</h2>
+          <h2>Simplified Products Page</h2>
           <p>This is a simplified version of the page.</p>
-          <p>Found {pumpSolutions.total} pump solutions.</p>
+          <p>Found {products.total} product solutions.</p>
           <p>Categories: {categories.join(', ')}</p>
         </div>
       </div>

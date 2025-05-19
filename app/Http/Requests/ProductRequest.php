@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Rules\ValidPumpCategory;
 use App\Rules\ValidPumpSpecification;
 
-class PumpSolutionRequest extends FormRequest
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,9 @@ class PumpSolutionRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:pump_solutions,slug,' . $this->pump_solution?->id],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug,' . $this->product?->id],
             'description' => ['nullable', 'string'],
-            'category' => ['required', 'string', Rule::in(\App\Models\PumpSolution::getCategories())],
+            'category' => ['required', 'string', Rule::in(\App\Models\Product::getCategories())],
             'item_code' => ['nullable', 'string', 'max:50'],
             'q_max' => ['nullable', 'numeric', 'min:0'],
             'h_max' => ['nullable', 'numeric', 'min:0'],

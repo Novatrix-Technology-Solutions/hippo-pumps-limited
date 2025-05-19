@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-interface PumpSolutionsFilters {
+interface ProductsFilters {
     search?: string;
     is_featured?: boolean;
     per_page?: number;
     page?: number;
 }
 
-interface PumpSolution {
+interface Product {
     id: number;
     title: string;
     slug: string;
@@ -26,8 +26,8 @@ interface PumpSolution {
     }[];
 }
 
-interface PumpSolutionsResponse {
-    data: PumpSolution[];
+interface ProductsResponse {
+    data: Product[];
     current_page: number;
     last_page: number;
     per_page: number;
@@ -35,39 +35,39 @@ interface PumpSolutionsResponse {
 }
 
 /**
- * Fetches pump solutions with optional filtering
+ * Fetches products with optional filtering
  */
-const fetchPumpSolutions = async (filters: PumpSolutionsFilters): Promise<PumpSolutionsResponse> => {
+const fetchProducts = async (filters: ProductsFilters): Promise<ProductsResponse> => {
     const { data } = await axios.get('/products', { params: filters });
-    return data.pumpSolutions;
+    return data.products;
 };
 
 /**
- * Hook for querying pump solutions with filters
+ * Hook for querying products with filters
  */
-export const usePumpSolutions = (filters: PumpSolutionsFilters) => {
+export const useProducts = (filters: ProductsFilters) => {
     return useQuery({
-        queryKey: ['pumpSolutions', filters],
-        queryFn: () => fetchPumpSolutions(filters),
+        queryKey: ['products', filters],
+        queryFn: () => fetchProducts(filters),
         placeholderData: (previousData) => previousData,
     });
 };
 
 /**
- * Fetches a single pump solution by slug
+ * Fetches a single product by slug
  */
-const fetchPumpSolution = async (slug: string): Promise<PumpSolution> => {
+const fetchProduct = async (slug: string): Promise<Product> => {
     const { data } = await axios.get(`/products/${slug}`);
-    return data.pumpSolution;
+    return data.product;
 };
 
 /**
- * Hook for querying a single pump solution
+ * Hook for querying a single product
  */
-export const usePumpSolution = (slug: string) => {
+export const useProduct = (slug: string) => {
     return useQuery({
-        queryKey: ['pumpSolution', slug],
-        queryFn: () => fetchPumpSolution(slug),
+        queryKey: ['product', slug],
+        queryFn: () => fetchProduct(slug),
         enabled: !!slug,
     });
 }; 

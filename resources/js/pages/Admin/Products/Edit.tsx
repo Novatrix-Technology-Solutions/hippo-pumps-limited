@@ -3,7 +3,7 @@ import AppSidebarLayout from '@/layouts/app/app-sidebar-layout';
 import Form from './Form';
 import { type BreadcrumbItem } from '@/types';
 
-interface PumpSolution {
+interface ProductSolution {
         id: number;
         title: string;
     slug: string;
@@ -17,10 +17,10 @@ interface PumpSolution {
 }
 
 interface Props {
-    pumpSolution: PumpSolution;
+    productSolution: ProductSolution;
 }
 
-export default function Edit({ pumpSolution }: Props) {
+export default function Edit({ productSolution }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
@@ -28,20 +28,20 @@ export default function Edit({ pumpSolution }: Props) {
         },
         {
             title: 'Products',
-            href: '/admin/pump-solutions',
+            href: '/admin/product-solutions',
         },
         {
-            title: `Edit: ${pumpSolution.title}`,
-            href: `/admin/pump-solutions/${pumpSolution.id}/edit`,
+            title: `Edit: ${productSolution.title}`,
+            href: `/admin/product-solutions/${productSolution.id}/edit`,
         },
     ];
 
     return (
         <AppSidebarLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit Product: ${pumpSolution.title}`} />
+            <Head title={`Edit Product: ${productSolution.title}`} />
             <div className="container mx-auto py-10">
                 <h1 className="text-3xl font-bold mb-6">Edit Product</h1>
-                <Form pumpSolution={pumpSolution} isEdit={true} />
+                <Form productSolution={productSolution} isEdit={true} />
             </div>
         </AppSidebarLayout>
     );

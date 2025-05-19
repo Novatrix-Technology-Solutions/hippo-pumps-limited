@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\PumpSolutionController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +40,5 @@ Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
 
 // Public API endpoints
 Route::middleware([\App\Http\Middleware\CorsMiddleware::class])->group(function () {
-    Route::get('/products', [PumpSolutionController::class, 'apiIndex']);
+    Route::get('/products', [ProductController::class, 'apiIndex']);
 });

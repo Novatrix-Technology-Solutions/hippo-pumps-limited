@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\PumpSolution;
+use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PumpSolutionService
+class ProductService
 {
-    public function getFilteredPumpSolutions(array $filters, array $sorting): LengthAwarePaginator
+    public function getFilteredProducts(array $filters, array $sorting): LengthAwarePaginator
     {
         try {
-            $query = PumpSolution::query()->with('media');
+            $query = Product::query()->with('media');
 
             // Apply filters
             if (!empty($filters['search'])) {
@@ -33,7 +33,7 @@ class PumpSolutionService
 
             return $query->paginate($filters['per_page'] ?? 9);
         } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionService@getFilteredPumpSolutions: ' . $e->getMessage(), [
+            Log::error('Error in ProductService@getFilteredProducts: ' . $e->getMessage(), [
                 'filters' => $filters,
                 'sorting' => $sorting,
                 'trace' => $e->getTraceAsString()
@@ -42,19 +42,19 @@ class PumpSolutionService
         }
     }
 
-    public function createPumpSolution(array $data): PumpSolution
+    public function createProduct(array $data): Product
     {
         try {
-            $pumpSolution = PumpSolution::create($data);
+            $product = Product::create($data);
 
             if (isset($data['image'])) {
-                $pumpSolution->addMedia($data['image'])
-                    ->toMediaCollection('pump-solutions');
+                $product->addMedia($data['image'])
+                    ->toMediaCollection('products');
             }
 
-            return $pumpSolution;
+            return $product;
         } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionService@createPumpSolution: ' . $e->getMessage(), [
+            Log::error('Error in ProductService@createProduct: ' . $e->getMessage(), [
                 'data' => $data,
                 'trace' => $e->getTraceAsString()
             ]);
@@ -62,21 +62,21 @@ class PumpSolutionService
         }
     }
 
-    public function updatePumpSolution(PumpSolution $pumpSolution, array $data): PumpSolution
+    public function updateProduct(Product $product, array $data): Product
     {
         try {
-            $pumpSolution->update($data);
+            $product->update($data);
 
             if (isset($data['image'])) {
-                $pumpSolution->clearMediaCollection('pump-solutions');
-                $pumpSolution->addMedia($data['image'])
-                    ->toMediaCollection('pump-solutions');
+                $product->clearMediaCollection('products');
+                $product->addMedia($data['image'])
+                    ->toMediaCollection('products');
             }
 
-            return $pumpSolution;
+            return $product;
         } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionService@updatePumpSolution: ' . $e->getMessage(), [
-                'pump_solution_id' => $pumpSolution->id,
+            Log::error('Error in ProductService@updateProduct: ' . $e->getMessage(), [
+                'product_id' => $product->id,
                 'data' => $data,
                 'trace' => $e->getTraceAsString()
             ]);
@@ -84,13 +84,13 @@ class PumpSolutionService
         }
     }
 
-    public function deletePumpSolution(PumpSolution $pumpSolution): bool
+    public function deleteProduct(Product $product): bool
     {
         try {
-            return $pumpSolution->delete();
+            return $product->delete();
         } catch (\Exception $e) {
-            Log::error('Error in PumpSolutionService@deletePumpSolution: ' . $e->getMessage(), [
-                'pump_solution_id' => $pumpSolution->id,
+            Log::error('Error in ProductService@deleteProduct: ' . $e->getMessage(), [
+                'product_id' => $product->id,
                 'trace' => $e->getTraceAsString()
             ]);
             throw $e;
