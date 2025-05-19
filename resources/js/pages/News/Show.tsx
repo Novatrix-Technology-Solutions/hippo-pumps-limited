@@ -47,23 +47,6 @@ export default function Show({ news }: Props) {
                         </Link>
                     </motion.div>
 
-                    {/* Featured Image */}
-                    {news.featured_image && (
-                        <motion.div 
-                            variants={staggerItem}
-                            className="mb-8 rounded-xl overflow-hidden shadow-xl"
-                        >
-                            <motion.img
-                                initial={{ opacity: 0, scale: 1.1 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5 }}
-                                src={news.featured_image}
-                                alt={news.title}
-                                className="w-full h-[500px] object-cover"
-                            />
-                        </motion.div>
-                    )}
-
                     {/* Article Header */}
                     <motion.div 
                         variants={staggerItem}
@@ -81,10 +64,6 @@ export default function Show({ news }: Props) {
                                 <Calendar className="w-5 h-5 mr-2" />
                                 <time>{format(new Date(news.published_at), 'MMMM d, yyyy')}</time>
                             </div>
-                            <Button variant="ghost" size="sm" className="ml-auto">
-                                <Share2 className="w-4 h-4 mr-2" />
-                                Share
-                            </Button>
                         </div>
                     </motion.div>
 
@@ -94,26 +73,6 @@ export default function Show({ news }: Props) {
                         className="prose prose-lg max-w-none"
                     >
                         {renderHTML(news.content)}
-                    </motion.div>
-
-                    {/* Share Section */}
-                    <motion.div 
-                        variants={staggerItem}
-                        className="mt-12 pt-8 border-t border-gray-200"
-                    >
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-gray-900">Share this article</h3>
-                            <div className="flex gap-4">
-                                <Button variant="outline" size="sm">
-                                    <Share2 className="w-4 h-4 mr-2" />
-                                    Share on LinkedIn
-                                </Button>
-                                <Button variant="outline" size="sm">
-                                    <Share2 className="w-4 h-4 mr-2" />
-                                    Share on Twitter
-                                </Button>
-                            </div>
-                        </div>
                     </motion.div>
                 </div>
             </motion.div>

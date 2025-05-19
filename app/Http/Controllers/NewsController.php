@@ -61,7 +61,6 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'featured_image' => 'nullable|image|max:2048',
             'meta_description' => 'nullable|string|max:255',
             'is_published' => 'boolean',
         ]);
@@ -71,10 +70,6 @@ class NewsController extends Controller
         $news->user_id = auth()->id();
         $news->published_at = $validated['is_published'] ? now() : null;
         
-        if ($request->hasFile('featured_image')) {
-            $news->featured_image = $request->file('featured_image')->store('news', 'public');
-        }
-
         $news->save();
 
         return redirect()->route('admin.news.index')
@@ -95,7 +90,6 @@ class NewsController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'featured_image' => 'nullable|image|max:2048',
             'meta_description' => 'nullable|string|max:255',
             'is_published' => 'boolean',
         ]);
@@ -103,17 +97,6 @@ class NewsController extends Controller
         $news->fill($validated);
         $news->slug = Str::slug($validated['title']);
         $news->published_at = $validated['is_published'] ? now() : null;
-
-        if ($request->hasFile('featured_image')) {
-            // Delete old image if exists
-            if ($news->featured_image) {
-                Storage::disk('public')->delete($news->featured_image);
-            }
-            $news->featured_image = $request->file('featured_image')->store('news', 'public');
-        } elseif ($request->input('featured_image') === null && $news->featured_image) {
-            Storage::disk('public')->delete($news->featured_image);
-            $news->featured_image = null;
-        }
 
         $news->save();
         

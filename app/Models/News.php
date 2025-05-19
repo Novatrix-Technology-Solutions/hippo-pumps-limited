@@ -13,7 +13,6 @@ class News extends Model
     protected $fillable = [
         'title',
         'content',
-        'featured_image',
         'meta_description',
         'is_published',
         'slug',

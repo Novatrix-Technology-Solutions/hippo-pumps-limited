@@ -81,20 +81,7 @@ export default function Create() {
                                 </motion.div>
 
                                 <motion.div variants={staggerItem}>
-                                    <Label htmlFor="featured_image">Featured Image</Label>
-                                    <Input
-                                        id="featured_image"
-                                        type="file"
-                                        onChange={(e) => setData('featured_image', e.target.files?.[0] || null)}
-                                        className="mt-1"
-                                    />
-                                    {errors.featured_image && (
-                                        <p className="text-red-500 text-sm mt-1">{errors.featured_image}</p>
-                                    )}
-                                </motion.div>
-
-                                <motion.div variants={staggerItem}>
-                                    <Label htmlFor="meta_description">Meta Description</Label>
+                                    <Label htmlFor="meta_description">Content Preview</Label>
                                     <Input
                                         id="meta_description"
                                         value={data.meta_description}
