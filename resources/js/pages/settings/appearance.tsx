@@ -7,7 +7,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard'),
     },
     {
         title: 'Settings',

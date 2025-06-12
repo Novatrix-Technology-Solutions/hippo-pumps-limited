@@ -27,7 +27,7 @@ interface Props extends PageProps {
 const breadcrumbs = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard'),
     },
     {
         title: 'Products',
