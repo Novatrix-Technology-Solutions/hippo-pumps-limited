@@ -15,6 +15,13 @@ class PumpSolution extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia, HasSlug;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'products';
+
     protected $fillable = [
         'title',
         'slug',
