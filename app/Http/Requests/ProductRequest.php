@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Rules\ValidPumpCategory;
 use App\Rules\ValidPumpSpecification;
+use App\Models\PumpSolution;
 
 class ProductRequest extends FormRequest
 {
@@ -26,9 +27,9 @@ class ProductRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:products,slug,' . $this->product?->id],
+            'slug' => ['nullable', 'string', 'max:255', 'unique:pump_solutions,slug,' . $this->product?->id],
             'description' => ['nullable', 'string'],
-            'category' => ['required', 'string', Rule::in(\App\Models\Product::getCategories())],
+            'category' => ['required', 'string', Rule::in(PumpSolution::getCategories())],
             'item_code' => ['nullable', 'string', 'max:50'],
             'q_max' => ['nullable', 'numeric', 'min:0'],
             'h_max' => ['nullable', 'numeric', 'min:0'],

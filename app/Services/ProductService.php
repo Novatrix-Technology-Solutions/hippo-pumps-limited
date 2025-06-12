@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Product;
+use App\Models\PumpSolution;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -11,7 +11,7 @@ class ProductService
     public function getFilteredProducts(array $filters, array $sorting): LengthAwarePaginator
     {
         try {
-            $query = Product::query()->with('media');
+            $query = PumpSolution::query()->with('media');
 
             // Apply filters
             if (!empty($filters['search'])) {
@@ -42,10 +42,10 @@ class ProductService
         }
     }
 
-    public function createProduct(array $data): Product
+    public function createProduct(array $data): PumpSolution
     {
         try {
-            $product = Product::create($data);
+            $product = PumpSolution::create($data);
 
             if (isset($data['image'])) {
                 $product->addMedia($data['image'])
@@ -62,7 +62,7 @@ class ProductService
         }
     }
 
-    public function updateProduct(Product $product, array $data): Product
+    public function updateProduct(PumpSolution $product, array $data): PumpSolution
     {
         try {
             $product->update($data);
@@ -84,7 +84,7 @@ class ProductService
         }
     }
 
-    public function deleteProduct(Product $product): bool
+    public function deleteProduct(PumpSolution $product): bool
     {
         try {
             return $product->delete();

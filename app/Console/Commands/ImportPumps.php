@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\Product;
-use App\Imports\ProductsImport;
+use App\Models\PumpSolution;
+use App\Imports\PumpsImport;
 
 class ImportPumps extends Command
 {
@@ -31,7 +31,7 @@ class ImportPumps extends Command
         $file = $this->argument('file');
 
         try {
-            Excel::import(new ProductsImport, $file);
+            Excel::import(new PumpsImport, $file);
 
             $this->info('Pumps imported successfully!');
         } catch (\Exception $e) {

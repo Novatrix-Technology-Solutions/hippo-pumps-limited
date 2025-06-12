@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\PumpSolution;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -64,7 +64,7 @@ class ProductController extends Controller
         }
     }
 
-    public function show(Product $product)
+    public function show(PumpSolution $product)
     {
         try {
             $props = [
@@ -81,7 +81,7 @@ class ProductController extends Controller
     {
         try {
             $products = Cache::remember('admin_products', 300, function () {
-                return Product::with('media')
+                return PumpSolution::with('media')
                     ->orderBy('order', 'asc')
                     ->paginate(10);
             });
@@ -136,7 +136,7 @@ class ProductController extends Controller
         }
     }
 
-    public function edit(Product $product)
+    public function edit(PumpSolution $product)
     {
         try {
             $props = [
@@ -149,7 +149,7 @@ class ProductController extends Controller
         }
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, PumpSolution $product)
     {
         $validator = Validator::make($request->all(), [
             'category' => 'required|string|max:255',
@@ -184,7 +184,7 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product)
+    public function destroy(PumpSolution $product)
     {
         try {
             $this->productService->deleteProduct($product);
