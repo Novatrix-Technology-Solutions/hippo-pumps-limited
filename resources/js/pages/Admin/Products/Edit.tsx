@@ -4,15 +4,21 @@ import Form from './Form';
 import { type BreadcrumbItem } from '@/types';
 
 interface ProductSolution {
-        id: number;
-        title: string;
+    id: number;
+    category: string;
+    title: string;
     slug: string;
-        description: string;
-    features: string[];
-    specifications: string[];
-    applications: string[];
-        is_featured: boolean;
-        order: number;
+    description: string;
+    q_max: string;
+    h_max: string;
+    rated_q: string;
+    rated_h: string;
+    motor: string;
+    price_zmw_no_vat: string;
+    vat_rate: string;
+    price_zmw_including_vat: string;
+    is_featured: boolean;
+    order: number;
     media: { id: number; original_url: string }[];
 }
 
@@ -24,14 +30,15 @@ export default function Edit({ productSolution }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
-            href: route('dashboard')        },
+            href: '/dashboard',
+        },
         {
             title: 'Products',
-            href: '/admin/product-solutions',
+            href: route('admin.products.index'),
         },
         {
             title: `Edit: ${productSolution.title}`,
-            href: `/admin/product-solutions/${productSolution.id}/edit`,
+            href: route('admin.products.edit', { product: productSolution.id }),
         },
     ];
 
@@ -40,7 +47,7 @@ export default function Edit({ productSolution }: Props) {
             <Head title={`Edit Product: ${productSolution.title}`} />
             <div className="container mx-auto py-10">
                 <h1 className="text-3xl font-bold mb-6">Edit Product</h1>
-                <Form productSolution={productSolution} isEdit={true} />
+                <Form product={productSolution} isEdit />
             </div>
         </AppSidebarLayout>
     );
