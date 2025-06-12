@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Get the latest news
         $latestNews = \App\Models\News::latest()->first();
         
-        return Inertia::render('Admin/Dashboard', [
+        return Inertia::render('dashboard', [
             'newsCount' => $newsCount,
             'productsCount' => $productsCount,
             'teamMembersCount' => $teamMembersCount,

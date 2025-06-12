@@ -10,7 +10,7 @@ import React from 'react';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/admin/dashboard',
+        href: '/dashboard',
         icon: LayoutGrid,
     },
     {
