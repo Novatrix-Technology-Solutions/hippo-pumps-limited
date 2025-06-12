@@ -28,8 +28,7 @@ export default function Edit({ news }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
-            href: route('dashboard'),
-        },
+            href: route('dashboard')        },
         {
             title: 'News',
             href: '/admin/news',

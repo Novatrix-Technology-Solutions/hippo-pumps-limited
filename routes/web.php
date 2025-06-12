@@ -39,7 +39,7 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get(route('dashboard'), function () {
+    Route::get('/dashboard', function () {
         $usersCount = \App\Models\User::count();
         $productsCount = \App\Models\PumpSolution::count();
         $teamMembersCount = \App\Models\TeamMember::count();

@@ -26,7 +26,7 @@ interface Props {
 
 const AdminLayout = ({ children, title, user }: PropsWithChildren<Props>) => {
     const { url } = usePage();
-    const isAdminRoute = url.startsWith('/admin') || url.startsWith(route('dashboard'));
+    const isAdminRoute = url.startsWith('/admin') || url.startsWith('/dashboard');
 
     const isActive = (routeName: string) => {
         return url.startsWith(route(routeName));

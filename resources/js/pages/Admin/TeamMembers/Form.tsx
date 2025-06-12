@@ -29,8 +29,7 @@ export default function Form({ teamMember, isEdit = false }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
-            href: route('dashboard'),
-        },
+            href: route('dashboard')        },
         {
             title: 'Team Members',
             href: '/admin/team-members',

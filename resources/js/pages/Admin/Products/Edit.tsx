@@ -24,8 +24,7 @@ export default function Edit({ productSolution }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Dashboard',
-            href: route('dashboard'),
-        },
+            href: route('dashboard')        },
         {
             title: 'Products',
             href: '/admin/product-solutions',
