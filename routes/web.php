@@ -39,7 +39,7 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show'])->name
 
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/admin/dashboard', function () {
+    Route::get('/dashboard', function () {
         $usersCount = \App\Models\User::count();
         $productsCount = \App\Models\PumpSolution::count();
         $teamMembersCount = \App\Models\TeamMember::count();
@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Get the latest news
         $latestNews = \App\Models\News::latest()->first();
         
-        return Inertia::render('dashboard', [
+        return Inertia::render('Admin/Dashboard', [
             'newsCount' => $newsCount,
             'productsCount' => $productsCount,
             'teamMembersCount' => $teamMembersCount,
