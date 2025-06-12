@@ -50,7 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         return Inertia::render('Admin/Dashboard', [
             'newsCount' => $newsCount,
-            'pumpSolutionsCount' => $productsCount,
+            'productsCount' => $productsCount,
             'teamMembersCount' => $teamMembersCount,
             'usersCount' => $usersCount,
             'latestNews' => $latestNews,
